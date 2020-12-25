@@ -1,6 +1,6 @@
 ## move to openair-epc-fed directory
-cd ../openair-epc-fed/
-
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd "$DIR/../openair-epc-fed/"
 
 ## without sleeps after docker instructions, it does not work
 # Setup colors for colorful echos

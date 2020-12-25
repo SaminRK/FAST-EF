@@ -1,5 +1,6 @@
 ## move to openair-epc-fed directory
-cd ../openair-epc-fed/
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd "$DIR/../openair-epc-fed/"
 
 # Setup colors for colorful echos
 RED='\033[0;31m'
