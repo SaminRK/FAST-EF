@@ -1,0 +1,3 @@
+[submodule "openair-epc-fed"]
+	path = openair-epc-fed
+	url = https://github.com/OPENAIRINTERFACE/openair-epc-fed.git
