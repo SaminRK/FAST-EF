@@ -1,3 +1,6 @@
 [submodule "openair-epc-fed"]
 	path = openair-epc-fed
 	url = https://github.com/OPENAIRINTERFACE/openair-epc-fed.git
+[submodule "openairinterface5g"]
+	path = openairinterface5g
+	url = https://gitlab.eurecom.fr/oai/openairinterface5g.git
