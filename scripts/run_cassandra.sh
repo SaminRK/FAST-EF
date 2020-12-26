@@ -1,3 +1,7 @@
+## move to project root directory
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd "$DIR/../openair-epc-fed/"
+
 docker container rm prod-cassandra -f
 
 docker run --name prod-cassandra --network prod-oai-private-net --ip 192.168.62.2 -d \
@@ -13,3 +17,5 @@ docker exec -it prod-cassandra /bin/bash -c "nodetool status"
 sleep 10
 echo cqlash
 docker exec -it prod-cassandra /bin/bash -c "cqlsh --file /home/oai_db.cql 192.168.62.2"
+
+cd -

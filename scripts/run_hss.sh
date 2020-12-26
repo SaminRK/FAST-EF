@@ -3,7 +3,9 @@ echo removing past containers
 docker stop -t 1 prod-oai-hss
 docker container rm prod-oai-hss
 
-cd component/oai-hss
+## move to project root directory
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd "$DIR/../openair-epc-fed/component/oai-hss"
 
 echo creating new container
 

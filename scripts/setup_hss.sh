@@ -1,4 +1,6 @@
-cd component/oai-hss
+## move to project root directory
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd "$DIR/../openair-epc-fed/component/oai-hss/"
 
 python3 ci-scripts/generateConfigFiles.py --kind=HSS \
            --cassandra=192.168.62.2 \
