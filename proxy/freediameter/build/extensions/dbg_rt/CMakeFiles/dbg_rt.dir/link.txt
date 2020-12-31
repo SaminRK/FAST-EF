@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../dbg_rt.fdx CMakeFiles/dbg_rt.dir/dbg_rt.c.o 

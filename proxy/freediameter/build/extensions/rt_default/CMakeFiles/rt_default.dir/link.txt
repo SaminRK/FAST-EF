@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../rt_default.fdx CMakeFiles/rt_default.dir/rt_default.c.o CMakeFiles/rt_default.dir/lex.rtd_conf.c.o CMakeFiles/rt_default.dir/rtd_conf.tab.c.o CMakeFiles/rt_default.dir/rtd_rules.c.o 

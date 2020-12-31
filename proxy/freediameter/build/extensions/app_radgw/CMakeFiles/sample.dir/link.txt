@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../sample.rgwx CMakeFiles/sample.dir/rgwx_sample.c.o 

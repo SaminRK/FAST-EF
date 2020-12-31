@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../dict_nas_mipv6.fdx CMakeFiles/dict_nas_mipv6.dir/dict_nas_mipv6.c.o 

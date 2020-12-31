@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../dict_eap.fdx CMakeFiles/dict_eap.dir/dict_eap.c.o 

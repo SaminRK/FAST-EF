@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../acl_wl.fdx CMakeFiles/acl_wl.dir/acl_wl.c.o CMakeFiles/acl_wl.dir/aw_tree.c.o CMakeFiles/acl_wl.dir/lex.aw_conf.c.o CMakeFiles/acl_wl.dir/aw_conf.tab.c.o 

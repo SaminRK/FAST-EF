@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../dict_rfc5777.fdx CMakeFiles/dict_rfc5777.dir/dict_rfc5777.c.o 

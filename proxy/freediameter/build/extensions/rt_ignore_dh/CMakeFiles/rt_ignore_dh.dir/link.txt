@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../rt_ignore_dh.fdx CMakeFiles/rt_ignore_dh.dir/rt_ignore_dh.c.o 

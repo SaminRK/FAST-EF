@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../sip.rgwx CMakeFiles/sip.dir/rgwx_sip.c.o 

@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../test_sip.fdx CMakeFiles/test_sip.dir/test_sip.c.o CMakeFiles/test_sip.dir/multimediaauth.c.o CMakeFiles/test_sip.dir/locationinfo.c.o CMakeFiles/test_sip.dir/locationinfosl.c.o CMakeFiles/test_sip.dir/registrationtermination.c.o CMakeFiles/test_sip.dir/userauthorization.c.o CMakeFiles/test_sip.dir/serverassignment.c.o -lmysqlclient 

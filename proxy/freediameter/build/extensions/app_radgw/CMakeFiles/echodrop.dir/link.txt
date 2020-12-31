@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../echodrop.rgwx CMakeFiles/echodrop.dir/rgwx_echodrop.c.o CMakeFiles/echodrop.dir/lex.rgwx_echodrop.c.o CMakeFiles/echodrop.dir/rgwx_echodrop.tab.c.o 

@@ -1,0 +1,1 @@
+/usr/bin/cc -Wall -g -O0  -rdynamic CMakeFiles/testdisp.dir/testdisp.c.o  -o testdisp -Wl,-rpath,/home/samin/workspace/research_implementation/proxy/freediameter/build/libfdcore:/home/samin/workspace/research_implementation/proxy/freediameter/build/libfdproto ../libfdcore/libfdcore.so.1.2.1 -lgnutls -lgcrypt ../libfdproto/libfdproto.so.1.2.1 -lpthread 

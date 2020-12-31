@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../test_rt_any.fdx CMakeFiles/test_rt_any.dir/test_rt_any.c.o 

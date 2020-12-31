@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../auth.rgwx CMakeFiles/auth.dir/rgwx_auth.c.o 

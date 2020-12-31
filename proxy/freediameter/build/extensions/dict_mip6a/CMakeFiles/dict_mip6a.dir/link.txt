@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../dict_mip6a.fdx CMakeFiles/dict_mip6a.dir/dict_mip6a.c.o 

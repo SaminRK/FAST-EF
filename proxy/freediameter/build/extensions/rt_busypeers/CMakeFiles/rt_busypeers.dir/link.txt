@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../rt_busypeers.fdx CMakeFiles/rt_busypeers.dir/rtbusy.c.o CMakeFiles/rt_busypeers.dir/lex.rtbusy_conf.c.o CMakeFiles/rt_busypeers.dir/rtbusy_conf.tab.c.o 

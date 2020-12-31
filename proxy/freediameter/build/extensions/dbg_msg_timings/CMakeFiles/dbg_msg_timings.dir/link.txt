@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../dbg_msg_timings.fdx CMakeFiles/dbg_msg_timings.dir/dbg_msg_timings.c.o 

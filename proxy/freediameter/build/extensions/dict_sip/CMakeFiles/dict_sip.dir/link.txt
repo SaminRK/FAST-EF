@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../dict_sip.fdx CMakeFiles/dict_sip.dir/dict_sip.c.o 

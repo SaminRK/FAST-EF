@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../test_netemul.fdx CMakeFiles/test_netemul.dir/test_netemul.c.o CMakeFiles/test_netemul.dir/lex.test_netemul.c.o CMakeFiles/test_netemul.dir/test_netemul.tab.c.o CMakeFiles/test_netemul.dir/tne_process.c.o -lm 

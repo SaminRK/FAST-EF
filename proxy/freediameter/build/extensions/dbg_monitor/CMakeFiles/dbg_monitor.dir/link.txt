@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../dbg_monitor.fdx CMakeFiles/dbg_monitor.dir/dbg_monitor.c.o 

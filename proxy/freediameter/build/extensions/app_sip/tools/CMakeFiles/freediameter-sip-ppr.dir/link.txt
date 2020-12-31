@@ -1,0 +1,1 @@
+/usr/bin/cc -Wall -g -O0  -rdynamic CMakeFiles/freediameter-sip-ppr.dir/app_sip_ppr.c.o  -o freediameter-sip-ppr 

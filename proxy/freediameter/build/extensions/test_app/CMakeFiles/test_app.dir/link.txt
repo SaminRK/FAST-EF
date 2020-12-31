@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../test_app.fdx CMakeFiles/test_app.dir/test_app.c.o CMakeFiles/test_app.dir/lex.ta_conf.c.o CMakeFiles/test_app.dir/ta_conf.tab.c.o CMakeFiles/test_app.dir/ta_dict.c.o CMakeFiles/test_app.dir/ta_cli.c.o CMakeFiles/test_app.dir/ta_bench.c.o CMakeFiles/test_app.dir/ta_serv.c.o 

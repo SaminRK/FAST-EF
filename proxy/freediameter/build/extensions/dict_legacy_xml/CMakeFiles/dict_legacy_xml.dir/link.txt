@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../dict_legacy_xml.fdx CMakeFiles/dict_legacy_xml.dir/dict_lxml.c.o CMakeFiles/dict_legacy_xml.dir/dict_lxml_xml.c.o CMakeFiles/dict_legacy_xml.dir/lex.dict_lxml.c.o CMakeFiles/dict_legacy_xml.dir/dict_lxml.tab.c.o -lxml2 

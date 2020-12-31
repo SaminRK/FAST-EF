@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../dict_dcca_starent.fdx CMakeFiles/dict_dcca_starent.dir/dict_dcca_starent.c.o 

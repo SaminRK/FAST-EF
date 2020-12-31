@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../app_redirect.fdx CMakeFiles/app_redirect.dir/app_redir.c.o CMakeFiles/app_redirect.dir/lex.ard_conf.c.o CMakeFiles/app_redirect.dir/ard_conf.tab.c.o CMakeFiles/app_redirect.dir/ard_rules.c.o 
