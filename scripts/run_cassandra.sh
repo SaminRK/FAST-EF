@@ -18,4 +18,3 @@ sleep 10
 echo cqlash
 docker exec -it prod-cassandra /bin/bash -c "cqlsh --file /home/oai_db.cql 192.168.62.2"
 
-cd -
