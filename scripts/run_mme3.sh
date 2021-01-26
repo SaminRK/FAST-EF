@@ -9,7 +9,7 @@ docker create --privileged --name prod-oai-mme --network prod-oai-public-net --i
              -a stdin -a stdout --env-file ./mme-env.list oai-mme:production
 
 # the network is in another pc
-# docker network connect --ip 192.168.63.3 prod-oai-hss-net prod-oai-mme
+docker network connect --ip 192.168.64.3 prod-oai-hss-overlay prod-oai-mme
 
 echo start
 docker start prod-oai-mme
