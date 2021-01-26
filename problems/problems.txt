@@ -1,6 +1,10 @@
 *** Always remember to setup FORWARD ACCEPT before experiment, use iptables0.sh to do so
 
 
+EMMAS-SAP: Failed to process EMMAS_ESTABLISH_REQUEST (205)
+
+solved by correctly configuring ue and enb config files
+
 
 MAC Failure MSG:32A77E35(849837621) <> INT ALGO:00000000(0) Type of security context 0
 
