@@ -13,7 +13,7 @@ docker create --privileged --name prod-oai-hss --network prod-oai-private-net --
                 -a stdin -a stdout --env-file ./hss-env.list oai-hss:production
 
 
-docker network connect --ip 192.168.63.2 prod-oai-hss-net prod-oai-hss
+docker network connect --ip 192.168.64.2 prod-oai-hss-overlay prod-oai-hss
 
 echo start
 docker start prod-oai-hss
