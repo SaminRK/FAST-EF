@@ -1,0 +1,7 @@
+*** Always remember to setup FORWARD ACCEPT before experiment, use iptables0.sh to do so
+
+
+
+MAC Failure MSG:32A77E35(849837621) <> INT ALGO:00000000(0) Type of security context 0
+
+solved by turning on spgwc and spgwu
