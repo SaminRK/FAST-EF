@@ -70,26 +70,29 @@ def getHeadInfo(raw_packet) :
 
 
 def main() :
-    LOCAL_IP = "172.17.1.2"
-    CORE_IP = "172.17.100.254"
+    LOCAL_IP = "0.0.0.0" # IP address of this machine
+    CORE_IP = "192.168.61.5" # spgwu ip address
     CORE_PORT = 2152
-    MEC_IP = "172.17.1.2"
+    MEC_IP = "192.168.71.2"
     MEC_PORT = 2152 
-    #recive the traffic
-    ListenSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # recive the traffic
+    ListenSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # IP, UDP
     ListenSock.bind((LOCAL_IP, 7000)) # LOCAL, 2152
-    #send the traffic
+    # send the traffic
     ForwardSocket_teid = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     ForwardSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-		
+
+    print("dispatcher started ...")
 	
     while True:
+        print("waiting for packet")
         gtp_pkg, addr = ListenSock.recvfrom(2048)
 		#print "received addr:", addr
 		#print '{}:{}'.format(addr[0], str(addr[1]))    
 	    # get header info
 
         Redirection, TEID, SRC_IP= getHeadInfo(gtp_pkg)
+        print(gtp_pkg)
 
         # Test
         
@@ -103,17 +106,15 @@ def main() :
 			#l = ForwardSocket.sendto(gtp_pkg,( "172.17.1.2", 7000 )) #MEC_IP, MEC_PORT     
             l = ForwardSocket.sendto(gtp_pkg,( MEC_IP, MEC_PORT ))      
 			#print "end time: {0}, packet length: {1}".format(datetime.now(), len(gtp_pkg))
-            print "sending to MEC server..."
+            print("sending to MEC server...")
         else:
             ForwardSocket.sendto( gtp_pkg, ( CORE_IP, CORE_PORT ))
-            print "sending to Core..."
+            print("sending to Core...")
 		    #print ""
     
 
 	
 if __name__ == '__main__' :
     main()
-
-
 
 

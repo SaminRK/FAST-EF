@@ -9,7 +9,7 @@ docker run --name prod-cassandra --network prod-oai-private-net --ip 192.168.62.
              -e CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch cassandra:2.1
 
 docker cp component/oai-hss/src/hss_rel14/db/oai_db.cql prod-cassandra:/home
-sleep 10
+sleep 30 # fix later, try to avoid sleep
 echo nodetool
 docker exec -it prod-cassandra /bin/bash -c "nodetool status"
 
