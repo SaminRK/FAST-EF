@@ -2,10 +2,14 @@
 
 
 EMMAS-SAP: Failed to process EMMAS_ESTABLISH_REQUEST (205)
-
 solved by correctly configuring ue and enb config files
 
 
 MAC Failure MSG:32A77E35(849837621) <> INT ALGO:00000000(0) Type of security context 0
-
 solved by turning on spgwc and spgwu
+
+docker swarm sits on port 2377 and queries neighbours ports
+
+
+dispatcher was not receiving packets from other computers
+https://stackoverflow.com/questions/18882203/python-cant-connect-to-open-socket-on-the-same-network
