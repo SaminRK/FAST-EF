@@ -4,3 +4,6 @@
 [submodule "openairinterface5g"]
 	path = openairinterface5g
 	url = https://gitlab.eurecom.fr/oai/openairinterface5g.git
+[submodule "pycrate"]
+	path = pycrate
+	url = https://github.com/P1sec/pycrate.git
