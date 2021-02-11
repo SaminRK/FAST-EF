@@ -75,17 +75,29 @@ def parseSCTPPacket(ip_packet):
                 PDU.from_aper(s1ap_packet)
                 s1ap_obj = PDU.get_val()
                 pp = pprint.PrettyPrinter(indent=1)
-                #pp.pprint(s1ap_obj)
+                pp.pprint(s1ap_obj)
                 #print(s1ap_obj)
-                if (s1ap_obj[0] == 'initiatingMessage'):
-                    inner1 = s1ap_obj[1]['value']
-                    #pp.pprint(inner1)
-                    if (inner1[0] == 'DownlinkNASTransport'):
-                        for ie in inner1[1]['protocolIEs']:
-                            if (ie['value'][0] == 'NAS-PDU'):
-                                inner2 = ie['value'][1]
-                                pp.pprint(inner2)
-                                pp.pprint(NASLTE.parse_NASLTE_MT(inner2))
+                inner1 = s1ap_obj[1]['value']
+                for ie in inner1[1]['protocolIEs']:
+                    if ie['id'] == 26:
+                        inner2 = ie['value'][1]
+                        if (s1ap_obj[0] == 'initiatingMessage'):
+                            pp.pprint(NASLTE.parse_NASLTE_MO(inner2))
+                        else:
+                            pp.pprint(NASLTE.parse_NASLTE_MO(inner2))
+                    elif ie['id'] == 24:
+                        inner2 = ie['value'][1][0]['value'][1]['nAS-PDU'][0] #.NASMessage
+                        pp.pprint(NASLTE.parse_NASLTE_MO(inner2))
+#                if (s1ap_obj[0] == 'initiatingMessage'):
+#                    inner1 = s1ap_obj[1]['value']
+#                    #pp.pprint(inner1)
+#                    if (inner1[0] == 'DownlinkNASTransport'):
+#                        for ie in inner1[1]['protocolIEs']:
+#                            if (ie['value'][0] == 'NAS-PDU'):
+#                                inner2 = ie['value'][1]
+#                                pp.pprint(inner2)
+#                                nas_packet = NASLTE.parse_NASLTE_MT(inner2)
+#                                pp.pprint(nas_packet)
                 #IEs = get_val_at(PDU, ['initiatingMessage', 'value', 'S1SetupRequest', 'protocolIEs'])
                 #for ie in IEs: print(ie['value'])
 #                print(s1ap_packet)
@@ -107,7 +119,9 @@ def main() :
     # https://man7.org/linux/man-pages/man7/ip.7.html
 #    ListenSock = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_SCTP)
 #    ListenSock.bind(("192.168.0.108", CORE_PORT))
+#    buffer_size = 1024*1024
     conn = socket.socket(socket.AF_PACKET, socket.SOCK_DGRAM, socket.ntohs(3))
+#    conn.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, buffer_size)
 #    conn.bind(('wlp3s0', 0))
     
     # recive the traffic
@@ -122,7 +136,7 @@ def main() :
     while True:
         #print("waiting for packet")
         #packet, addr = ListenSock.recvfrom(2048)
-        raw_data, addr = conn.recvfrom(65536)
+        raw_data, addr = conn.recvfrom(4096)
         #print("received addr:", addr)
         #print('{}:{}'.format(addr[0], str(addr[1])))
 	    # get header info
