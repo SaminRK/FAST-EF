@@ -38,16 +38,13 @@
 #include <unistd.h>
 
 #include "assertions.h"
-#include "bstrlib.h"
-#include "common_defs.h"
-#include "conversions.h"
-#include "dynamic_memory_check.h"
-#include "msc.h"
 #include "sctp_common.h"
+#include "dynamic_memory_check.h"
 
 #define SCTP_RC_ERROR -1
 #define SCTP_RC_NORMAL_READ 0
 #define SCTP_RC_DISCONNECT 1
+#define SCTP_RECV_BUFFER_SIZE (8192)
 
 typedef struct sctp_association_s {
     struct sctp_association_s *next_assoc;  ///< Next association in the list
@@ -87,10 +84,10 @@ static struct sctp_descriptor_s sctp_desc;
 // Thread used to handle sctp messages
 static pthread_t assoc_thread;
 
+static server_sctp_recv_callback handle_received_sctp_message;
+
 // LOCAL FUNCTIONS prototypes
 void *sctp_receiver_thread(void *args_p);
-static int sctp_send_msg(sctp_assoc_id_t sctp_assoc_id, uint16_t stream,
-                         STOLEN_REF bstring *payload);
 
 // Association list related local functions prototypes
 static struct sctp_association_s *sctp_is_assoc_in_list(
@@ -98,7 +95,11 @@ static struct sctp_association_s *sctp_is_assoc_in_list(
 static struct sctp_association_s *sctp_add_new_peer(void);
 static int sctp_handle_com_down(sctp_assoc_id_t assoc_id);
 static void sctp_dump_list(void);
-static void sctp_exit(void);
+
+//------------------------------------------------------------------------------
+void set_sctp_message_handler(server_sctp_recv_callback handler) {
+    handle_received_sctp_message = handler;
+}
 
 //------------------------------------------------------------------------------
 static struct sctp_association_s *sctp_add_new_peer(void) {
@@ -251,11 +252,11 @@ static void sctp_dump_list(void) {
 }
 
 //------------------------------------------------------------------------------
-static int sctp_send_msg(sctp_assoc_id_t sctp_assoc_id, uint16_t stream,
-                         STOLEN_REF bstring *payload) {
+int server_sctp_send_msg(sctp_assoc_id_t sctp_assoc_id, uint16_t stream,
+                         const uint8_t *buffer, const uint32_t length) {
     struct sctp_association_s *assoc_desc = NULL;
 
-    DevAssert(*payload);
+    DevAssert(*buffer);
 
     if ((assoc_desc = sctp_is_assoc_in_list(sctp_assoc_id)) == NULL) {
         printf("This assoc id has not been fount in list (%d)\n",
@@ -272,30 +273,25 @@ static int sctp_send_msg(sctp_assoc_id_t sctp_assoc_id, uint16_t stream,
         return -1;
     }
 
-    print("[%d][%d] Sending buffer %p of %d bytes on stream %d with ppid %d\n",
-          assoc_desc->sd, sctp_assoc_id, bdata(*payload), blength(*payload),
-          stream, assoc_desc->ppid);
+    printf("[%d][%d] Sending buffer of %d bytes on stream %d with ppid %d\n",
+          assoc_desc->sd, sctp_assoc_id, length, stream, assoc_desc->ppid);
 
     /*
      * Send message_p on specified stream of the sd association
      */
-    if (sctp_sendmsg(assoc_desc->sd, (const void *)bdata(*payload),
-                     blength(*payload), NULL, 0, htonl(assoc_desc->ppid), 0,
-                     stream, 0, 0) < 0) {
-        bdestroy_wrapper(payload);
+    if (sctp_sendmsg(assoc_desc->sd, (const void *)buffer, length, NULL, 0,
+                     htonl(assoc_desc->ppid), 0, stream, 0, 0) < 0) {
         printf("send: %s:%d", strerror(errno), errno);
         return -1;
     }
-    printf("Successfully sent %d bytes on stream %d\n", blength(*payload),
-           stream);
-    bdestroy_wrapper(payload);
+    printf("Successfully sent %d bytes on stream %d\n", length, stream);
 
     assoc_desc->messages_sent++;
     return 0;
 }
 
 //------------------------------------------------------------------------------
-static int sctp_create_new_listener(SctpInit *init_p) {
+int sctp_create_new_listener(SctpInit *init_p) {
     struct sctp_event_subscribe event = {0};
     //  struct sockaddr                        *addr = NULL;
     struct sctp_arg_s *sctp_arg_p = NULL;
@@ -488,13 +484,13 @@ static inline int sctp_read_from_socket(int sd, int ppid) {
                             sd, &new_association->peer_addresses,
                             &new_association->nb_peer_addresses);
 
-                        if (sctp_itti_send_new_association(
-                                new_association->assoc_id,
-                                new_association->instreams,
-                                new_association->outstreams) < 0) {
-                            printf("Failed to send message to S1AP\n");
-                            return SCTP_RC_ERROR;
-                        }
+                        // if (sctp_itti_send_new_association(
+                        //         new_association->assoc_id,
+                        //         new_association->instreams,
+                        //         new_association->outstreams) < 0) {
+                        //     printf("Failed to send message to S1AP\n");
+                        //     return SCTP_RC_ERROR;
+                        // }
                     }
                 } break;
 
@@ -540,10 +536,13 @@ static inline int sctp_read_from_socket(int sd, int ppid) {
             "%d, PPID %d\n",
             sinfo.sinfo_assoc_id, sd, n, ntohs(addr.sin6_port),
             sinfo.sinfo_stream, ntohl(sinfo.sinfo_ppid));
-        bstring payload = blk2bstr(buffer, n);
-        sctp_itti_send_new_message_ind(
-            &payload, sinfo.sinfo_assoc_id, sinfo.sinfo_stream,
-            association->instreams, association->outstreams);
+        // TODO: make a function to send buffer to mme
+        (*handle_received_sctp_message)(buffer, n, sinfo.sinfo_ppid,
+                                        sinfo.sinfo_stream);
+
+        // sctp_itti_send_new_message_ind(
+        //     &payload, sinfo.sinfo_assoc_id, sinfo.sinfo_stream,
+        //     association->instreams, association->outstreams);
     }
 
     printf("SCTP RETURNING!!\n");
@@ -555,9 +554,9 @@ static inline int sctp_read_from_socket(int sd, int ppid) {
 static int sctp_handle_com_down(sctp_assoc_id_t assoc_id) {
     printf("Sending close connection for assoc_id %u\n", assoc_id);
 
-    if (sctp_itti_send_com_down_ind(assoc_id) < 0) {
-        printf("Failed to send message to TASK_S1AP\n");
-    }
+    // if (sctp_itti_send_com_down_ind(assoc_id) < 0) {
+    //     printf("Failed to send message to TASK_S1AP\n");
+    // }
 
     if (sctp_remove_assoc_from_list(assoc_id) < 0) {
         printf("Failed to find client in list\n");
@@ -663,105 +662,105 @@ void *sctp_receiver_thread(void *args_p) {
 }
 
 //------------------------------------------------------------------------------
-static void *sctp_intertask_interface(void *args_p) {
-    itti_mark_task_ready(TASK_SCTP);
+// static void *sctp_intertask_interface(void *args_p) {
+//     itti_mark_task_ready(TASK_SCTP);
 
-    while (1) {
-        MessageDef *received_message_p = NULL;
+//     while (1) {
+//         MessageDef *received_message_p = NULL;
 
-        itti_receive_msg(TASK_SCTP, &received_message_p);
+//         itti_receive_msg(TASK_SCTP, &received_message_p);
 
-        switch (ITTI_MSG_ID(received_message_p)) {
-            case SCTP_CLOSE_ASSOCIATION: {
-            } break;
+//         switch (ITTI_MSG_ID(received_message_p)) {
+//             case SCTP_CLOSE_ASSOCIATION: {
+//             } break;
 
-            case SCTP_DATA_REQ: {
-                if (sctp_send_msg(SCTP_DATA_REQ(received_message_p).assoc_id,
-                                  SCTP_DATA_REQ(received_message_p).stream,
-                                  &SCTP_DATA_REQ(received_message_p).payload) <
-                    0) {
-                    sctp_itti_send_lower_layer_conf(
-                        received_message_p->ittiMsgHeader.originTaskId,
-                        SCTP_DATA_REQ(received_message_p).assoc_id,
-                        SCTP_DATA_REQ(received_message_p).stream,
-                        SCTP_DATA_REQ(received_message_p).mme_ue_s1ap_id,
-                        false);
-                } /* NO NEED FOR CONFIRM success yet else {
-                  if (INVALID_MME_UE_S1AP_ID != SCTP_DATA_REQ
-                (received_message_p).mme_ue_s1ap_id) {
-                    sctp_itti_send_lower_layer_conf(received_message_p->ittiMsgHeader.originTaskId,
-                        SCTP_DATA_REQ (received_message_p).assoc_id,
-                        SCTP_DATA_REQ (received_message_p).stream,
-                        SCTP_DATA_REQ (received_message_p).mme_ue_s1ap_id,
-                        true);
-                  }
-                }*/
-            } break;
+//             case SCTP_DATA_REQ: {
+//                 if (server_sctp_send_msg(SCTP_DATA_REQ(received_message_p).assoc_id,
+//                                   SCTP_DATA_REQ(received_message_p).stream,
+//                                   &SCTP_DATA_REQ(received_message_p).payload) <
+//                     0) {
+//                     sctp_itti_send_lower_layer_conf(
+//                         received_message_p->ittiMsgHeader.originTaskId,
+//                         SCTP_DATA_REQ(received_message_p).assoc_id,
+//                         SCTP_DATA_REQ(received_message_p).stream,
+//                         SCTP_DATA_REQ(received_message_p).mme_ue_s1ap_id,
+//                         false);
+//                 } /* NO NEED FOR CONFIRM success yet else {
+//                   if (INVALID_MME_UE_S1AP_ID != SCTP_DATA_REQ
+//                 (received_message_p).mme_ue_s1ap_id) {
+//                     sctp_itti_send_lower_layer_conf(received_message_p->ittiMsgHeader.originTaskId,
+//                         SCTP_DATA_REQ (received_message_p).assoc_id,
+//                         SCTP_DATA_REQ (received_message_p).stream,
+//                         SCTP_DATA_REQ (received_message_p).mme_ue_s1ap_id,
+//                         true);
+//                   }
+//                 }*/
+//             } break;
 
-            case SCTP_INIT_MSG: {
-                printf("Received SCTP_INIT_MSG\n");
+//             case SCTP_INIT_MSG: {
+//                 printf("Received SCTP_INIT_MSG\n");
 
-                /*
-                 * We received a new connection request
-                 */
-                if (sctp_create_new_listener(
-                        &received_message_p->ittiMsg.sctpInit) < 0) {
-                    /*
-                     * SCTP socket creation or bind failed...
-                     */
-                    printf("Failed to create new SCTP listener\n");
-                }
-            } break;
+//                 /*
+//                  * We received a new connection request
+//                  */
+//                 if (sctp_create_new_listener(
+//                         &received_message_p->ittiMsg.sctpInit) < 0) {
+//                     /*
+//                      * SCTP socket creation or bind failed...
+//                      */
+//                     printf("Failed to create new SCTP listener\n");
+//                 }
+//             } break;
 
-            case MESSAGE_TEST: {
-                printf("TASK_SCTP received MESSAGE_TEST\n");
-            } break;
+//             case MESSAGE_TEST: {
+//                 printf("TASK_SCTP received MESSAGE_TEST\n");
+//             } break;
 
-            case TERMINATE_MESSAGE: {
-                sctp_exit();
-                itti_free_msg_content(received_message_p);
-                itti_free(ITTI_MSG_ORIGIN_ID(received_message_p),
-                          received_message_p);
-                itti_exit_task();
-            } break;
+//             case TERMINATE_MESSAGE: {
+//                 sctp_exit();
+//                 itti_free_msg_content(received_message_p);
+//                 itti_free(ITTI_MSG_ORIGIN_ID(received_message_p),
+//                           received_message_p);
+//                 itti_exit_task();
+//             } break;
 
-            default: {
-                printf("Unkwnon message ID %d:%s\n",
-                       ITTI_MSG_ID(received_message_p),
-                       ITTI_MSG_NAME(received_message_p));
-            } break;
-        }
+//             default: {
+//                 printf("Unkwnon message ID %d:%s\n",
+//                        ITTI_MSG_ID(received_message_p),
+//                        ITTI_MSG_NAME(received_message_p));
+//             } break;
+//         }
 
-        itti_free_msg_content(received_message_p);
-        itti_free(ITTI_MSG_ORIGIN_ID(received_message_p), received_message_p);
-        received_message_p = NULL;
-    }
+//         itti_free_msg_content(received_message_p);
+//         itti_free(ITTI_MSG_ORIGIN_ID(received_message_p), received_message_p);
+//         received_message_p = NULL;
+//     }
 
-    return NULL;
-}
+//     return NULL;
+// }
 
 //------------------------------------------------------------------------------
-int sctp_init(const mme_config_t *mme_config_p) {
+int sctp_init(int nb_instreams, int nb_outstreams) {
     printf("Initializing SCTP task interface\n");
     memset(&sctp_desc, 0, sizeof(struct sctp_descriptor_s));
     /*
      * Number of streams from configuration
      */
-    sctp_desc.nb_instreams = mme_config_p->sctp_config.in_streams;
-    sctp_desc.nb_outstreams = mme_config_p->sctp_config.out_streams;
+    sctp_desc.nb_instreams = nb_instreams;
+    sctp_desc.nb_outstreams = nb_outstreams;
 
-    if (itti_create_task(TASK_SCTP, &sctp_intertask_interface, NULL) < 0) {
-        printf("create task failed");
-        printf("Initializing SCTP task interface: FAILED\n");
-        return -1;
-    }
+    // if (itti_create_task(TASK_SCTP, &sctp_intertask_interface, NULL) < 0) {
+    //     printf("create task failed");
+    //     printf("Initializing SCTP task interface: FAILED\n");
+    //     return -1;
+    // }
 
     printf("Initializing SCTP task interface: DONE\n");
     return 0;
 }
 
 //------------------------------------------------------------------------------
-static void sctp_exit(void) {
+void sctp_exit(void) {
     int rv = pthread_cancel(assoc_thread);
     if (rv)
         printf("pthread_cancel(%08lX) failed: %d:%s\n", assoc_thread, rv,

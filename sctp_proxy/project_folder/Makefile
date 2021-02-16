@@ -21,11 +21,20 @@ CFLAGS  = -g -Wall
 #
 default: sctp_dispatcher
 
-sctp_dispatcher: sctp_primitives_client.o backtrace.o sctp_common.o
-	$(CC) $(CFLAGS) -o sctp_dispatcher sctp_primitives_client.o sctp_common.o backtrace.o sctp_dispatcher.c -lsctp
+sctp_dispatcher: sctp_primitives_client.o sctp_primitives_server.o backtrace.o sctp_common.o dynamic_memory_check.o bstrlib.o
+	$(CC) $(CFLAGS) -o sctp_dispatcher sctp_primitives_client.o sctp_primitives_server.o backtrace.o sctp_common.o dynamic_memory_check.o bstrlib.o sctp_dispatcher.c -lsctp -pthread
+
+sctp_primitives_server.o: sctp_primitives_server.c sctp_primitives_server.h
+	$(CC) $(CFLAGS) -c sctp_primitives_server.c
 
 sctp_primitives_client.o: sctp_primitives_client.c sctp_primitives_client.h
 	$(CC) $(CFLAGS) -c sctp_primitives_client.c
+
+bstrlib.o: bstrlib.c bstrlib.h
+	$(CC) $(CFLAGS) -c bstrlib.c
+
+dynamic_memory_check.o: dynamic_memory_check.c dynamic_memory_check.h
+	$(CC) $(CFLAGS) -c dynamic_memory_check.c
 
 backtrace.o: backtrace.c backtrace.h
 	$(CC) $(CFLAGS) -c backtrace.c

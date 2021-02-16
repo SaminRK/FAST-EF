@@ -40,7 +40,7 @@
 #include "sctp_primitives_client.h"
 
 /* Send buffer to SCTP association */
-int sctp_send_msg(sctp_data_t *sctp_data_p, uint16_t ppid, uint16_t stream,
+int client_sctp_send_msg(sctp_data_t *sctp_data_p, uint16_t ppid, uint16_t stream,
                   const uint8_t *buffer, const uint32_t length) {
     DevAssert(buffer != NULL);
     DevAssert(sctp_data_p != NULL);
@@ -75,7 +75,7 @@ static int sctp_handle_notifications(union sctp_notification *snp) {
     return 0;
 }
 
-int sctp_run(sctp_data_t *sctp_data_p) {
+int sctp_run(sctp_data_t *sctp_data_p, client_sctp_recv_callback handler) {
     int ret, repeat = 1;
     int total_size = 0;
     int sd;
@@ -128,33 +128,35 @@ int sctp_run(sctp_data_t *sctp_data_p) {
             if (flags & MSG_NOTIFICATION) {
                 sctp_handle_notifications((union sctp_notification *)buffer);
             } else {
-                struct sctp_queue_item_s *new_item_p;
+                // struct sctp_queue_item_s *new_item_p;
 
-                new_item_p = calloc(1, sizeof(struct sctp_queue_item_s));
+                // new_item_p = calloc(1, sizeof(struct sctp_queue_item_s));
                 /* Normal data received */
                 printf(
                     "[SD %d] Msg of length %d received from %s:%u on "
                     "stream %d, PPID %d, assoc_id %d\n",
                     sd, n, inet_ntoa(addr.sin_addr), ntohs(addr.sin_port),
                     sinfo.sinfo_stream, sinfo.sinfo_ppid, sinfo.sinfo_assoc_id);
+                
+                (*handler)(sinfo.sinfo_assoc_id, sinfo.sinfo_stream, buffer, n);
 
-                new_item_p->local_stream = sinfo.sinfo_stream;
-                new_item_p->remote_port = ntohs(addr.sin_port);
-                new_item_p->remote_addr = addr.sin_addr.s_addr;
-                new_item_p->ppid = sinfo.sinfo_ppid;
-                new_item_p->assoc_id = sinfo.sinfo_assoc_id;
-                new_item_p->length = n;
-                new_item_p->buffer = malloc(sizeof(uint8_t) * n);
+                // new_item_p->local_stream = sinfo.sinfo_stream;
+                // new_item_p->remote_port = ntohs(addr.sin_port);
+                // new_item_p->remote_addr = addr.sin_addr.s_addr;
+                // new_item_p->ppid = sinfo.sinfo_ppid;
+                // new_item_p->assoc_id = sinfo.sinfo_assoc_id;
+                // new_item_p->length = n;
+                // new_item_p->buffer = malloc(sizeof(uint8_t) * n);
 
-                memcpy(new_item_p->buffer, buffer, n);
+                // memcpy(new_item_p->buffer, buffer, n);
 
-                /* Insert the new packet at the tail of queue. */
-                TAILQ_INSERT_TAIL(&sctp_data_p->sctp_queue, new_item_p, entry);
+                // /* Insert the new packet at the tail of queue. */
+                // TAILQ_INSERT_TAIL(&sctp_data_p->sctp_queue, new_item_p, entry);
 
-                /* Update queue related data */
-                sctp_data_p->queue_size += n;
-                sctp_data_p->queue_length++;
-                total_size += n;
+                // /* Update queue related data */
+                // sctp_data_p->queue_size += n;
+                // sctp_data_p->queue_length++;
+                // total_size += n;
             }
         }
     }

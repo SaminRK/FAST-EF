@@ -24,30 +24,43 @@
  *  @{
  */
 
-#if !defined(HAVE_LIBSCTP)
-#error "You must install libsctp-dev"
-#endif
-
 #ifndef FILE_SCTP_PRIMITIVES_SERVER_SEEN
 #define FILE_SCTP_PRIMITIVES_SERVER_SEEN
-#if HAVE_CONFIG_H
-#include "config.h"
-#endif
 
-#include "mme_config.h"
+#include <stdint.h>
+
+typedef uint32_t sctp_assoc_id_t;
 
 /** \brief SCTP data received callback
  \param buffer pointer to buffer received
  \param length pointer to the length of buffer
+ \param ppid packet protocol id
+ \param stream stream no
  **/
-typedef void (*sctp_recv_callback)(uint8_t* buffer, uint32_t length);
+typedef void (*server_sctp_recv_callback)(uint8_t *buffer, uint32_t length,
+                                          uint16_t ppid, uint16_t stream);
+
+typedef struct sctp_init_s {
+    int ipv4, ipv6;
+    int nb_ipv4_addr, nb_ipv6_addr;
+    uint16_t port;
+    struct in_addr *ipv4_address;
+    struct in6_addr *ipv6_address;
+    uint32_t ppid;
+} SctpInit;
 
 /** \brief SCTP Init function. Initialize SCTP layer
- \param mme_config The global MME configuration structure
+ \param nb_instreams
+ \param nb_outstreams
  @returns -1 on error, 0 otherwise.
  **/
-struct mme_config_s;
-int sctp_init(const struct mme_config_s* mme_config_p);
+int sctp_init(int nb_instreams, int nb_outstreams);
+
+int sctp_create_new_listener(SctpInit *init_p);
+void set_sctp_message_handler(server_sctp_recv_callback handler);
+int server_sctp_send_msg(sctp_assoc_id_t sctp_assoc_id, uint16_t stream,
+                         const uint8_t *buffer, const uint32_t length);
+void sctp_exit(void);
 
 #endif /* FILE_SCTP_PRIMITIVES_SERVER_SEEN */
 

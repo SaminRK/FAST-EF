@@ -39,7 +39,7 @@
  * \param length Length of message received
  * @return Execution result
  */
-typedef int (*sctp_recv_callback)(uint32_t assocId, uint32_t stream,
+typedef int (*client_sctp_recv_callback)(uint32_t assocId, uint32_t stream,
                                   uint8_t *buffer, uint32_t length);
 
 /** \brief SCTP connected callback prototype. Will be called once the
@@ -73,14 +73,14 @@ int sctp_connect_to_remote_host(char *local_ip_addr[], int nb_local_addr,
  * \param length Buffer length
  * @return < 0 in case of failure
  */
-int sctp_send_msg(sctp_data_t *sctp_data_p, uint16_t ppid, uint16_t stream,
+int client_sctp_send_msg(sctp_data_t *sctp_data_p, uint16_t ppid, uint16_t stream,
                   const uint8_t *buffer, const uint32_t length);
 
 /** \brief Flush the FIFO of messages from the socket
  * \param sctp_data_p
  * @return < 0 in case of failure
  */
-int sctp_run(sctp_data_t *sctp_data_p);
+int sctp_run(sctp_data_t *sctp_data_p, client_sctp_recv_callback handler);
 
 /** \brief Properly disconnect the peer
  * \param assoc_id The SCTP association ID
