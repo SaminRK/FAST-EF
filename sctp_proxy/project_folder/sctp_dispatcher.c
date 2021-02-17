@@ -19,7 +19,7 @@ int client_to_server(uint32_t assocId, uint32_t stream, uint8_t *buffer,
 }
 
 int main() {
-    char *locals[] = {"192.168.0.106"};
+    char *locals[] = {"192.168.0.108"};
     sctp_connect_to_remote_host(locals, 1, "192.168.61.3", 36412, SOCK_STREAM,
                                 (sctp_data_t *)&client_config);
 
@@ -39,10 +39,10 @@ int main() {
     set_sctp_message_handler((server_sctp_recv_callback)&server_to_client);
     sctp_create_new_listener((SctpInit *)&sctp_init);
 
-    while (1) {
-        sctp_run((sctp_data_t *)&client_config,
-                 (client_sctp_recv_callback)client_to_server);
-    }
+    // while (1) {
+    //     sctp_run((sctp_data_t *)&client_config,
+    //              (client_sctp_recv_callback)client_to_server);
+    // }
 
     sctp_exit();
 }
