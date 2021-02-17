@@ -4,18 +4,21 @@
 #include "sctp_primitives_server.h"
 #include "sctp_primitives_client.h"
 
+#include <stdio.h>
+
 sctp_data_t client_config;
 
 void server_to_client(uint8_t *buffer, uint32_t length, uint16_t ppid,
                       uint16_t stream) {
+    printf("passing ppid %d\n", ppid);
     client_sctp_send_msg((sctp_data_t *)&client_config, ppid, stream, buffer,
                          length);
 
 }
 
-int client_to_server(uint32_t assocId, uint32_t stream, uint8_t *buffer,
+int client_to_server(uint32_t stream, uint8_t *buffer,
                      uint32_t length) {
-    return server_sctp_send_msg(assocId, stream, buffer, length);
+    return server_sctp_send_msg_to_first_assoc(stream, buffer, length);
 }
 
 int main() {
@@ -31,7 +34,7 @@ int main() {
     sctp_init.nb_ipv4_addr = 1;
     sctp_init.nb_ipv6_addr = 0;
     sctp_init.ipv4_address = calloc(1, sizeof(struct in6_addr));
-    inet_aton("192.168.61.3", (struct in_addr *)&sctp_init.ipv4_address[0]);
+    inet_aton("192.168.0.106", (struct in_addr *)&sctp_init.ipv4_address[0]);
     sctp_init.port = 36414;
     sctp_init.ppid =
         18;  // https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-25
@@ -39,6 +42,7 @@ int main() {
     set_sctp_message_handler((server_sctp_recv_callback)&server_to_client);
     sctp_create_new_listener((SctpInit *)&sctp_init);
 
+    //while(1) {;}
     while (1) {
         sctp_run((sctp_data_t *)&client_config,
                  (client_sctp_recv_callback)client_to_server);

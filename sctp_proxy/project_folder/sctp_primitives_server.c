@@ -251,6 +251,10 @@ static void sctp_dump_list(void) {
 #endif
 }
 
+int server_sctp_send_msg_to_first_assoc(uint16_t stream, const uint8_t* buffer, const uint32_t length) {
+    return server_sctp_send_msg(sctp_desc.available_connections_head->assoc_id, stream, buffer, length);
+}
+
 //------------------------------------------------------------------------------
 int server_sctp_send_msg(sctp_assoc_id_t sctp_assoc_id, uint16_t stream,
                          const uint8_t *buffer, const uint32_t length) {
@@ -388,6 +392,7 @@ int sctp_create_new_listener(SctpInit *init_p) {
         }
 
         if ((sctp_arg_p = malloc(sizeof(struct sctp_arg_s))) == NULL) {
+            printf("could not allocate memory\n");
             return -1;
         }
 
@@ -400,10 +405,9 @@ int sctp_create_new_listener(SctpInit *init_p) {
             return -1;
         }
     }
-
     return sd;
 err:
-
+    printf("error has occured\n");
     if (sd != -1) {
         close(sd);
         sd = -1;
@@ -537,8 +541,8 @@ static inline int sctp_read_from_socket(int sd, int ppid) {
             sinfo.sinfo_assoc_id, sd, n, ntohs(addr.sin6_port),
             sinfo.sinfo_stream, ntohl(sinfo.sinfo_ppid));
         // TODO: make a function to send buffer to mme
-        (*handle_received_sctp_message)(buffer, n, sinfo.sinfo_ppid,
-                                        sinfo.sinfo_stream);
+        (*handle_received_sctp_message)(buffer, (uint32_t) n, (uint16_t) ntohl(sinfo.sinfo_ppid),
+                                        (uint16_t)sinfo.sinfo_stream);
 
         // sctp_itti_send_new_message_ind(
         //     &payload, sinfo.sinfo_assoc_id, sinfo.sinfo_stream,
@@ -741,7 +745,7 @@ void *sctp_receiver_thread(void *args_p) {
 
 //------------------------------------------------------------------------------
 int sctp_init(int nb_instreams, int nb_outstreams) {
-    printf("Initializing SCTP task interface\n");
+    printf("Initializing SCTP\n");
     memset(&sctp_desc, 0, sizeof(struct sctp_descriptor_s));
     /*
      * Number of streams from configuration
@@ -755,7 +759,7 @@ int sctp_init(int nb_instreams, int nb_outstreams) {
     //     return -1;
     // }
 
-    printf("Initializing SCTP task interface: DONE\n");
+    printf("Initializing SCTP: DONE\n");
     return 0;
 }
 
