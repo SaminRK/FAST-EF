@@ -38,8 +38,8 @@
 #include <unistd.h>
 
 #include "assertions.h"
-#include "sctp_common.h"
 #include "dynamic_memory_check.h"
+#include "sctp_common.h"
 
 #define SCTP_RC_ERROR -1
 #define SCTP_RC_NORMAL_READ 0
@@ -251,8 +251,10 @@ static void sctp_dump_list(void) {
 #endif
 }
 
-int server_sctp_send_msg_to_first_assoc(uint16_t stream, const uint8_t* buffer, const uint32_t length) {
-    return server_sctp_send_msg(sctp_desc.available_connections_head->assoc_id, stream, buffer, length);
+int server_sctp_send_msg_to_first_assoc(uint16_t stream, const uint8_t *buffer,
+                                        const uint32_t length) {
+    return server_sctp_send_msg(sctp_desc.available_connections_head->assoc_id,
+                                stream, buffer, length);
 }
 
 //------------------------------------------------------------------------------
@@ -278,7 +280,7 @@ int server_sctp_send_msg(sctp_assoc_id_t sctp_assoc_id, uint16_t stream,
     }
 
     printf("[%d][%d] Sending buffer of %d bytes on stream %d with ppid %d\n",
-          assoc_desc->sd, sctp_assoc_id, length, stream, assoc_desc->ppid);
+           assoc_desc->sd, sctp_assoc_id, length, stream, assoc_desc->ppid);
 
     /*
      * Send message_p on specified stream of the sd association
@@ -541,7 +543,8 @@ static inline int sctp_read_from_socket(int sd, int ppid) {
             sinfo.sinfo_assoc_id, sd, n, ntohs(addr.sin6_port),
             sinfo.sinfo_stream, ntohl(sinfo.sinfo_ppid));
         // TODO: make a function to send buffer to mme
-        (*handle_received_sctp_message)(buffer, (uint32_t) n, (uint16_t) ntohl(sinfo.sinfo_ppid),
+        (*handle_received_sctp_message)(buffer, (uint32_t)n,
+                                        (uint16_t)ntohl(sinfo.sinfo_ppid),
                                         (uint16_t)sinfo.sinfo_stream);
 
         // sctp_itti_send_new_message_ind(
@@ -679,9 +682,11 @@ void *sctp_receiver_thread(void *args_p) {
 //             } break;
 
 //             case SCTP_DATA_REQ: {
-//                 if (server_sctp_send_msg(SCTP_DATA_REQ(received_message_p).assoc_id,
+//                 if
+//                 (server_sctp_send_msg(SCTP_DATA_REQ(received_message_p).assoc_id,
 //                                   SCTP_DATA_REQ(received_message_p).stream,
-//                                   &SCTP_DATA_REQ(received_message_p).payload) <
+//                                   &SCTP_DATA_REQ(received_message_p).payload)
+//                                   <
 //                     0) {
 //                     sctp_itti_send_lower_layer_conf(
 //                         received_message_p->ittiMsgHeader.originTaskId,
@@ -736,8 +741,8 @@ void *sctp_receiver_thread(void *args_p) {
 //         }
 
 //         itti_free_msg_content(received_message_p);
-//         itti_free(ITTI_MSG_ORIGIN_ID(received_message_p), received_message_p);
-//         received_message_p = NULL;
+//         itti_free(ITTI_MSG_ORIGIN_ID(received_message_p),
+//         received_message_p); received_message_p = NULL;
 //     }
 
 //     return NULL;

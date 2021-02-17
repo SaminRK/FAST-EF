@@ -1,23 +1,19 @@
 #include <arpa/inet.h>
+#include <stdio.h>
 #include <stdlib.h>
 
-#include "sctp_primitives_server.h"
 #include "sctp_primitives_client.h"
-
-#include <stdio.h>
+#include "sctp_primitives_server.h"
 
 sctp_data_t client_config;
 
 void server_to_client(uint8_t *buffer, uint32_t length, uint16_t ppid,
                       uint16_t stream) {
-    printf("passing ppid %d\n", ppid);
     client_sctp_send_msg((sctp_data_t *)&client_config, ppid, stream, buffer,
                          length);
-
 }
 
-int client_to_server(uint32_t stream, uint8_t *buffer,
-                     uint32_t length) {
+int client_to_server(uint16_t stream, uint8_t *buffer, uint32_t length) {
     return server_sctp_send_msg_to_first_assoc(stream, buffer, length);
 }
 
@@ -42,18 +38,9 @@ int main() {
     set_sctp_message_handler((server_sctp_recv_callback)&server_to_client);
     sctp_create_new_listener((SctpInit *)&sctp_init);
 
-<<<<<<< HEAD
-    // while (1) {
-    //     sctp_run((sctp_data_t *)&client_config,
-    //              (client_sctp_recv_callback)client_to_server);
-    // }
-=======
-    //while(1) {;}
     while (1) {
         sctp_run((sctp_data_t *)&client_config,
                  (client_sctp_recv_callback)client_to_server);
     }
->>>>>>> 9c15ebb4120a8a5b02e637f0fdaf26ddd143581d
-
     sctp_exit();
 }

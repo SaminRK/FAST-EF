@@ -40,8 +40,9 @@
 #include "sctp_primitives_client.h"
 
 /* Send buffer to SCTP association */
-int client_sctp_send_msg(sctp_data_t *sctp_data_p, uint16_t ppid, uint16_t stream,
-                  const uint8_t *buffer, const uint32_t length) {
+int client_sctp_send_msg(sctp_data_t *sctp_data_p, uint16_t ppid,
+                         uint16_t stream, const uint8_t *buffer,
+                         const uint32_t length) {
     DevAssert(buffer != NULL);
     DevAssert(sctp_data_p != NULL);
 
@@ -54,8 +55,8 @@ int client_sctp_send_msg(sctp_data_t *sctp_data_p, uint16_t ppid, uint16_t strea
         return -1;
     }
 
-    printf("Successfully sent %d bytes to port %d on stream %d with ppid: %d\n", length,
-           sctp_data_p->remote_port, stream, ppid);
+    printf("Successfully sent %d bytes to port %d on stream %d with ppid: %d\n",
+           length, sctp_data_p->remote_port, stream, ppid);
 
     return 0;
 }
@@ -97,13 +98,12 @@ int sctp_run(sctp_data_t *sctp_data_p, client_sctp_recv_callback handler) {
     memset((void *)&sinfo, 0, sizeof(struct sctp_sndrcvinfo));
 
     n = sctp_recvmsg(sd, (void *)buffer, SCTP_RECV_BUFFER_SIZE,
-                        (struct sockaddr *)&addr, &from_len, &sinfo,
-                        &flags);
+                     (struct sockaddr *)&addr, &from_len, &sinfo, &flags);
 
     if (n < 0) {
         /* Other peer is deconnected */
-        printf("[SD %d] An error occured during read (%d:%s)\n", sd,
-                errno, strerror(errno));
+        printf("[SD %d] An error occured during read (%d:%s)\n", sd, errno,
+               strerror(errno));
         return 0;
     }
 
@@ -118,9 +118,9 @@ int sctp_run(sctp_data_t *sctp_data_p, client_sctp_recv_callback handler) {
             "[SD %d] Msg of length %d received from %s:%u on "
             "stream %d, PPID %d, assoc_id %d\n",
             sd, n, inet_ntoa(addr.sin_addr), ntohs(addr.sin_port),
-            sinfo.sinfo_stream, sinfo.sinfo_ppid, sinfo.sinfo_assoc_id);
-        
-        (*handler)(sinfo.sinfo_stream, buffer, n);
+            sinfo.sinfo_stream, ntohl(sinfo.sinfo_ppid), sinfo.sinfo_assoc_id);
+
+        (*handler)((uint16_t)sinfo.sinfo_stream, (uint8_t *)buffer, n);
 
         // new_item_p->local_stream = sinfo.sinfo_stream;
         // new_item_p->remote_port = ntohs(addr.sin_port);
@@ -159,7 +159,7 @@ int sctp_run(sctp_data_t *sctp_data_p, client_sctp_recv_callback handler) {
     //         repeat = 0;
     //     } else {
     //         /* Socket has some data to read */
-    
+
     //     }
     // }
 
