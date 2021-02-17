@@ -39,7 +39,7 @@
  * \param length Length of message received
  * @return Execution result
  */
-typedef int (*client_sctp_recv_callback)(uint32_t assocId, uint32_t stream,
+typedef int (*client_sctp_recv_callback)(uint32_t stream,
                                   uint8_t *buffer, uint32_t length);
 
 /** \brief SCTP connected callback prototype. Will be called once the

@@ -54,8 +54,8 @@ int client_sctp_send_msg(sctp_data_t *sctp_data_p, uint16_t ppid, uint16_t strea
         return -1;
     }
 
-    printf("Successfully sent %d bytes to port %d on stream %d\n", length,
-           sctp_data_p->remote_port, stream);
+    printf("Successfully sent %d bytes to port %d on stream %d with ppid: %d\n", length,
+           sctp_data_p->remote_port, stream, ppid);
 
     return 0;
 }
@@ -76,92 +76,94 @@ static int sctp_handle_notifications(union sctp_notification *snp) {
 }
 
 int sctp_run(sctp_data_t *sctp_data_p, client_sctp_recv_callback handler) {
-    int ret, repeat = 1;
-    int total_size = 0;
+    // int ret, repeat = 1;
+    // int total_size = 0;
     int sd;
-    struct pollfd fds;
+    // struct pollfd fds;
 
-    DevAssert(sctp_data_p != NULL);
+    // DevAssert(sctp_data_p != NULL);
 
     sd = sctp_data_p->sd;
 
-    memset(&fds, 0, sizeof(struct pollfd));
+    uint8_t buffer[SCTP_RECV_BUFFER_SIZE];
+    int flags = 0;
+    int n;
+    struct sockaddr_in addr;
+    struct sctp_sndrcvinfo sinfo;
 
-    fds.fd = sd;
-    fds.events = POLLIN;
+    socklen_t from_len;
+    memset((void *)&addr, 0, sizeof(struct sockaddr_in));
+    from_len = (socklen_t)sizeof(struct sockaddr_in);
+    memset((void *)&sinfo, 0, sizeof(struct sctp_sndrcvinfo));
 
-    while (repeat == 1) {
-        ret = poll(&fds, 1, 0);  // non-blocking since timeout is 0
+    n = sctp_recvmsg(sd, (void *)buffer, SCTP_RECV_BUFFER_SIZE,
+                        (struct sockaddr *)&addr, &from_len, &sinfo,
+                        &flags);
 
-        if (ret < 0) {
-            printf("[SD %d] Poll has failed (%d:%s)\n", sd, errno,
-                   strerror(errno));
-            return errno;
-        } else if (ret == 0) {
-            /* No data to read, just leave the loop */
-            printf("[SD %d] Poll: no data available\n", sd);
-            repeat = 0;
-        } else {
-            /* Socket has some data to read */
-            uint8_t buffer[SCTP_RECV_BUFFER_SIZE];
-            int flags = 0;
-            int n;
-            struct sockaddr_in addr;
-            struct sctp_sndrcvinfo sinfo;
-
-            socklen_t from_len;
-            memset((void *)&addr, 0, sizeof(struct sockaddr_in));
-            from_len = (socklen_t)sizeof(struct sockaddr_in);
-            memset((void *)&sinfo, 0, sizeof(struct sctp_sndrcvinfo));
-
-            n = sctp_recvmsg(sd, (void *)buffer, SCTP_RECV_BUFFER_SIZE,
-                             (struct sockaddr *)&addr, &from_len, &sinfo,
-                             &flags);
-
-            if (n < 0) {
-                /* Other peer is deconnected */
-                printf("[SD %d] An error occured during read (%d:%s)\n", sd,
-                       errno, strerror(errno));
-                return 0;
-            }
-
-            if (flags & MSG_NOTIFICATION) {
-                sctp_handle_notifications((union sctp_notification *)buffer);
-            } else {
-                // struct sctp_queue_item_s *new_item_p;
-
-                // new_item_p = calloc(1, sizeof(struct sctp_queue_item_s));
-                /* Normal data received */
-                printf(
-                    "[SD %d] Msg of length %d received from %s:%u on "
-                    "stream %d, PPID %d, assoc_id %d\n",
-                    sd, n, inet_ntoa(addr.sin_addr), ntohs(addr.sin_port),
-                    sinfo.sinfo_stream, sinfo.sinfo_ppid, sinfo.sinfo_assoc_id);
-                
-                (*handler)(sinfo.sinfo_assoc_id, sinfo.sinfo_stream, buffer, n);
-
-                // new_item_p->local_stream = sinfo.sinfo_stream;
-                // new_item_p->remote_port = ntohs(addr.sin_port);
-                // new_item_p->remote_addr = addr.sin_addr.s_addr;
-                // new_item_p->ppid = sinfo.sinfo_ppid;
-                // new_item_p->assoc_id = sinfo.sinfo_assoc_id;
-                // new_item_p->length = n;
-                // new_item_p->buffer = malloc(sizeof(uint8_t) * n);
-
-                // memcpy(new_item_p->buffer, buffer, n);
-
-                // /* Insert the new packet at the tail of queue. */
-                // TAILQ_INSERT_TAIL(&sctp_data_p->sctp_queue, new_item_p, entry);
-
-                // /* Update queue related data */
-                // sctp_data_p->queue_size += n;
-                // sctp_data_p->queue_length++;
-                // total_size += n;
-            }
-        }
+    if (n < 0) {
+        /* Other peer is deconnected */
+        printf("[SD %d] An error occured during read (%d:%s)\n", sd,
+                errno, strerror(errno));
+        return 0;
     }
 
-    return total_size;
+    if (flags & MSG_NOTIFICATION) {
+        sctp_handle_notifications((union sctp_notification *)buffer);
+    } else {
+        // struct sctp_queue_item_s *new_item_p;
+
+        // new_item_p = calloc(1, sizeof(struct sctp_queue_item_s));
+        /* Normal data received */
+        printf(
+            "[SD %d] Msg of length %d received from %s:%u on "
+            "stream %d, PPID %d, assoc_id %d\n",
+            sd, n, inet_ntoa(addr.sin_addr), ntohs(addr.sin_port),
+            sinfo.sinfo_stream, sinfo.sinfo_ppid, sinfo.sinfo_assoc_id);
+        
+        (*handler)(sinfo.sinfo_stream, buffer, n);
+
+        // new_item_p->local_stream = sinfo.sinfo_stream;
+        // new_item_p->remote_port = ntohs(addr.sin_port);
+        // new_item_p->remote_addr = addr.sin_addr.s_addr;
+        // new_item_p->ppid = sinfo.sinfo_ppid;
+        // new_item_p->assoc_id = sinfo.sinfo_assoc_id;
+        // new_item_p->length = n;
+        // new_item_p->buffer = malloc(sizeof(uint8_t) * n);
+
+        // memcpy(new_item_p->buffer, buffer, n);
+
+        // /* Insert the new packet at the tail of queue. */
+        // TAILQ_INSERT_TAIL(&sctp_data_p->sctp_queue, new_item_p, entry);
+
+        // /* Update queue related data */
+        // sctp_data_p->queue_size += n;
+        // sctp_data_p->queue_length++;
+        // total_size += n;
+    }
+
+    // memset(&fds, 0, sizeof(struct pollfd));
+
+    // fds.fd = sd;
+    // fds.events = POLLIN;
+
+    // while (repeat == 1) {
+    //     ret = poll(&fds, 1, 0);  // non-blocking since timeout is 0
+
+    //     if (ret < 0) {
+    //         printf("[SD %d] Poll has failed (%d:%s)\n", sd, errno,
+    //                strerror(errno));
+    //         return errno;
+    //     } else if (ret == 0) {
+    //         /* No data to read, just leave the loop */
+    //         printf("[SD %d] Poll: no data available\n", sd);
+    //         repeat = 0;
+    //     } else {
+    //         /* Socket has some data to read */
+    
+    //     }
+    // }
+
+    return 0;
 }
 
 int sctp_connect_to_remote_host(char *local_ip_addr[], int nb_local_addr,

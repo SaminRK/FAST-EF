@@ -58,6 +58,7 @@ int sctp_init(int nb_instreams, int nb_outstreams);
 
 int sctp_create_new_listener(SctpInit *init_p);
 void set_sctp_message_handler(server_sctp_recv_callback handler);
+int server_sctp_send_msg_to_first_assoc(uint16_t stream, const uint8_t* buffer, const uint32_t length);
 int server_sctp_send_msg(sctp_assoc_id_t sctp_assoc_id, uint16_t stream,
                          const uint8_t *buffer, const uint32_t length);
 void sctp_exit(void);
