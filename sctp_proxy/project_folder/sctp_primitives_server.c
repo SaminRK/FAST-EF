@@ -262,7 +262,7 @@ int server_sctp_send_msg(sctp_assoc_id_t sctp_assoc_id, uint16_t stream,
                          const uint8_t *buffer, const uint32_t length) {
     struct sctp_association_s *assoc_desc = NULL;
 
-    DevAssert(*buffer);
+    // DevAssert(*buffer);
 
     if ((assoc_desc = sctp_is_assoc_in_list(sctp_assoc_id)) == NULL) {
         printf("This assoc id has not been fount in list (%d)\n",

@@ -119,6 +119,8 @@ int sctp_run(sctp_data_t *sctp_data_p, client_sctp_recv_callback handler) {
             "stream %d, PPID %d, assoc_id %d\n",
             sd, n, inet_ntoa(addr.sin_addr), ntohs(addr.sin_port),
             sinfo.sinfo_stream, ntohl(sinfo.sinfo_ppid), sinfo.sinfo_assoc_id);
+        
+        // DevAssert(*buffer);
 
         (*handler)((uint16_t)sinfo.sinfo_stream, (uint8_t *)buffer, n);
 
