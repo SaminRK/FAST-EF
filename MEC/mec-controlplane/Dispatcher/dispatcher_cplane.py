@@ -86,6 +86,7 @@ def parseSCTPPacket(ip_packet):
                                 inner2 = ie['value'][1]
                                 pp.pprint(inner2)
                                 pp.pprint(NASLTE.parse_NASLTE_MT(inner2))
+                                pp.pprint(type(NASLTE.parse_NASLTE_MT(inner2)[0]).EMMHeader)
                 #IEs = get_val_at(PDU, ['initiatingMessage', 'value', 'S1SetupRequest', 'protocolIEs'])
                 #for ie in IEs: print(ie['value'])
 #                print(s1ap_packet)
