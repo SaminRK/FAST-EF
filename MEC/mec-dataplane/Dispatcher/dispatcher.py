@@ -1,7 +1,7 @@
 import socket
 import binascii
 import struct
-import sysv_ipc
+# import sysv_ipc
 import hashlib
 from datetime import datetime
 
