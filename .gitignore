@@ -2,4 +2,9 @@
 /openairinterface5g
 /config
 
+# Python virtual environment 
 venv/
+
+# C object files 
+*.o 
+*.out
