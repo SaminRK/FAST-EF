@@ -26,8 +26,8 @@
 #define UE_SUBNET   "10.0.0.0"  //OAI
 
 //#define UE_SUBNET   "45.45.0.0"  //NEXTEPC
-#define CORE_IP     "172.17.100.254"
-#define ENB_IP      "172.17.1.1"
+#define CORE_IP     "192.168.61.5"  // SPGW-U IP
+#define ENB_IP      "192.168.1.105"
 
 typedef struct{
 	char ip[50];
@@ -176,7 +176,7 @@ int process_packet(char *buffer, client_info** clients){
         inet_ntop(AF_INET, &dst, dstip, 48);*/
 	    struct in_addr src = {.s_addr = 0};
         addr2str(&dst, dstip, ADDR_STRLEN);
-	    
+     
         src.s_addr = iph->saddr;
         char *srcip = malloc(sizeof(char) * ADDR_STRLEN);
         addr2str(&src, srcip, ADDR_STRLEN);
@@ -184,7 +184,7 @@ int process_packet(char *buffer, client_info** clients){
         inet_ntop(AF_INET, &src, srcip, 48);*/
         
         if(!strcmp(dstip, CORE_IP)){
-            //printf("src: %s, dst: %s:%hu, teid: %u\n", srcip, dstip, ntohs(udph->dest), *teid);
+            printf("src: %s, dst: %s:%hu, teid: %u\n", srcip, dstip, ntohs(udph->dest), *teid);
 	        struct in_addr src = {.s_addr = 0};
             //printf("%x %x\n", pl_iph->saddr, pl_iph->daddr);
 	        src.s_addr = pl_iph->saddr; //MNC :daddr
@@ -201,7 +201,7 @@ int process_packet(char *buffer, client_info** clients){
             return pp;
         }
         else if(!strcmp(dstip, ENB_IP)){
-            //printf("dst: %s:%hu, teid: %x\n", dstip, ntohs(udph->dest), *teid);
+            printf("dst: %s:%hu, teid: %x\n", dstip, ntohs(udph->dest), *teid);
 	        struct in_addr dst = {.s_addr = 0};
 	        dst.s_addr = pl_iph->daddr;
             char *ueip = malloc(sizeof(char) * ADDR_STRLEN);
