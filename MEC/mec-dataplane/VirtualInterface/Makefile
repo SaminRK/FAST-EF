@@ -15,4 +15,4 @@ vif.out: gtp_mod_kernel.o vif.c
 gtp_mod_kernel.o: gtp_mod_kernel.c gtp_mod_kernel.h
 	$(CC) $(CFLAGS) -c gtp_mod_kernel.c $(LIBS)
 clean:
-	@rm -rf testvif.out *.o
+	@rm -rf vif.out *.o
