@@ -13,3 +13,7 @@ docker swarm sits on port 2377 and queries neighbours ports
 
 dispatcher was not receiving packets from other computers
 https://stackoverflow.com/questions/18882203/python-cant-connect-to-open-socket-on-the-same-network
+
+sctp_dispatcher crasher after ue connects
+happened because it was failing an assertion in send_sctp_msg in client_primitives
+Solved by removing the unneccessarily positioned DevAssert(*)

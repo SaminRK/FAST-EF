@@ -120,11 +120,14 @@ def main() :
 #    ListenSock = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_SCTP)
 #    ListenSock.bind(("192.168.0.108", CORE_PORT))
 #    buffer_size = 1024*1024
+#    conn = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+#    conn = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_TCP)
+
     conn = socket.socket(socket.AF_PACKET, socket.SOCK_DGRAM, socket.ntohs(3))
 #    conn.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, buffer_size)
 #    conn.bind(('wlp3s0', 0))
     
-    # recive the traffic
+    # receive the traffic
 #    ListenSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # IP, UDP
 #    ListenSock.bind((LOCAL_IP, 9000)) # LOCAL, 2152
 #    # send the traffic
@@ -141,8 +144,8 @@ def main() :
         #print('{}:{}'.format(addr[0], str(addr[1])))
 	    # get header info
 
-        #parseIPPacket(raw_data)
-        parseSCTPPacket(raw_data)
+        parseIPPacket(raw_data)
+        #parseSCTPPacket(raw_data)
         #parseIPPacket(packet)
 
 #        Redirection, TEID, SRC_IP= getHeadInfo(gtp_pkg)
