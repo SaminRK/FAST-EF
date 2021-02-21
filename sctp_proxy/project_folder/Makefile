@@ -21,8 +21,8 @@ CFLAGS  = -g -Wall
 #
 default: sctp_dispatcher
 
-sctp_dispatcher: sctp_primitives_client.o sctp_primitives_server.o backtrace.o sctp_common.o dynamic_memory_check.o bstrlib.o
-	$(CC) $(CFLAGS) -o sctp_dispatcher sctp_primitives_client.o sctp_primitives_server.o backtrace.o sctp_common.o dynamic_memory_check.o bstrlib.o sctp_dispatcher.c -lsctp -pthread
+sctp_dispatcher: sctp_primitives_client.o sctp_primitives_server.o backtrace.o sctp_common.o dynamic_memory_check.o bstrlib.o tcp_primitives_client.o
+	$(CC) $(CFLAGS) -o sctp_dispatcher sctp_primitives_client.o sctp_primitives_server.o backtrace.o sctp_common.o dynamic_memory_check.o bstrlib.o tcp_primitives_client.o sctp_dispatcher.c -lsctp -pthread
 
 sctp_primitives_server.o: sctp_primitives_server.c sctp_primitives_server.h
 	$(CC) $(CFLAGS) -c sctp_primitives_server.c
@@ -41,6 +41,9 @@ backtrace.o: backtrace.c backtrace.h
 
 sctp_common.o: sctp_common.c sctp_common.h
 	$(CC) $(CFLAGS) -c sctp_common.c
+
+tcp_primitives_client.o: tcp_primitives_client.c tcp_primitives_client.h
+	$(CC) $(CFLAGS) -c tcp_primitives_client.c
 
 # To start over from scratch, type 'make clean'.  This
 # removes the executable file, as well as old .o object

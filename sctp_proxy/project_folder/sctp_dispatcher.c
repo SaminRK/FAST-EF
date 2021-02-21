@@ -4,6 +4,7 @@
 
 #include "sctp_primitives_client.h"
 #include "sctp_primitives_server.h"
+#include "tcp_primitives_client.h"
 
 sctp_data_t client_config;
 
@@ -11,10 +12,13 @@ void server_to_client(uint8_t *buffer, uint32_t length, uint16_t ppid,
                       uint16_t stream) {
     client_sctp_send_msg((sctp_data_t *)&client_config, ppid, stream, buffer,
                          length);
+    send_msg(buffer, length);
 }
 
 int client_to_server(uint16_t stream, uint8_t *buffer, uint32_t length) {
-    return server_sctp_send_msg_to_first_assoc(stream, buffer, length);
+    int ret = server_sctp_send_msg_to_first_assoc(stream, buffer, length);
+    send_msg(buffer, length);
+    return ret;
 }
 
 int main() {
@@ -36,11 +40,19 @@ int main() {
         18;  // https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-25
 
     set_sctp_message_handler((server_sctp_recv_callback)&server_to_client);
+    
+    /**
+     * creates TCP connection to mec controller
+    */
+   connect_to_remote("127.0.0.1", 9001);
+    /**
+     * Loops
+    */
     sctp_create_new_listener((SctpInit *)&sctp_init);
-
     while (1) {
         sctp_run((sctp_data_t *)&client_config,
                  (client_sctp_recv_callback)client_to_server);
     }
     sctp_exit();
+    // TODO: also close tcp connection
 }
