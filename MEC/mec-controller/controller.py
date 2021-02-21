@@ -44,17 +44,23 @@ def parse_msg(msg):
 def main() :
     LOCAL_PORT = 9001
 
-    ListenSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
-    ListenSock.bind((socket.gethostname(), LOCAL_PORT))
+    ListenSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    ListenSock.bind(('localhost', LOCAL_PORT))
     ListenSock.listen(5)
 
     print("waiting for client to connect...")
 
     clientSock, address = ListenSock.accept()
 
-    while True:
-        msg = clientSock.recv(4096)
-        parse_msg(msg)
+    print("Connection with client established")
+
+    while clientSock:
+        try:
+            msg = clientSock.recv(4096)
+            parse_msg(msg)
+        except Exception:
+            break
+
 
 if __name__ == '__main__' :
     main()
