@@ -23,7 +23,7 @@
 #define ADDR_STRLEN 50
 //#define UE_SUBNET   "192.172.0.0"  //OAI
 // TODO: Change UE_SUBNET
-#define UE_SUBNET   "10.0.0.0"  //OAI
+#define UE_SUBNET   "12.1.1.0"  //OAI
 
 //#define UE_SUBNET   "45.45.0.0"  //NEXTEPC
 #define CORE_IP     "192.168.61.5"  // SPGW-U IP
@@ -70,10 +70,10 @@ int main(){
 	printf("===kernel init rv===: %d\n", rv);
 
 	struct in_addr enb = {.s_addr = 0};
-	enb.s_addr = ((in_addr_t)172 |
-	     ((in_addr_t)17 << 8) |
+	enb.s_addr = ((in_addr_t)192 |
+	     ((in_addr_t)168 << 8) |
 	     ((in_addr_t)1 << 16) |
-	     ((in_addr_t)1 << 24));
+	     ((in_addr_t)105 << 24));
 	
     
     sockfd_raw = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
@@ -83,7 +83,8 @@ int main(){
     }
     
     struct sockaddr_in cli_addr; 
-    int pp;    
+    int pp;
+    int tunnel_created = 0;
 	// receive ue info 	
 	while(1){
         socklen_t len = sizeof(cli_addr);
@@ -95,15 +96,16 @@ int main(){
         if(pp != -1){
             for(int i = 0; i < 3; i++){
                 //if(!strncmp(clients[i].ip, "45.45", 5))
-                    printf("index: %d, %s %x %x\n", i, clients[i].ip, clients[i].ul_teid, (unsigned int)clients[i].dl_teid);
+                    // printf("index: %d, %s %x %x\n", i, clients[i].ip, clients[i].ul_teid, (unsigned int)clients[i].dl_teid);
             }   
             char *temp = check_completed(&clients, MAX_CLIENTS, pp);
     	    struct in_addr ue = {.s_addr = 0};
-            if(temp){
+            if(temp && tunnel_created == 0){
                 inet_pton(AF_INET, temp, &ue);
     	        rv = gtp_mod_kernel_tunnel_add(ue, enb, clients[pp].ul_teid, clients[pp].dl_teid);
     	        printf("ip = %s, ul = %d, dl = %x, ================add tunnel rv: %d================\n", 
                  clients[pp].ip, clients[pp].ul_teid, clients[pp].dl_teid, rv);
+                tunnel_created = 1;
             }
 
         }
