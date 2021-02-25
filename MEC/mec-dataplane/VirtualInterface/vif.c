@@ -23,7 +23,7 @@
 #define ADDR_STRLEN 50
 //#define UE_SUBNET   "192.172.0.0"  //OAI
 // TODO: Change UE_SUBNET
-#define UE_SUBNET   "12.1.1.0"  //OAI
+#define UE_SUBNET   "12.1.1.30"  //OAI
 
 //#define UE_SUBNET   "45.45.0.0"  //NEXTEPC
 #define CORE_IP     "192.168.61.5"  // SPGW-U IP

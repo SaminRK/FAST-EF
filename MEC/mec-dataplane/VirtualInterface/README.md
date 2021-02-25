@@ -16,6 +16,18 @@
   - Navigate to `libgtpnl/tools` and run `./gtp-tunnel list`
 - Destroy GTP device
   - Navigate to `libgtpnl/tools` and run `./gtp-link del gtpvif`
+- Send traffic from UE to MEC network
+  - Run dispatcher. Make sure it redirects traffic for MEC server, MEC app servers to MEC. 
+  - Run vif. Keep it running. It'll create a GTP tunnel. It will listen on host machine's port 2152. 
+  - Now, you can ping from MEC host to UE. 
+    ```sh
+    ping -I 12.1.1.31 12.1.1.2
+    ```
+  - Up a local app server in MEC host binding to an IP. 
+  - Curl from UE to this app server. 
+    ```sh
+    curl --interface oaitun_ue1 http://{APP_SERVER_IP}:PORT
+    ```
 
 ## Useful Links
 
