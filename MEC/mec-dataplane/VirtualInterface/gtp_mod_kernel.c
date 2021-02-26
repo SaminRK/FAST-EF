@@ -22,7 +22,7 @@ static struct {
 } gtp_nl;
 
 
-#define GTP_DEVNAME "gtp0"
+#define GTP_DEVNAME "gtpvif"
 #define GTPV1U_UDP_PORT 2152
 
 //------------------------------------------------------------------------------

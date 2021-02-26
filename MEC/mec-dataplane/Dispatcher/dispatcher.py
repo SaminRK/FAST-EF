@@ -14,9 +14,9 @@ def getHeadInfo(raw_packet) :
     udp_dport = 0
     # registered mec server
     server_list = []
-    server_list.append("172.17.1.2")
-    server_list.append("172.17.1.3")
-    server_list.append("10.0.0.1")
+    server_list.append("11.12.13.14")
+    server_list.append("11.12.13.15")
+    server_list.append("12.1.1.31")     # MEC Gateway
     #server_list.append("192.172.0.1")
     #server_list.append("45.45.0.1") #MNC
     #server_list.append("10.0.2.11")
@@ -73,9 +73,9 @@ def main() :
     LOCAL_IP = "0.0.0.0" # IP address of this machine
     CORE_IP = "192.168.61.5" # spgwu ip address
     CORE_PORT = 2152
-    MEC_IP = "192.168.71.2"
+    MEC_IP = "192.168.1.103"
     MEC_PORT = 2152 
-    # recive the traffic
+    # receive the traffic
     ListenSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # IP, UDP
     ListenSock.bind((LOCAL_IP, 7000)) # LOCAL, 2152
     # send the traffic
