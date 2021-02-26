@@ -8,7 +8,6 @@ cd cmake_targets/lte_build_oai/build
 ../../nas_sim_tools/build/conf2uedata -c $OPENAIR_HOME/openair3/NAS/TOOLS/ue_eurecom_test_sfr.conf -o .
 sudo -E ./lte-uesoftmodem -C 2625000000 -r 25 --ue-rxgain 140 --basicsim
 
-
 cd -
 
 
