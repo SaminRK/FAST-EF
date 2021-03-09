@@ -10,3 +10,6 @@
 [submodule "CryptoMobile"]
 	path = CryptoMobile
 	url = https://github.com/mitshell/CryptoMobile.git
+[submodule "pyoidc"]
+	path = pyoidc
+	url = https://github.com/OpenIDC/pyoidc.git
