@@ -4,5 +4,5 @@ cd "$DIR/../openairinterface5g/"
 
 source oaienv
 cd cmake_targets/
-./build_oai -C -w SIMU -I --eNB --UE
+./build_oai -C -w SIMU --eNB --UE
 
