@@ -1,35 +1,6 @@
- sudo python3 dispatcher_cplane.py 
-dispatcher started ...
-SCTP Packet
-192.168.0.108:36412 -> 192.168.0.106:36412
-sctp data length: 36
-type: 1, flags: 0 length: 36
-TYPE:  INIT
-
-SCTP Packet
-192.168.0.106:36412 -> 192.168.0.108:36412
-sctp data length: 260
-type: 2, flags: 0 length: 260
-TYPE:  INIT ACK
-
-SCTP Packet
-192.168.0.108:36412 -> 192.168.0.106:36412
-sctp data length: 232
-type: 10, flags: 0 length: 232
-TYPE:  COOKIE ECHO
-
-SCTP Packet
-192.168.0.106:36412 -> 192.168.0.108:36412
-sctp data length: 4
-type: 11, flags: 0 length: 4
-TYPE:  COOKIE ACK
-
-SCTP Packet
-192.168.0.108:36412 -> 192.168.0.106:36412
-sctp data length: 76
-type: 0, flags: 3 length: 75
-TYPE:  DATA
-TSN:  588461332 Stream Id:  0 Stream seq num:  0 Payload protocol Id:  18
+warning: CryptoMobile Python module not found, unable to handle LTE NAS security
+waiting for client to connect...
+Connection with client established
 ('initiatingMessage',
  {'criticality': 'reject',
   'procedureCode': 17,
@@ -51,18 +22,9 @@ TSN:  588461332 Stream Id:  0 Stream seq num:  0 Payload protocol Id:  18
                               'id': 137,
                               'value': ('PagingDRX', 'v128')}]})})
 
-SCTP Packet
-192.168.0.106:36412 -> 192.168.0.108:36412
-sctp data length: 16
-type: 3, flags: 0 length: 16
-TYPE:  SACK
 
-SCTP Packet
-192.168.0.106:36412 -> 192.168.0.108:36412
-sctp data length: 44
-type: 0, flags: 3 length: 43
-TYPE:  DATA
-TSN:  3214091936 Stream Id:  0 Stream seq num:  0 Payload protocol Id:  18
+
+
 ('successfulOutcome',
  {'criticality': 'reject',
   'procedureCode': 17,
@@ -77,18 +39,7 @@ TSN:  3214091936 Stream Id:  0 Stream seq num:  0 Payload protocol Id:  18
                               'id': 87,
                               'value': ('RelativeMMECapacity', 10)}]})})
 
-SCTP Packet
-192.168.0.108:36412 -> 192.168.0.106:36412
-sctp data length: 16
-type: 3, flags: 0 length: 16
-TYPE:  SACK
 
-SCTP Packet
-192.168.0.108:36412 -> 192.168.0.106:36412
-sctp data length: 112
-type: 0, flags: 3 length: 112
-TYPE:  DATA
-TSN:  588461333 Stream Id:  1 Stream seq num:  0 Payload protocol Id:  18
 ('initiatingMessage',
  {'criticality': 'ignore',
   'procedureCode': 12,
@@ -119,17 +70,13 @@ TSN:  588461333 Stream Id:  1 Stream seq num:  0 Payload protocol Id:  18
                               'id': 134,
                               'value': ('RRC-Establishment-Cause',
                                         'mo-Signalling')}]})})
+
 (<EMMAttachRequest : <EMMHeader : <SecHdr : 0 (No security)><ProtDisc : 7 (EMM)><Type : 65 (Attach request)>><NAS_KSI : <NAS_KSI : <TSC : 0 (native security context)><Value : 7 (no key available)>>><EPSAttachType : <V : 1 (EPS Attach)>><EPSID : <L : 8><EPSID [IMSI] : 320230100000025>><UENetCap : <L : 2><UENetCap : <EEA0 : 1><EEA1_128 : 0><EEA2_128 : 0><EEA3_128 : 0><EEA4 : 0><EEA5 : 0><EEA6 : 0><EEA7 : 0><EIA0 : 0><EIA1_128 : 0><EIA2_128 : 1><EIA3_128 : 0><EIA4 : 0><EIA5 : 0><EIA6 : 0><EIA7 : 0><UEA0 [transparent] : 0><UEA1 [transparent] : 0><UEA2 [transparent] : 0><UEA3 [transparent] : 0><UEA4 [transparent] : 0><UEA5 [transparent] : 0><UEA6 [transparent] : 0><UEA7 [transparent] : 0><UCS2 [transparent] : 0><UIA1 [transparent] : 0><UIA2 [transparent] : 0><UIA3 [transparent] : 0><UIA4 [transparent] : 0><UIA5 [transparent] : 0><UIA6 [transparent] : 0><UIA7 [transparent] : 0><ProSe_dd [transparent] : 0><ProSe [transparent] : 0><H245_ASH [transparent] : 0><ACC_CSFB [transparent] : 0><LPP [transparent] : 0><LCS [transparent] : 0><X1_SRVCC [transparent] : 0><NF [transparent] : 0><ePCO [transparent] : 0><HC_CP_CIoT [transparent] : 0><ERw_oPDN [transparent] : 0><S1U_data [transparent] : 0><UP_CIoT [transparent] : 0><CP_CIoT [transparent] : 0><ProSe_relay [transparent] : 0><ProSe_dc [transparent] : 0><spare [transparent] : 0><spare [transparent] : 0><spare [transparent] : 0><spare [transparent] : 0><spare [transparent] : 0><spare [transparent] : 0><spare [transparent] : 0><MultiDRB [transparent] : 0><spare [transparent] : 0x>>><ESMContainer : <L : 32><ESMPDNConnectivityRequest : <ESMHeader : <EPSBearerId : 0><ProtDisc : 2><PTI : 1><Type : 208 (PDN connectivity request)>><PDNType : <V : 1 (IPv4)>><RequestType : <V : 1 (Initial request)>><ESMInfoTransferFlag [transparent] : <T : 13><V : 0>><APN [transparent] : <T : 40><L : 1><V : 0x00>><ProtConfig : <T : 39><L : 26><ProtConfig : <Ext : 1><spare : 0><Prot : 0 (PPP with IP PDP)><Config : <ProtConfigElt : <ID : 32801 (IPCP)><Len : 16><Cont : <Code : 1 (Configure-Request)><Id : 0><Len : 16><Data : <NCPOpt : <Type : 129 (Primary DNS Server Address)><Len : 6><Data : 0x00000000>><NCPOpt : <Type : 131 (Secondary DNS Server Address)><Len : 6><Data : 0x00000000>>>>><ProtConfigElt : <ID : 13 (DNS server IPv4 address request)><Len : 0><Cont : 0x>><ProtConfigElt : <ID : 10 (IP address allocation via NAS signalling)><Len : 0><Cont : 0x>>>>><DeviceProp [transparent] : <T : 12><V : 0>><NBIFOMContainer [transparent] : <T : 51><L : 1><V : 0x00>><HdrCompConfig [transparent] : <T : 102><L : 3><V : 0x000000>><ExtProtConfig [transparent] : <T : 123><L : 1><V : 0x00>>>><OldPTMSISign [transparent] : <T : 25><V : 0x000000>><AddGUTI [transparent] : <T : 80><L : 11><V : 0xf600000000000000000000>><OldTAI [transparent] : <T : 82><V : 0x0000000000>><DRXParam [transparent] : <T : 92><V : 0x0000>><MSNetCap [transparent] : <T : 49><L : 2><V : 0x0000>><OldLAI [transparent] : <T : 19><V : 0x0000000000>><TMSIStatus [transparent] : <T : 9><V : 0>><MSCm2 [transparent] : <T : 17><L : 3><V : 0x400000>><MSCm3 [transparent] : <T : 32><L : 0><V : 0x>><SuppCodecs [transparent] : <T : 64><L : 3><V : 0x000100>><AddUpdateType [transparent] : <T : 15><V : 0>><VoiceDomPref [transparent] : <T : 93><L : 1><V : 0x00>><DeviceProp [transparent] : <T : 13><V : 0>><OldGUTIType [transparent] : <T : 14><V : 0>><MSNetFeatSupp [transparent] : <T : 12><V : 0>><TMSIBasedNRICont [transparent] : <T : 16><L : 2><V : 0x0000>><T3324 [transparent] : <T : 106><L : 1><V : 0x00>><T3412Ext [transparent] : <T : 94><L : 1><V : 0x00>><ExtDRXParam [transparent] : <T : 110><L : 1><V : 0x00>><UEAddSecCap [transparent] : <T : 111><L : 4><V : 0x00000000>><UEStatus [transparent] : <T : 109><L : 1><V : 0x00>><AddInfoReq [transparent] : <T : 23><V : 0x00>><N1UENetCap [transparent] : <T : 50><L : 1><V : 0x00>><UERadioCapIDAvail [transparent] : <T : 11><V : 0>>>,
  0)
 
-SCTP Packet
-192.168.0.106:36412 -> 192.168.0.108:36412
-sctp data length: 96
-type: 3, flags: 0 length: 16
-TYPE:  SACK
-type: 0, flags: 3 length: 78
-TYPE:  DATA
-TSN:  3214091937 Stream Id:  1 Stream seq num:  0 Payload protocol Id:  18
+
+
+
 ('initiatingMessage',
  {'criticality': 'ignore',
   'procedureCode': 11,
@@ -143,21 +90,14 @@ TSN:  3214091937 Stream Id:  1 Stream seq num:  0 Payload protocol Id:  18
                              {'criticality': 'reject',
                               'id': 26,
                               'value': ('NAS-PDU',
-                                        b'\x07R\x00\x10iNa\xe9v\x046\x01'
-                                        b'\xb6\x97\x08o\x9c>]\x10'
-                                        b'\xfe\xcc\x05\x98\x81\x06\x80\x00'
-                                        b'\xf9E\xc5\xb74\x9e\xec\t')}]})})
-(<EMMAuthenticationRequest : <EMMHeader : <SecHdr : 0 (No security)><ProtDisc : 7 (EMM)><Type : 82 (Authentication request)>><spare : 0><NAS_KSI : <NAS_KSI : <TSC : 0 (native security context)><Value : 0>>><RAND : <V : 0x10694e61e976043601b697086f9c3e5d>><AUTN : <L : 16><AUTN : <SQNxAK : 0xfecc05988106><AMF : 0x8000><MAC : 0xf945c5b7349eec09>>>>,
+                                        b"\x07R\x00C\xdb';\xb1J0\x00\x90"
+                                        b'\xf4pu\xac\\?C\x10*/Y\xd5'
+                                        b'\xee\xad\x80\x00Vr\xc3\x7f\x19T\xc4V')}]})})
+
+
+(<EMMAuthenticationRequest : <EMMHeader : <SecHdr : 0 (No security)><ProtDisc : 7 (EMM)><Type : 82 (Authentication request)>><spare : 0><NAS_KSI : <NAS_KSI : <TSC : 0 (native security context)><Value : 0>>><RAND : <V : 0x43db273bb14a300090f47075ac5c3f43>><AUTN : <L : 16><AUTN : <SQNxAK : 0x2a2f59d5eead><AMF : 0x8000><MAC : 0x5672c37f1954c456>>>>,
  0)
 
-SCTP Packet
-192.168.0.108:36412 -> 192.168.0.106:36412
-sctp data length: 92
-type: 3, flags: 0 length: 16
-TYPE:  SACK
-type: 0, flags: 3 length: 75
-TYPE:  DATA
-TSN:  588461334 Stream Id:  1 Stream seq num:  1 Payload protocol Id:  18
 ('initiatingMessage',
  {'criticality': 'ignore',
   'procedureCode': 13,
@@ -171,8 +111,7 @@ TSN:  588461334 Stream Id:  1 Stream seq num:  1 Payload protocol Id:  18
                              {'criticality': 'reject',
                               'id': 26,
                               'value': ('NAS-PDU',
-                                        b'\x07S\x08\xfa\xe4\x1de\x8e'
-                                        b'r\x1f\x01')},
+                                        b'\x07S\x08f\xf9\xe3\xc5\x85VX\x9e')},
                              {'criticality': 'ignore',
                               'id': 100,
                               'value': ('EUTRAN-CGI',
@@ -183,17 +122,13 @@ TSN:  588461334 Stream Id:  1 Stream seq num:  1 Payload protocol Id:  18
                               'value': ('TAI',
                                         {'pLMNidentity': b'# \x03',
                                          'tAC': b'\x00\x05'})}]})})
-(<EMMAuthenticationResponse : <EMMHeader : <SecHdr : 0 (No security)><ProtDisc : 7 (EMM)><Type : 83 (Authentication response)>><RES : <L : 8><V : 0xfae41d658e721f01>>>,
+
+
+(<EMMAuthenticationResponse : <EMMHeader : <SecHdr : 0 (No security)><ProtDisc : 7 (EMM)><Type : 83 (Authentication response)>><RES : <L : 8><V : 0x66f9e3c58556589e>>>,
  0)
 
-SCTP Packet
-192.168.0.106:36412 -> 192.168.0.108:36412
-sctp data length: 72
-type: 3, flags: 0 length: 16
-TYPE:  SACK
-type: 0, flags: 3 length: 56
-TYPE:  DATA
-TSN:  3214091938 Stream Id:  1 Stream seq num:  1 Payload protocol Id:  18
+
+
 ('initiatingMessage',
  {'criticality': 'ignore',
   'procedureCode': 11,
@@ -207,19 +142,45 @@ TSN:  3214091938 Stream Id:  1 Stream seq num:  1 Payload protocol Id:  18
                              {'criticality': 'reject',
                               'id': 26,
                               'value': ('NAS-PDU',
-                                        b'7<A\x99T\x00\x07]\x02\x00\x02\x80'
-                                        b' \xc1')}]})})
-(<EMMSecProtNASMessage : <EMMHeaderSec : <SecHdr : 3 (Integrity protected with new EPS security context)><ProtDisc : 7 (EMM)>><MAC : 0x3c419954><Seqn : 0><EMMSecurityModeCommand : <EMMHeader : <SecHdr : 0 (No security)><ProtDisc : 7 (EMM)><Type : 93 (Security mode command)>><NASSecAlgo : <NASSecAlgo : <spare : 0><CiphAlgo : 0 (EPS encryption algorithm EEA0 (null))><spare : 0><IntegAlgo : 2 (EPS integrity algorithm 128-EIA2 (AES))>>><spare : 0><NAS_KSI : <NAS_KSI : <TSC : 0 (native security context)><Value : 0>>><UESecCap : <L : 2><UESecCap : <EEA0 : 1><EEA1_128 : 0><EEA2_128 : 0><EEA3_128 : 0><EEA4 : 0><EEA5 : 0><EEA6 : 0><EEA7 : 0><EIA0 : 0><EIA1_128 : 0><EIA2_128 : 1><EIA3_128 : 0><EIA4 : 0><EIA5 : 0><EIA6 : 0><EIA7 : 0><UEA0 [transparent] : 0><UEA1 [transparent] : 0><UEA2 [transparent] : 0><UEA3 [transparent] : 0><UEA4 [transparent] : 0><UEA5 [transparent] : 0><UEA6 [transparent] : 0><UEA7 [transparent] : 0><spare [transparent] : 0><UIA1 [transparent] : 0><UIA2 [transparent] : 0><UIA3 [transparent] : 0><UIA4 [transparent] : 0><UIA5 [transparent] : 0><UIA6 [transparent] : 0><UIA7 [transparent] : 0><spare [transparent] : 0><GEA1 [transparent] : 0><GEA2 [transparent] : 0><GEA3 [transparent] : 0><GEA4 [transparent] : 0><GEA5 [transparent] : 0><GEA6 [transparent] : 0><GEA7 [transparent] : 0>>><IMEISVReq : <T : 12><IMEISVReq : <spare : 0><Value : 1 (IMEISV requested)>>><NonceUE [transparent] : <T : 85><V : 0x00000000>><NonceMME [transparent] : <T : 86><V : 0x00000000>><HashMME [transparent] : <T : 79><L : 8><V : 0x0000000000000000>><UEAddSecCap [transparent] : <T : 111><L : 4><V : 0x00000000>><UERadioCapIDReq [transparent] : <T : 13><V : 0>>>>,
+                                        b'7\x17\xc5p\xbc\x00\x07]'
+                                        b'\x02\x00\x02\x80 \xc1')}]})})
+
+
+(<EMMSecProtNASMessage : <EMMHeaderSec : <SecHdr : 3 (Integrity protected with new EPS security context)><ProtDisc : 7 (EMM)>><MAC : 0x17c570bc><Seqn : 0><EMMSecurityModeCommand : <EMMHeader : <SecHdr : 0 (No security)><ProtDisc : 7 (EMM)><Type : 93 (Security mode command)>><NASSecAlgo : <NASSecAlgo : <spare : 0><CiphAlgo : 0 (EPS encryption algorithm EEA0 (null))><spare : 0><IntegAlgo : 2 (EPS integrity algorithm 128-EIA2 (AES))>>><spare : 0><NAS_KSI : <NAS_KSI : <TSC : 0 (native security context)><Value : 0>>><UESecCap : <L : 2><UESecCap : <EEA0 : 1><EEA1_128 : 0><EEA2_128 : 0><EEA3_128 : 0><EEA4 : 0><EEA5 : 0><EEA6 : 0><EEA7 : 0><EIA0 : 0><EIA1_128 : 0><EIA2_128 : 1><EIA3_128 : 0><EIA4 : 0><EIA5 : 0><EIA6 : 0><EIA7 : 0><UEA0 [transparent] : 0><UEA1 [transparent] : 0><UEA2 [transparent] : 0><UEA3 [transparent] : 0><UEA4 [transparent] : 0><UEA5 [transparent] : 0><UEA6 [transparent] : 0><UEA7 [transparent] : 0><spare [transparent] : 0><UIA1 [transparent] : 0><UIA2 [transparent] : 0><UIA3 [transparent] : 0><UIA4 [transparent] : 0><UIA5 [transparent] : 0><UIA6 [transparent] : 0><UIA7 [transparent] : 0><spare [transparent] : 0><GEA1 [transparent] : 0><GEA2 [transparent] : 0><GEA3 [transparent] : 0><GEA4 [transparent] : 0><GEA5 [transparent] : 0><GEA6 [transparent] : 0><GEA7 [transparent] : 0>>><IMEISVReq : <T : 12><IMEISVReq : <spare : 0><Value : 1 (IMEISV requested)>>><NonceUE [transparent] : <T : 85><V : 0x00000000>><NonceMME [transparent] : <T : 86><V : 0x00000000>><HashMME [transparent] : <T : 79><L : 8><V : 0x0000000000000000>><UEAddSecCap [transparent] : <T : 111><L : 4><V : 0x00000000>><UERadioCapIDReq [transparent] : <T : 13><V : 0>>>>,
  0)
 
-SCTP Packet
-192.168.0.106:36412 -> 192.168.0.108:36412
-sctp data length: 240
-type: 3, flags: 0 length: 16
-TYPE:  SACK
-type: 0, flags: 3 length: 222
-TYPE:  DATA
-TSN:  3214091939 Stream Id:  1 Stream seq num:  2 Payload protocol Id:  18
+('initiatingMessage',
+ {'criticality': 'ignore',
+  'procedureCode': 13,
+  'value': ('UplinkNASTransport',
+            {'protocolIEs': [{'criticality': 'reject',
+                              'id': 0,
+                              'value': ('MME-UE-S1AP-ID', 1)},
+                             {'criticality': 'reject',
+                              'id': 8,
+                              'value': ('ENB-UE-S1AP-ID', 420141)},
+                             {'criticality': 'reject',
+                              'id': 26,
+                              'value': ('NAS-PDU',
+                                        b'G\xc9>\x85b\x00\x07^#\t3ut\x03\x04p'
+                                        b'P\x03\xf0')},
+                             {'criticality': 'ignore',
+                              'id': 100,
+                              'value': ('EUTRAN-CGI',
+                                        {'cell-ID': (917504, 28),
+                                         'pLMNidentity': b'# \x03'})},
+                             {'criticality': 'ignore',
+                              'id': 67,
+                              'value': ('TAI',
+                                        {'pLMNidentity': b'# \x03',
+                                         'tAC': b'\x00\x05'})}]})})
+
+
+(<EMMSecProtNASMessage : <EMMHeaderSec : <SecHdr : 4 (Integrity protected and ciphered with new EPS security context)><ProtDisc : 7 (EMM)>><MAC : 0xc93e8562><Seqn : 0><NASMessage : b'\x07^#\t3ut\x03\x04pP\x03\xf0'>>,
+ 0)
+
+
+
 ('initiatingMessage',
  {'criticality': 'ignore',
   'procedureCode': 9,
@@ -247,8 +208,8 @@ TSN:  3214091939 Stream Id:  1 Stream seq num:  2 Payload protocol Id:  18
                                                                                                                  'priorityLevel': 15},
                                                                                  'qCI': 9},
                                                      'gTP-TEID': b'\x00\x00\x00\x01',
-                                                     'nAS-PDU': b"'\xf1\xd4\x1b"
-                                                                b')\x01\x07B'
+                                                     'nAS-PDU': b"'\x84;T"
+                                                                b'6\x01\x07B'
                                                                 b'\x01!\x06 '
                                                                 b'#\x002\x00'
                                                                 b'\x05\x00ER'
@@ -283,16 +244,15 @@ TSN:  3214091939 Stream Id:  1 Stream seq num:  2 Payload protocol Id:  18
                              {'criticality': 'reject',
                               'id': 73,
                               'value': ('SecurityKey',
-                                        (57132711633611316108628725318698398398682256561096198284307014796882919268161,
+                                        (106593141838929760069126862991257429484620925211571588112214664344104467651457,
                                          256))}]})})
+
+
+
 (None, 111)
 
-SCTP Packet
-192.168.0.108:36412 -> 192.168.0.106:36412
-sctp data length: 200
-type: 0, flags: 3 length: 62
-TYPE:  DATA
-TSN:  588461336 Stream Id:  1 Stream seq num:  3 Payload protocol Id:  18
+
+
 ('initiatingMessage',
  {'criticality': 'ignore',
   'procedureCode': 22,
@@ -309,13 +269,371 @@ TSN:  588461336 Stream Id:  1 Stream seq num:  3 Payload protocol Id:  18
                                         b'\x00\x94\x01\x00\xf0\x18\x00\x03'
                                         b'\x08\x98d\xa0\xc1\xb8;\x07'
                                         b'\xa0\xf8\x00\x00')}]})})
-type: 0, flags: 0 length: 3
-TYPE:  DATA
-Traceback (most recent call last):
-  File "dispatcher_cplane.py", line 173, in <module>
+
+
+
+('successfulOutcome',
+ {'criticality': 'reject',
+  'procedureCode': 9,
+  'value': ('InitialContextSetupResponse',
+            {'protocolIEs': [{'criticality': 'ignore',
+                              'id': 0,
+                              'value': ('MME-UE-S1AP-ID', 1)},
+                             {'criticality': 'ignore',
+                              'id': 8,
+                              'value': ('ENB-UE-S1AP-ID', 420141)},
+                             {'criticality': 'ignore',
+                              'id': 51,
+                              'value': ('E-RABSetupListCtxtSURes',
+                                        [{'criticality': 'ignore',
+                                          'id': 50,
+                                          'value': ('E-RABSetupItemCtxtSURes',
+                                                    {'e-RAB-ID': 5,
+                                                     'gTP-TEID': b'\xcao\xe0\xdd',
+                                                     'transportLayerAddress': (3232235628,
+                                                                               32)})}])}]})})
+
+
+
+('initiatingMessage',
+ {'criticality': 'ignore',
+  'procedureCode': 13,
+  'value': ('UplinkNASTransport',
+            {'protocolIEs': [{'criticality': 'reject',
+                              'id': 0,
+                              'value': ('MME-UE-S1AP-ID', 1)},
+                             {'criticality': 'reject',
+                              'id': 8,
+                              'value': ('ENB-UE-S1AP-ID', 420141)},
+                             {'criticality': 'reject',
+                              'id': 26,
+                              'value': ('NAS-PDU',
+                                        b"'\x8c\x02\x05\xc0\x01\x07C"
+                                        b'\x00\x03R\x00\xc2')},
+                             {'criticality': 'ignore',
+                              'id': 100,
+                              'value': ('EUTRAN-CGI',
+                                        {'cell-ID': (917504, 28),
+                                         'pLMNidentity': b'# \x03'})},
+                             {'criticality': 'ignore',
+                              'id': 67,
+                              'value': ('TAI',
+                                        {'pLMNidentity': b'# \x03',
+                                         'tAC': b'\x00\x05'})}]})})
+
+
+(<EMMSecProtNASMessage : <EMMHeaderSec : <SecHdr : 2 (Integrity protected and ciphered)><ProtDisc : 7 (EMM)>><MAC : 0x8c0205c0><Seqn : 1><NASMessage : b'\x07C\x00\x03R\x00\xc2'>>,
+ 0)
+
+
+
+        
+
+
+
+
+
+ {'criticality': 'ignore',
+  'procedureCode': 12,
+  'value': ('InitialUEMessage',
+            {'protocolIEs': [{'criticality': 'reject',
+                              'id': 8,
+                              'value': ('ENB-UE-S1AP-ID', 420141)},
+                             {'criticality': 'reject',
+                              'id': 26,
+                              'value': ('NAS-PDU',
+                                        b'\x07Aq\x089\x022\x10\x00\x00\x00R'
+                                        b'\x02\x80 \x00 \x02\x01\xd0'
+                                        b"\x11'\x1a\x80\x80!\x10\x01"
+                                        b'\x00\x00\x10\x81\x06\x00\x00\x00'
+                                        b'\x00\x83\x06\x00\x00\x00\x00\x00'
+                                        b'\r\x00\x00\n\x00')},
+                             {'criticality': 'reject',
+                              'id': 67,
+                              'value': ('TAI',
+                                        {'pLMNidentity': b'# \x03',
+                                         'tAC': b'\x00\x05'})},
+                             {'criticality': 'ignore',
+                              'id': 100,
+                              'value': ('EUTRAN-CGI',
+                                        {'cell-ID': (917504, 28),
+                                         'pLMNidentity': b'# \x03'})},
+                             {'criticality': 'ignore',
+                              'id': 134,
+                              'value': ('RRC-Establishment-Cause',
+                                        'mo-Signalling')}]})})
+
+(<EMMAttachRequest : <EMMHeader : <SecHdr : 0 (No security)><ProtDisc : 7 (EMM)><Type : 65 (Attach request)>><NAS_KSI : <NAS_KSI : <TSC : 0 (native security context)><Value : 7 (no key available)>>><EPSAttachType : <V : 1 (EPS Attach)>><EPSID : <L : 8><EPSID [IMSI] : 320230100000025>><UENetCap : <L : 2><UENetCap : <EEA0 : 1><EEA1_128 : 0><EEA2_128 : 0><EEA3_128 : 0><EEA4 : 0><EEA5 : 0><EEA6 : 0><EEA7 : 0><EIA0 : 0><EIA1_128 : 0><EIA2_128 : 1><EIA3_128 : 0><EIA4 : 0><EIA5 : 0><EIA6 : 0><EIA7 : 0><UEA0 [transparent] : 0><UEA1 [transparent] : 0><UEA2 [transparent] : 0><UEA3 [transparent] : 0><UEA4 [transparent] : 0><UEA5 [transparent] : 0><UEA6 [transparent] : 0><UEA7 [transparent] : 0><UCS2 [transparent] : 0><UIA1 [transparent] : 0><UIA2 [transparent] : 0><UIA3 [transparent] : 0><UIA4 [transparent] : 0><UIA5 [transparent] : 0><UIA6 [transparent] : 0><UIA7 [transparent] : 0><ProSe_dd [transparent] : 0><ProSe [transparent] : 0><H245_ASH [transparent] : 0><ACC_CSFB [transparent] : 0><LPP [transparent] : 0><LCS [transparent] : 0><X1_SRVCC [transparent] : 0><NF [transparent] : 0><ePCO [transparent] : 0><HC_CP_CIoT [transparent] : 0><ERw_oPDN [transparent] : 0><S1U_data [transparent] : 0><UP_CIoT [transparent] : 0><CP_CIoT [transparent] : 0><ProSe_relay [transparent] : 0><ProSe_dc [transparent] : 0><spare [transparent] : 0><spare [transparent] : 0><spare [transparent] : 0><spare [transparent] : 0><spare [transparent] : 0><spare [transparent] : 0><spare [transparent] : 0><MultiDRB [transparent] : 0><spare [transparent] : 0x>>><ESMContainer : <L : 32><ESMPDNConnectivityRequest : <ESMHeader : <EPSBearerId : 0><ProtDisc : 2><PTI : 1><Type : 208 (PDN connectivity request)>><PDNType : <V : 1 (IPv4)>><RequestType : <V : 1 (Initial request)>><ESMInfoTransferFlag [transparent] : <T : 13><V : 0>><APN [transparent] : <T : 40><L : 1><V : 0x00>><ProtConfig : <T : 39><L : 26><ProtConfig : <Ext : 1><spare : 0><Prot : 0 (PPP with IP PDP)><Config : <ProtConfigElt : <ID : 32801 (IPCP)><Len : 16><Cont : <Code : 1 (Configure-Request)><Id : 0><Len : 16><Data : <NCPOpt : <Type : 129 (Primary DNS Server Address)><Len : 6><Data : 0x00000000>><NCPOpt : <Type : 131 (Secondary DNS Server Address)><Len : 6><Data : 0x00000000>>>>><ProtConfigElt : <ID : 13 (DNS server IPv4 address request)><Len : 0><Cont : 0x>><ProtConfigElt : <ID : 10 (IP address allocation via NAS signalling)><Len : 0><Cont : 0x>>>>><DeviceProp [transparent] : <T : 12><V : 0>><NBIFOMContainer [transparent] : <T : 51><L : 1><V : 0x00>><HdrCompConfig [transparent] : <T : 102><L : 3><V : 0x000000>><ExtProtConfig [transparent] : <T : 123><L : 1><V : 0x00>>>><OldPTMSISign [transparent] : <T : 25><V : 0x000000>><AddGUTI [transparent] : <T : 80><L : 11><V : 0xf600000000000000000000>><OldTAI [transparent] : <T : 82><V : 0x0000000000>><DRXParam [transparent] : <T : 92><V : 0x0000>><MSNetCap [transparent] : <T : 49><L : 2><V : 0x0000>><OldLAI [transparent] : <T : 19><V : 0x0000000000>><TMSIStatus [transparent] : <T : 9><V : 0>><MSCm2 [transparent] : <T : 17><L : 3><V : 0x400000>><MSCm3 [transparent] : <T : 32><L : 0><V : 0x>><SuppCodecs [transparent] : <T : 64><L : 3><V : 0x000100>><AddUpdateType [transparent] : <T : 15><V : 0>><VoiceDomPref [transparent] : <T : 93><L : 1><V : 0x00>><DeviceProp [transparent] : <T : 13><V : 0>><OldGUTIType [transparent] : <T : 14><V : 0>><MSNetFeatSupp [transparent] : <T : 12><V : 0>><TMSIBasedNRICont [transparent] : <T : 16><L : 2><V : 0x0000>><T3324 [transparent] : <T : 106><L : 1><V : 0x00>><T3412Ext [transparent] : <T : 94><L : 1><V : 0x00>><ExtDRXParam [transparent] : <T : 110><L : 1><V : 0x00>><UEAddSecCap [transparent] : <T : 111><L : 4><V : 0x00000000>><UEStatus [transparent] : <T : 109><L : 1><V : 0x00>><AddInfoReq [transparent] : <T : 23><V : 0x00>><N1UENetCap [transparent] : <T : 50><L : 1><V : 0x00>><UERadioCapIDAvail [transparent] : <T : 11><V : 0>>>,
+ 0)
+
+
+
+
+('initiatingMessage',
+ {'criticality': 'ignore',
+  'procedureCode': 11,
+  'value': ('DownlinkNASTransport',
+            {'protocolIEs': [{'criticality': 'reject',
+                              'id': 0,
+                              'value': ('MME-UE-S1AP-ID', 1)},
+                             {'criticality': 'reject',
+                              'id': 8,
+                              'value': ('ENB-UE-S1AP-ID', 420141)},
+                             {'criticality': 'reject',
+                              'id': 26,
+                              'value': ('NAS-PDU',
+                                        b'\x07R\x00\x1b\xb9h3\xeb\xbc\xba\\\xc7'
+                                        b'\x85\x19c\xe7\xf1\xe7u\x10@)\xc0\xc4'
+                                        b'\x99@\x80\x00\x1e3\x08\x92'
+                                        b'Q\x9d\xbb\x92')}]})})
+
+
+(<EMMAuthenticationRequest : <EMMHeader : <SecHdr : 0 (No security)><ProtDisc : 7 (EMM)><Type : 82 (Authentication request)>><spare : 0><NAS_KSI : <NAS_KSI : <TSC : 0 (native security context)><Value : 0>>><RAND : <V : 0x1bb96833ebbcba5cc7851963e7f1e775>><AUTN : <L : 16><AUTN : <SQNxAK : 0x4029c0c49940><AMF : 0x8000><MAC : 0x1e330892519dbb92>>>>,
+ 0)
+
+('initiatingMessage',
+ {'criticality': 'ignore',
+  'procedureCode': 13,
+  'value': ('UplinkNASTransport',
+            {'protocolIEs': [{'criticality': 'reject',
+                              'id': 0,
+                              'value': ('MME-UE-S1AP-ID', 1)},
+                             {'criticality': 'reject',
+                              'id': 8,
+                              'value': ('ENB-UE-S1AP-ID', 420141)},
+                             {'criticality': 'reject',
+                              'id': 26,
+                              'value': ('NAS-PDU',
+                                        b'\x07S\x08\xb21\x82\xd9\x8c'
+                                        b'\xe7I\xc5')},
+                             {'criticality': 'ignore',
+                              'id': 100,
+                              'value': ('EUTRAN-CGI',
+                                        {'cell-ID': (917504, 28),
+                                         'pLMNidentity': b'# \x03'})},
+                             {'criticality': 'ignore',
+                              'id': 67,
+                              'value': ('TAI',
+                                        {'pLMNidentity': b'# \x03',
+                                         'tAC': b'\x00\x05'})}]})})
+
+
+(<EMMAuthenticationResponse : <EMMHeader : <SecHdr : 0 (No security)><ProtDisc : 7 (EMM)><Type : 83 (Authentication response)>><RES : <L : 8><V : 0xb23182d98ce749c5>>>,
+ 0)
+
+
+
+('initiatingMessage',
+ {'criticality': 'ignore',
+  'procedureCode': 11,
+  'value': ('DownlinkNASTransport',
+            {'protocolIEs': [{'criticality': 'reject',
+                              'id': 0,
+                              'value': ('MME-UE-S1AP-ID', 1)},
+                             {'criticality': 'reject',
+                              'id': 8,
+                              'value': ('ENB-UE-S1AP-ID', 420141)},
+                             {'criticality': 'reject',
+                              'id': 26,
+                              'value': ('NAS-PDU',
+                                        b'7\x84\xe1\xe9\x06\x00\x07]'
+                                        b'\x02\x00\x02\x80 \xc1')}]})})
+
+
+(<EMMSecProtNASMessage : <EMMHeaderSec : <SecHdr : 3 (Integrity protected with new EPS security context)><ProtDisc : 7 (EMM)>><MAC : 0x84e1e906><Seqn : 0><EMMSecurityModeCommand : <EMMHeader : <SecHdr : 0 (No security)><ProtDisc : 7 (EMM)><Type : 93 (Security mode command)>><NASSecAlgo : <NASSecAlgo : <spare : 0><CiphAlgo : 0 (EPS encryption algorithm EEA0 (null))><spare : 0><IntegAlgo : 2 (EPS integrity algorithm 128-EIA2 (AES))>>><spare : 0><NAS_KSI : <NAS_KSI : <TSC : 0 (native security context)><Value : 0>>><UESecCap : <L : 2><UESecCap : <EEA0 : 1><EEA1_128 : 0><EEA2_128 : 0><EEA3_128 : 0><EEA4 : 0><EEA5 : 0><EEA6 : 0><EEA7 : 0><EIA0 : 0><EIA1_128 : 0><EIA2_128 : 1><EIA3_128 : 0><EIA4 : 0><EIA5 : 0><EIA6 : 0><EIA7 : 0><UEA0 [transparent] : 0><UEA1 [transparent] : 0><UEA2 [transparent] : 0><UEA3 [transparent] : 0><UEA4 [transparent] : 0><UEA5 [transparent] : 0><UEA6 [transparent] : 0><UEA7 [transparent] : 0><spare [transparent] : 0><UIA1 [transparent] : 0><UIA2 [transparent] : 0><UIA3 [transparent] : 0><UIA4 [transparent] : 0><UIA5 [transparent] : 0><UIA6 [transparent] : 0><UIA7 [transparent] : 0><spare [transparent] : 0><GEA1 [transparent] : 0><GEA2 [transparent] : 0><GEA3 [transparent] : 0><GEA4 [transparent] : 0><GEA5 [transparent] : 0><GEA6 [transparent] : 0><GEA7 [transparent] : 0>>><IMEISVReq : <T : 12><IMEISVReq : <spare : 0><Value : 1 (IMEISV requested)>>><NonceUE [transparent] : <T : 85><V : 0x00000000>><NonceMME [transparent] : <T : 86><V : 0x00000000>><HashMME [transparent] : <T : 79><L : 8><V : 0x0000000000000000>><UEAddSecCap [transparent] : <T : 111><L : 4><V : 0x00000000>><UERadioCapIDReq [transparent] : <T : 13><V : 0>>>>,
+ 0)
+
+('initiatingMessage',
+ {'criticality': 'ignore',
+  'procedureCode': 13,
+  'value': ('UplinkNASTransport',
+            {'protocolIEs': [{'criticality': 'reject',
+                              'id': 0,
+                              'value': ('MME-UE-S1AP-ID', 1)},
+                             {'criticality': 'reject',
+                              'id': 8,
+                              'value': ('ENB-UE-S1AP-ID', 420141)},
+                             {'criticality': 'reject',
+                              'id': 26,
+                              'value': ('NAS-PDU',
+                                        b'Gr\x96\xa1H\x00\x07^#\t3ut\x03\x04p'
+                                        b'P\x03\xf0')},
+                             {'criticality': 'ignore',
+                              'id': 100,
+                              'value': ('EUTRAN-CGI',
+                                        {'cell-ID': (917504, 28),
+                                         'pLMNidentity': b'# \x03'})},
+                             {'criticality': 'ignore',
+                              'id': 67,
+                              'value': ('TAI',
+                                        {'pLMNidentity': b'# \x03',
+                                         'tAC': b'\x00\x05'})}]})})
+
+
+(<EMMSecProtNASMessage : <EMMHeaderSec : <SecHdr : 4 (Integrity protected and ciphered with new EPS security context)><ProtDisc : 7 (EMM)>><MAC : 0x7296a148><Seqn : 0><NASMessage : b'\x07^#\t3ut\x03\x04pP\x03\xf0'>>,
+ 0)
+
+
+
+('initiatingMessage',
+ {'criticality': 'ignore',
+  'procedureCode': 9,
+  'value': ('InitialContextSetupRequest',
+            {'protocolIEs': [{'criticality': 'reject',
+                              'id': 0,
+                              'value': ('MME-UE-S1AP-ID', 1)},
+                             {'criticality': 'reject',
+                              'id': 8,
+                              'value': ('ENB-UE-S1AP-ID', 420141)},
+                             {'criticality': 'reject',
+                              'id': 66,
+                              'value': ('UEAggregateMaximumBitrate',
+                                        {'uEaggregateMaximumBitRateDL': 100000000,
+                                         'uEaggregateMaximumBitRateUL': 50000000})},
+                             {'criticality': 'reject',
+                              'id': 24,
+                              'value': ('E-RABToBeSetupListCtxtSUReq',
+                                        [{'criticality': 'reject',
+                                          'id': 52,
+                                          'value': ('E-RABToBeSetupItemCtxtSUReq',
+                                                    {'e-RAB-ID': 5,
+                                                     'e-RABlevelQoSParameters': {'allocationRetentionPriority': {'pre-emptionCapability': 'shall-not-trigger-pre-emption',
+                                                                                                                 'pre-emptionVulnerability': 'not-pre-emptable',
+                                                                                                                 'priorityLevel': 15},
+                                                                                 'qCI': 9},
+                                                     'gTP-TEID': b'\x00\x00\x00\x01',
+                                                     'nAS-PDU': b"'\x90\xcav"
+                                                                b'e\x01\x07B'
+                                                                b'\x01!\x06 '
+                                                                b'#\x002\x00'
+                                                                b'\x05\x00ER'
+                                                                b'\x01\xc1\x01\t'
+                                                                b'\x11\x04ap'
+                                                                b'n1\x07carri'
+                                                                b'er\x03c'
+                                                                b'om\x05\x01'
+                                                                b'\x0c\x01\x01\x02'
+                                                                b'^\x04\xfe\xfe'
+                                                                b"\x9el' "
+                                                                b'\x80\x80!\x10'
+                                                                b'\x03\x00\x00\x10'
+                                                                b'\x81\x06\x08\x08'
+                                                                b'\x08\x08\x83\x06'
+                                                                b'\x08\x08\x04\x04'
+                                                                b'\x00\r\x04\x08'
+                                                                b'\x08\x08\x08\x00'
+                                                                b'\x10\x02\x05\xdc'
+                                                                b'P\x0b\xf6#'
+                                                                b'\x002\x80\x00'
+                                                                b'\x03\x00\x00\x00'
+                                                                b'\x01',
+                                                     'transportLayerAddress': (3232251141,
+                                                                               32)})}])},
+                             {'criticality': 'reject',
+                              'id': 107,
+                              'value': ('UESecurityCapabilities',
+                                        {'encryptionAlgorithms': (0, 16),
+                                         'integrityProtectionAlgorithms': (16384,
+                                                                           16)})},
+                             {'criticality': 'reject',
+                              'id': 73,
+                              'value': ('SecurityKey',
+                                        (8476297005776208477975451685870666357286426580378859812221727150476065970518,
+                                         256))}]})})
+
+
+
+(b"'\x90\xcave\x01\x07B\x01!\x06 #\x002\x00\x05\x00ER\x01\xc1\x01\t\x11\x04ap"
+ b"n1\x07carrier\x03com\x05\x01\x0c\x01\x01\x02^\x04\xfe\xfe\x9el' "
+ b'\x80\x80!\x10\x03\x00\x00\x10\x81\x06\x08\x08\x08\x08\x83\x06'
+ b'\x08\x08\x04\x04\x00\r\x04\x08\x08\x08\x08\x00\x10\x02\x05\xdcP\x0b\xf6#'
+ b'\x002\x80\x00\x03\x00\x00\x00\x01')
+<EMMSecProtNASMessage : <EMMHeaderSec : <SecHdr : 2 (Integrity protected and ciphered)><ProtDisc : 7 (EMM)>><MAC : 0x90ca7665><Seqn : 1><NASMessage : b"\x07B\x01!\x06 #\x002\x00\x05\x00ER\x01\xc1\x01\t\x11\x04apn1\x07carrier\x03com\x05\x01\x0c\x01\x01\x02^\x04\xfe\xfe\x9el' \x80\x80!\x10\x03\x00\x00\x10\x81\x06\x08\x08\x08\x08\x83\x06\x08\x08\x04\x04\x00\r\x04\x08\x08\x08\x08\x00\x10\x02\x05\xdcP\x0b\xf6#\x002\x80\x00\x03\x00\x00\x00\x01">>
+<class 'pycrate_mobile.TS24301_EMM.EMMSecProtNASMessage'>
+<NASMessage : b"\x07B\x01!\x06 #\x002\x00\x05\x00ER\x01\xc1\x01\t\x11\x04apn1\x07carrier\x03com\x05\x01\x0c\x01\x01\x02^\x04\xfe\xfe\x9el' \x80\x80!\x10\x03\x00\x00\x10\x81\x06\x08\x08\x08\x08\x83\x06\x08\x08\x04\x04\x00\r\x04\x08\x08\x08\x08\x00\x10\x02\x05\xdcP\x0b\xf6#\x002\x80\x00\x03\x00\x00\x00\x01">
+<EMMAttachAccept : <EMMHeader : <SecHdr : 0 (No security)><ProtDisc : 7 (EMM)><Type : 66 (Attach accept)>><spare : 0><EPSAttachResult : <V : 1 (EPS only)>><T3412 : <GPRSTimer : <Unit : 1 (1 min)><Value : 1>>><TAIList : <L : 6><TAIList : <PartialTAIList1 : <spare : 0><Type : 1 (list of TACs belonging to one PLMN, with consecutive TAC values)><Num : 0><PLMN : 320230><TAC0 : 5>>>><ESMContainer : <L : 69><ESMActDefaultEPSBearerCtxtRequest : <ESMHeader : <EPSBearerId : 5><ProtDisc : 2><PTI : 1><Type : 193 (Activate default EPS bearer context request)>><EPSQoS : <L : 1><EPSQoS : <QCI : 9><EPSQoSBitrate [transparent] : <MaxULBitrate : 0><MaxDLBitrate : 0><GuaranteedULBitrate : 0><GuaranteedDLBitrate : 0>><EPSQoSBitrateExt [transparent] : <MaxULBitrate : 0><MaxDLBitrate : 0><GuaranteedULBitrate : 0><GuaranteedDLBitrate : 0>><EPSQoSBitrateExt2 [transparent] : <MaxULBitrate : 0><MaxDLBitrate : 0><GuaranteedULBitrate : 0><GuaranteedDLBitrate : 0>>>><APN : <L : 17><APN : <APNItem : <Len : 4><Value : b'apn1'>><APNItem : <Len : 7><Value : b'carrier'>><APNItem : <Len : 3><Value : b'com'>>>><PDNAddr : <L : 5><PDNAddr : <spare : 0><Type : 1 (IPv4)><Addr : 0x0c010102>>><TI [transparent] : <T : 93><L : 1><V : 0x00>><QoS [transparent] : <T : 48><L : 11><V : 0x0000000000000000000000>><LLC_SAPI [transparent] : <T : 50><V : 0x00>><RadioPriority [transparent] : <T : 8><V : 0>><PacketFlowId [transparent] : <T : 52><L : 1><V : 0x00>><APN_AMBR : <T : 94><L : 4><APN_AMBR : <DL : 254><UL : 254><DLExt : 158><ULExt : 108><DLExt2 [transparent] : 0><ULExt2 [transparent] : 0>>><ESMCause [transparent] : <T : 88><V : 0x00>><ProtConfig : <T : 39><L : 32><ProtConfig : <Ext : 1><spare : 0><Prot : 0 (PPP with IP PDP)><Config : <ProtConfigElt : <ID : 32801 (IPCP)><Len : 16><Cont : <Code : 3 (Configure-Nak)><Id : 0><Len : 16><Data : <NCPOpt : <Type : 129 (Primary DNS Server Address)><Len : 6><Data : 0x08080808>><NCPOpt : <Type : 131 (Secondary DNS Server Address)><Len : 6><Data : 0x08080404>>>>><ProtConfigElt : <ID : 13 (DNS server IPv4 address request)><Len : 4><Cont : 0x08080808>><ProtConfigElt : <ID : 16 (IPv4 Link MTU Request)><Len : 2><Cont : 0x05dc>>>>><ConType [transparent] : <T : 11><V : 0 (The PDN connection type is not indicated)>><WLANOffloadInd [transparent] : <T : 12><V : 0>><NBIFOMContainer [transparent] : <T : 51><L : 1><V : 0x00>><HdrCompConfig [transparent] : <T : 102><L : 3><V : 0x000000>><CPOnlyInd [transparent] : <T : 9><V : 0>><ExtProtConfig [transparent] : <T : 123><L : 1><V : 0x00>><ServingPLMNRateCtrl [transparent] : <T : 110><L : 1><V : 0x00>><ExtAPN_AMBR [transparent] : <T : 95><L : 0><V : 0x>>>><GUTI : <T : 80><L : 11><EPSID : <Digit1 : 0xf><Odd : 0><Type : 6 (GUTI)><PLMN : 320230><MMEGroupID : 0x8000><MMECode : 0x03><MTMSI : 0x00000001>>><LAI [transparent] : <T : 19><V : 0x0000000000>><ID [transparent] : <T : 35><L : 5><V : 0xf400000000>><EMMCause [transparent] : <T : 83><V : 0x00>><T3402 [transparent] : <T : 23><V : 0x00>><T3423 [transparent] : <T : 89><V : 0x00>><EquivPLMNList [transparent] : <T : 74><L : 3><V : 0x000000>><EmergNumList [transparent] : <T : 52><L : 3><V : 0x020100>><EPSNetFeat [transparent] : <T : 100><L : 2><V : 0x0000>><AddUpdateRes [transparent] : <T : 15><V : 0>><T3412Ext [transparent] : <T : 94><L : 1><V : 0x00>><T3324 [transparent] : <T : 106><L : 1><V : 0x00>><ExtDRXParam [transparent] : <T : 110><L : 1><V : 0x00>><SMSServStat [transparent] : <T : 14><V : 0>><Non3GPPNWProvPol [transparent] : <T : 13><V : 0>><T3448 [transparent] : <T : 107><L : 1><V : 0x00>><NetworkPol [transparent] : <T : 12><V : 0>><T3447 [transparent] : <T : 108><L : 1><V : 0x00>><ExtEmergNumList [transparent] : <T : 122><L : 4><V : 0x00000000>><CipherKeyData [transparent] : <T : 124><L : 32><V : 0x0000000000000000000000000000000000000000000000000000000000000000>><UERadioCapID [transparent] : <T : 102><L : 1><V : 0x00>><UERadioCapIDDelInd [transparent] : <T : 11><V : 0>>>
+
+
+
+('initiatingMessage',
+ {'criticality': 'ignore',
+  'procedureCode': 22,
+  'value': ('UECapabilityInfoIndication',
+            {'protocolIEs': [{'criticality': 'reject',
+                              'id': 0,
+                              'value': ('MME-UE-S1AP-ID', 1)},
+                             {'criticality': 'reject',
+                              'id': 8,
+                              'value': ('ENB-UE-S1AP-ID', 420141)},
+                             {'criticality': 'reject',
+                              'id': 74,
+                              'value': ('UERadioCapability',
+                                        b'\x00\x94\x01\x00\xf0\x18\x00\x03'
+                                        b'\x08\x98d\xa0\xc1\xb8;\x07'
+                                        b'\xa0\xf8\x00\x00')}]})})
+
+
+
+('successfulOutcome',
+ {'criticality': 'reject',
+  'procedureCode': 9,
+  'value': ('InitialContextSetupResponse',
+            {'protocolIEs': [{'criticality': 'ignore',
+                              'id': 0,
+                              'value': ('MME-UE-S1AP-ID', 1)},
+                             {'criticality': 'ignore',
+                              'id': 8,
+                              'value': ('ENB-UE-S1AP-ID', 420141)},
+                             {'criticality': 'ignore',
+                              'id': 51,
+                              'value': ('E-RABSetupListCtxtSURes',
+                                        [{'criticality': 'ignore',
+                                          'id': 50,
+                                          'value': ('E-RABSetupItemCtxtSURes',
+                                                    {'e-RAB-ID': 5,
+                                                     'gTP-TEID': b'\xcao\xe0\xdd',
+                                                     'transportLayerAddress': (3232235628,
+                                                                               32)})}])}]})})
+
+
+
+('initiatingMessage',
+ {'criticality': 'ignore',
+  'procedureCode': 13,
+  'value': ('UplinkNASTransport',
+            {'protocolIEs': [{'criticality': 'reject',
+                              'id': 0,
+                              'value': ('MME-UE-S1AP-ID', 1)},
+                             {'criticality': 'reject',
+                              'id': 8,
+                              'value': ('ENB-UE-S1AP-ID', 420141)},
+                             {'criticality': 'reject',
+                              'id': 26,
+                              'value': ('NAS-PDU',
+                                        b"'C\x8c\x98\xab\x01\x07C\x00\x03R\x00"
+                                        b'\xc2')},
+                             {'criticality': 'ignore',
+                              'id': 100,
+                              'value': ('EUTRAN-CGI',
+                                        {'cell-ID': (917504, 28),
+                                         'pLMNidentity': b'# \x03'})},
+                             {'criticality': 'ignore',
+                              'id': 67,
+                              'value': ('TAI',
+                                        {'pLMNidentity': b'# \x03',
+                                         'tAC': b'\x00\x05'})}]})})
+
+
+(<EMMSecProtNASMessage : <EMMHeaderSec : <SecHdr : 2 (Integrity protected and ciphered)><ProtDisc : 7 (EMM)>><MAC : 0x438c98ab><Seqn : 1><NASMessage : b'\x07C\x00\x03R\x00\xc2'>>,
+ 0)
+
+
+
+^CTraceback (most recent call last):
+  File "controller.py", line 76, in <module>
     main()
-  File "dispatcher_cplane.py", line 145, in main
-    parseSCTPPacket(raw_data)
-  File "dispatcher_cplane.py", line 71, in parseSCTPPacket
-    data_info = struct.unpack("!4sHH4s", chunk_data[:12])
+  File "controller.py", line 70, in main
+    msg = clientSock.recv(4096)
+KeyboardInterrupt
+
 
