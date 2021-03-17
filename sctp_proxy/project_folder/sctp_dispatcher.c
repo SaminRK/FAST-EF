@@ -12,7 +12,7 @@ void server_to_client(uint8_t *buffer, uint32_t length, uint16_t ppid,
                       uint16_t stream) {
     client_sctp_send_msg((sctp_data_t *)&client_config, ppid, stream, buffer,
                          length);
-    send_msg(buffer, length);
+   send_msg(buffer, length);
 }
 
 int client_to_server(uint16_t stream, uint8_t *buffer, uint32_t length) {
