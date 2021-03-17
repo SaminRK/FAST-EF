@@ -29,6 +29,9 @@
     curl --interface oaitun_ue1 http://{APP_SERVER_IP}:PORT
     ```
 
+# Netns
+  - Run `tc.out` and http server inside netns  
+
 ## Useful Links
 
 [libgtpnl homepage](https://osmocom.org/projects/linux-kernel-gtp-u/wiki)

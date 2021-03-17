@@ -73,7 +73,7 @@ def main() :
     LOCAL_IP = "0.0.0.0" # IP address of this machine
     CORE_IP = "192.168.61.5" # spgwu ip address
     CORE_PORT = 2152
-    MEC_IP = "192.168.1.103"
+    MEC_IP = "10.20.40.3"
     MEC_PORT = 2152 
     # receive the traffic
     ListenSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # IP, UDP
