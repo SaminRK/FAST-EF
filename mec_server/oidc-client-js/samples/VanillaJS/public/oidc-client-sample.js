@@ -18,7 +18,7 @@ Oidc.Log.logger = console;
 Oidc.Log.level = Oidc.Log.INFO;
 
 var settings = {
-    authority: 'http://localhost:15000/oidc',
+    authority: 'http://localhost:15005/oidc',
     client_id: 'js.tokenmanager',
     redirect_uri: 'http://localhost:15000/oidc-client-sample.html',
     post_logout_redirect_uri: 'http://localhost:15000/oidc-client-sample.html',
