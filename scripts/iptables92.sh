@@ -11,5 +11,6 @@ ENB_NETWORK='192.168.1.105'
 
 # sudo iptables -t nat -I PREROUTING 1 -s ${ENB_NETWORK} -d ${EPC_HOST} -p UDP --dport 7152 -j REDIRECT --to-ports 7000
 sudo iptables -t nat -I PREROUTING 1 -s ${ENB_NETWORK} -d ${EPC_HOST} -p UDP --dport 7152 -j DNAT --to-destination 192.168.61.5:2152
-sudo iptables -t nat -I PREROUTING 2 -s ${ENB_NETWORK} -d ${EPC_HOST} -p sctp --dport 16412 -j DNAT --to-destination 192.168.61.3:36412
-sudo iptables -t nat -I PREROUTING 3 -s ${ENB_NETWORK} -d ${EPC_HOST} -p sctp --dport 26412 -j DNAT --to-destination 192.168.61.7:36412
+sudo iptables -t nat -I PREROUTING 2 -s ${ENB_NETWORK} -d ${EPC_HOST} -p UDP --dport 8152 -j DNAT --to-destination 192.168.61.9:2152
+sudo iptables -t nat -I PREROUTING 3 -s ${ENB_NETWORK} -d ${EPC_HOST} -p sctp --dport 16412 -j DNAT --to-destination 192.168.61.3:36412
+sudo iptables -t nat -I PREROUTING 4 -s ${ENB_NETWORK} -d ${EPC_HOST} -p sctp --dport 26412 -j DNAT --to-destination 192.168.61.7:36412
