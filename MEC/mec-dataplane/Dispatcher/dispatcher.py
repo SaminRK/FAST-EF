@@ -1,3 +1,4 @@
+import argparse
 import socket
 import binascii
 import struct
@@ -67,17 +68,29 @@ def getHeadInfo(raw_packet) :
             return True, gtp_header[3], socket.inet_ntoa(ip_header[8]) # MNC: 9
     return False, gtp_header[3], socket.inet_ntoa(ip_header[8])        # MNC: 9
 
-
+# Run 
+# (foreign) python3 dispatcher.py -p 7000 -c 192.168.61.5 -m 10.20.40.3 
+# (home) python3 dispatcher.py -p 7001 -c 192.168.61.9 -m 10.20.40.4
 
 def main() :
+    my_parser = argparse.ArgumentParser()
+    my_parser.add_argument('-c', '--core_ip', type=str, help='SPGW-U IP')
+    my_parser.add_argument('-m', '--mec_ip', type=str, help='MEC IP')
+    my_parser.add_argument('-p', '--port', type=str, help='Port')
+    args = my_parser.parse_args()
+
     LOCAL_IP = "0.0.0.0" # IP address of this machine
-    CORE_IP = "192.168.61.5" # spgwu ip address
+    # CORE_IP = "192.168.61.5" # spgwu ip address
+    CORE_IP = args.core_ip
     CORE_PORT = 2152
-    MEC_IP = "10.20.40.3"
-    MEC_PORT = 2152 
+    # MEC_IP = "10.20.40.3"
+    MEC_IP = args.mec_ip
+    MEC_PORT = 2152
+    LOCAL_PORT = args.port 
+
     # receive the traffic
     ListenSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # IP, UDP
-    ListenSock.bind((LOCAL_IP, 7000)) # LOCAL, 2152
+    ListenSock.bind((LOCAL_IP, LOCAL_PORT)) # LOCAL, 2152
     # send the traffic
     ForwardSocket_teid = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     ForwardSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
