@@ -33,7 +33,8 @@ typedef struct{
 } ue_info;
 
 int main(){
-	int rv = system ("rmmod gtp");
+	int rv;
+	// int rv = system ("rmmod gtp");
 	int fd0 = 0, fd1u = 0;
 	
     rv = system ("modprobe gtp");
