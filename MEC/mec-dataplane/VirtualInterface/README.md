@@ -29,6 +29,29 @@
     curl --interface oaitun_ue1 http://{APP_SERVER_IP}:PORT
     ```
 
+## Netns
+
+### Create
+```
+sh create_netns_home.sh
+sh create_netns_foreign.sh
+```
+
+### Run 
+  - Run `tc.out` and http server inside netns
+  - home 
+```
+ne2='ip netns exec ns2'
+$ne2 python3 server.py
+$ne2 ./tc.out
+```
+  - foreign 
+```
+ne1='ip netns exec ns1'
+$ne1 python3 server.py
+$ne1 ./tc.out
+```   
+
 ## Useful Links
 
 [libgtpnl homepage](https://osmocom.org/projects/linux-kernel-gtp-u/wiki)

@@ -8,6 +8,10 @@ LIBS = -lgtpnl
 #	$(CC) $(CFLAGS) -o testvif.out gtp_mod_kernel.o vif-controlplane.c $(LIBS)
 #	@chmod u+x testvif.out
 
+tc.out: tunCreator.c gtp_mod_kernel.o
+	$(CC) $(CFLAGS) -o tc.out gtp_mod_kernel.o tunCreator.c $(LIBS)
+	@chmod u+x tc.out
+
 vif.out: gtp_mod_kernel.o vif.c
 	$(CC) $(CFLAGS) -o vif.out gtp_mod_kernel.o vif.c $(LIBS)
 	@chmod u+x vif.out
