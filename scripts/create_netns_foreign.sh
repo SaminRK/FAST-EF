@@ -1,5 +1,4 @@
 # default values 
-# foreign
 NAME="ns1"
 HOST_VETH_IP="10.20.40.2"
 NETNS_VETH_IP="10.20.40.3"

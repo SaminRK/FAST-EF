@@ -70,13 +70,13 @@ def getHeadInfo(raw_packet) :
 
 # Run 
 # (foreign) python3 dispatcher.py -p 7000 -c 192.168.61.5 -m 10.20.40.3 
-# (home) python3 dispatcher.py -p 7001 -c 192.168.61.9 -m 10.20.40.4
+# (home) python3 dispatcher.py -p 7001 -c 192.168.61.9 -m 10.20.50.3
 
 def main() :
     my_parser = argparse.ArgumentParser()
     my_parser.add_argument('-c', '--core_ip', type=str, help='SPGW-U IP')
     my_parser.add_argument('-m', '--mec_ip', type=str, help='MEC IP')
-    my_parser.add_argument('-p', '--port', type=str, help='Port')
+    my_parser.add_argument('-p', '--port', type=int, help='Port')
     args = my_parser.parse_args()
 
     LOCAL_IP = "0.0.0.0" # IP address of this machine
