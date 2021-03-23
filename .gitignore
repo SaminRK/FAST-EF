@@ -8,3 +8,6 @@ venv/
 # C object files 
 *.o 
 *.out
+
+# VS code 
+/.vscode
