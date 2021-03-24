@@ -75,22 +75,14 @@ def getHeadInfo(raw_packet) :
 def main() :
     my_parser = argparse.ArgumentParser()
     my_parser.add_argument('-n', '--network', type=str, help='network (home | foreign)')
-    my_parser.add_argument('-c', '--core_ip', type=str, help='SPGW-U IP')
-    my_parser.add_argument('-m', '--mec_ip', type=str, help='MEC IP')
-    my_parser.add_argument('-p', '--port', type=int, help='Port')
     args = my_parser.parse_args()
 
     LOCAL_IP = "0.0.0.0" # IP address of this machine
-    # CORE_IP = "192.168.61.5" # spgwu ip address
-    CORE_IP = args.core_ip
     CORE_PORT = 2152
-    # MEC_IP = "10.20.40.3"
-    MEC_IP = args.mec_ip
     MEC_PORT = 2152
-    LOCAL_PORT = args.port 
 
     if args.network == 'foreign':
-        CORE_IP = '192.168.61.5'
+        CORE_IP = '192.168.61.5'    # spgwu ip address
         MEC_IP = '10.20.40.3'
         LOCAL_PORT = 7000
     else:
