@@ -60,7 +60,7 @@ def main() :
     LOCAL_PORT = 9001
 
     ListenSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    ListenSock.bind(('localhost', LOCAL_PORT))
+    ListenSock.bind(('0.0.0.0', LOCAL_PORT))
     ListenSock.listen(5)
 
     print("waiting for client to connect...")
