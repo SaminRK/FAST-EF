@@ -21,9 +21,32 @@ int client_to_server(uint16_t stream, uint8_t *buffer, uint32_t length) {
     return ret;
 }
 
-int main() {
-    char *locals[] = {"192.168.0.106"};
-    sctp_connect_to_remote_host(locals, 1, "192.168.61.3", 36412, SOCK_STREAM,
+int main(int argc, char *argv[]) {
+    // Samin
+    // char epc_host[30] = "192.168.0.106"
+    // Sadman
+    char epc_host[30] = "192.168.43.99";
+    char *locals[] = {epc_host};
+
+    if(argc < 2){  
+      printf("Usage ./%s (home | foreign) \n", argv[0]);
+      exit(1);  
+   }
+
+    int sctp_dispatcher_port, mec_controller_port;
+    char mme_ip[30], mec_controller_ip[30];
+    mec_controller_port = 9001;
+    if(!strcmp(argv[1], "foreign")) {
+        strcpy(mme_ip, "192.168.61.3");
+        strcpy(mec_controller_ip, "10.20.40.3");
+        sctp_dispatcher_port = 36414;
+    } else {
+        strcpy(mme_ip, "192.168.61.7");
+        strcpy(mec_controller_ip, "10.20.50.3");
+        sctp_dispatcher_port = 36415;
+    }
+
+    sctp_connect_to_remote_host(locals, 1, mme_ip, 36412, SOCK_STREAM,
                                 (sctp_data_t *)&client_config);
 
     sctp_init(client_config.instreams, client_config.outstreams);
@@ -34,8 +57,8 @@ int main() {
     sctp_init.nb_ipv4_addr = 1;
     sctp_init.nb_ipv6_addr = 0;
     sctp_init.ipv4_address = calloc(1, sizeof(struct in6_addr));
-    inet_aton("192.168.0.106", (struct in_addr *)&sctp_init.ipv4_address[0]);
-    sctp_init.port = 36414;
+    inet_aton(epc_host, (struct in_addr *)&sctp_init.ipv4_address[0]);
+    sctp_init.port = sctp_dispatcher_port;
     sctp_init.ppid =
         18;  // https://www.iana.org/assignments/sctp-parameters/sctp-parameters.xhtml#sctp-parameters-25
 
@@ -44,7 +67,7 @@ int main() {
     /**
      * creates TCP connection to mec controller
     */
-   connect_to_remote("127.0.0.1", 9001);
+   connect_to_remote(mec_controller_ip, mec_controller_port);
     /**
      * Loops
     */
