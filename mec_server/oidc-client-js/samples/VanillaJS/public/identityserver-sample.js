@@ -27,19 +27,21 @@ document.getElementById('popupSignout').addEventListener("click", popupSignout, 
 Oidc.Log.logger = console;
 Oidc.Log.level = Oidc.Log.DEBUG;
 
+var appAddr = '11.12.13.14:15000';
+
 var settings = {
     authority: 'https://demo.identityserver.io/',
     client_id: 'implicit',
-    redirect_uri: 'http://localhost:15000/identityserver-sample.html',
-    post_logout_redirect_uri: 'http://localhost:15000/identityserver-sample.html',
+    redirect_uri: `http://${appAddr}/identityserver-sample.html`,
+    post_logout_redirect_uri: `http://${appAddr}/identityserver-sample.html`,
     response_type: 'id_token token',
     //response_mode:'fragment',
     scope: 'openid profile email api',
     
-    popup_redirect_uri:'http://localhost:15000/identityserver-sample-popup-signin.html',
-    popup_post_logout_redirect_uri:'http://localhost:15000/identityserver-sample-popup-signout.html',
+    popup_redirect_uri:`http://${appAddr}/identityserver-sample-popup-signin.html`,
+    popup_post_logout_redirect_uri:`http://${appAddr}/identityserver-sample-popup-signout.html`,
     
-    silent_redirect_uri:'http://localhost:15000/identityserver-sample-silent.html',
+    silent_redirect_uri:`http://${appAddr}/identityserver-sample-silent.html`,
     automaticSilentRenew:true,
     //silentRequestTimeout:10000,
 
@@ -121,7 +123,7 @@ function endSigninMainWindow() {
 }
 
 function startSigninMainWindowDiffCallbackPage() {
-    mgr.signinRedirect({state:'some data', redirect_uri: 'http://localhost:15000/identityserver-sample-callback.html'}).then(function() {
+    mgr.signinRedirect({state:'some data', redirect_uri: `http://${appAddr}/identityserver-sample-callback.html`}).then(function() {
         log("signinRedirect done");
     }).catch(function(err) {
         log(err);

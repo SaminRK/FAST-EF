@@ -30,8 +30,11 @@ console.log("Using oidc-client version: ", Oidc.Version);
 
 var url = window.location.origin;
 
+var hostAddr = '11.12.13.14';
+var idpAddr = `${hostAddr}:15005`;
+
 var settings = {
-    authority: 'http://localhost:15005/oidc',
+    authority: `http://${idpAddr}/oidc`,
     client_id: 'interactive.public',
     //client_id: 'interactive.public.short',
     redirect_uri: url + '/code-identityserver-sample.html',
