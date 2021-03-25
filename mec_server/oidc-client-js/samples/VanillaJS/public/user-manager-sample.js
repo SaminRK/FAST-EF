@@ -26,10 +26,12 @@ document.getElementById('popupSignout').addEventListener("click", popupSignout, 
 Oidc.Log.logger = console;
 Oidc.Log.level = Oidc.Log.WARN;
 
-var appAddr = '11.12.13.14:15000';
+var hostAddr = '11.12.13.14';
+var appAddr = `${hostAddr}:15000`;
+var idpAddr = `${hostAddr}:15005`;
 
 var settings = {
-    authority: 'http://localhost:15005/oidc',
+    authority: `http://${idpAddr}/oidc`,
     client_id: 'js.tokenmanager',
     redirect_uri: `http://${appAddr}/user-manager-sample.html`,
     post_logout_redirect_uri: `http://${appAddr}/user-manager-sample.html`,
