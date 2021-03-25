@@ -1,6 +1,7 @@
 #include <arpa/inet.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "sctp_primitives_client.h"
 #include "sctp_primitives_server.h"
@@ -29,7 +30,7 @@ int main(int argc, char *argv[]) {
     char *locals[] = {epc_host};
 
     if(argc < 2){  
-      printf("Usage ./%s (home | foreign) \n", argv[0]);
+      printf("Usage %s (home | foreign) \n", argv[0]);
       exit(1);  
    }
 
