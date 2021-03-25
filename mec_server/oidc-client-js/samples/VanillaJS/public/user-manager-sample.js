@@ -26,7 +26,7 @@ document.getElementById('popupSignout').addEventListener("click", popupSignout, 
 Oidc.Log.logger = console;
 Oidc.Log.level = Oidc.Log.WARN;
 
-var appAddr = 'localhost:15000';
+var appAddr = '11.12.13.14:15000';
 
 var settings = {
     authority: 'http://localhost:15005/oidc',

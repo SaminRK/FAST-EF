@@ -17,7 +17,7 @@ document.getElementById('links').addEventListener('change', toggleLinks, false);
 Oidc.Log.logger = console;
 Oidc.Log.level = Oidc.Log.INFO;
 
-var appAddr = 'localhost:15000';
+var appAddr = '11.12.13.14:15000';
 
 var settings = {
     authority: 'http://localhost:15005/oidc',
