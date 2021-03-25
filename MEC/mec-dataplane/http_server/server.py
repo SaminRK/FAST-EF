@@ -5,6 +5,7 @@ import socket
 
 def handle_request(request):
     headers = request.split('\n')
+    print('headers[0]', headers[0])
     filename = headers[0].split()[1]
     if filename == '/':
         filename = '/index.html'
