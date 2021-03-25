@@ -74,6 +74,7 @@ def getHeadInfo(raw_packet) :
 
 def main() :
     my_parser = argparse.ArgumentParser()
+    my_parser.add_argument('-n', '--network', type=str, help='network (home | foreign)')
     my_parser.add_argument('-c', '--core_ip', type=str, help='SPGW-U IP')
     my_parser.add_argument('-m', '--mec_ip', type=str, help='MEC IP')
     my_parser.add_argument('-p', '--port', type=int, help='Port')
@@ -87,6 +88,15 @@ def main() :
     MEC_IP = args.mec_ip
     MEC_PORT = 2152
     LOCAL_PORT = args.port 
+
+    if args.network == 'foreign':
+        CORE_IP = '192.168.61.5'
+        MEC_IP = '10.20.40.3'
+        LOCAL_PORT = 7000
+    else:
+        CORE_IP = '192.168.61.9'
+        MEC_IP = '10.20.50.3'
+        LOCAL_PORT = 7001
 
     # receive the traffic
     ListenSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # IP, UDP
