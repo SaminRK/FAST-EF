@@ -1,5 +1,4 @@
 var port = 15005;
-var url = "http://11.12.13.14:" + port;
 
 var express = require("express");
 var app = express();
@@ -144,8 +143,7 @@ function addFragment(url, name, value) {
 }
 
 app.get(metadataPath, function (req, res, next) {
-  //res.send("<h1>not json...</h1>"); return;
-  res.json(metadata);
+	res.json(metadata);
 });
 
 app.get(signingKeysPath, function (req, res, next) {
@@ -226,7 +224,11 @@ app.post(userDataStorePath, jsonParser, function (req, res, next) {
   res.sendStatus(200);
 });
 
+// Use http://11.12.13.14:15005/oidc as authority
+var url = "http://11.12.13.14:" + port;
+
 prependBaseUrlToMetadata(url);
+
 console.log("idp provider listening on " + url);
-//open(url);
+
 app.listen(port, "0.0.0.0");
