@@ -7,6 +7,7 @@ var SData = require("simple-data-storage");
 var jsonParser = require("body-parser").json();
 
 app.use(cors());
+app.options('*', cors());
 
 var jsrsasign = require("jsrsasign");
 var rsaKey = jsrsasign.KEYUTIL.generateKeypair("RSA", 1024);
@@ -219,8 +220,8 @@ app.post(userDataStorePath, jsonParser, function (req, res, next) {
   res.sendStatus(200);
 });
 
-// Use http://11.12.13.14:15005/oidc as authority
-var url = "http://11.12.13.14:" + port;
+// Use http://192.168.21.2:15005/oidc as authority
+var url = "http://192.168.21.2:" + port;
 
 prependBaseUrlToMetadata(url);
 
