@@ -151,9 +151,6 @@ app.get(signingKeysPath, function (req, res, next) {
 });
 
 app.get(authorizationPath, function (req, res, next) {
-  //res.send("<h1>waiting...</h1>"); return;
-  console.log("got auth request");
-
   var response_type = req.query.response_type;
 
   var url = req.query.redirect_uri;
@@ -162,8 +159,6 @@ app.get(authorizationPath, function (req, res, next) {
   if (state) {
     url = addFragment(url, "state", state);
   }
-
-  //url = addFragment(url, "error", "bad_stuff"); res.redirect(url); return;
 
   if (isOAuth(response_type)) {
     var access_token = genAccessToken();
