@@ -220,8 +220,8 @@ app.post(userDataStorePath, jsonParser, function (req, res, next) {
   res.sendStatus(200);
 });
 
-// Use http://192.168.21.2:15005/oidc as authority
-var url = "http://192.168.21.2:" + port;
+// Use http://localhost:15005/oidc as authority
+var url = "http://localhost:" + port;
 
 prependBaseUrlToMetadata(url);
 
