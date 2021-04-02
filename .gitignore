@@ -11,3 +11,7 @@ venv/
 
 # VS code 
 /.vscode
+
+# JS package installs 
+node_modules/
+package-lock.json
