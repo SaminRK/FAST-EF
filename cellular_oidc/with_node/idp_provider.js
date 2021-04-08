@@ -1,4 +1,4 @@
-var port = 15005;
+var port = process.env.PORT;
 
 var express = require("express");
 var app = express();
@@ -6,8 +6,10 @@ var cors = require("cors");
 var SData = require("simple-data-storage");
 var jsonParser = require("body-parser").json();
 
+require("custom-env").env(true);
+
 app.use(cors());
-app.options('*', cors());
+app.options("*", cors());
 
 var jsrsasign = require("jsrsasign");
 var rsaKey = jsrsasign.KEYUTIL.generateKeypair("RSA", 1024);
@@ -144,7 +146,7 @@ function addFragment(url, name, value) {
 }
 
 app.get(metadataPath, function (req, res, next) {
-	res.json(metadata);
+  res.json(metadata);
 });
 
 app.get(signingKeysPath, function (req, res, next) {
@@ -209,6 +211,7 @@ app.get(endSessionPath, function (req, res, next) {
 });
 
 app.post(userDataStorePath, jsonParser, function (req, res, next) {
+  console.log("User data store request:", req.body);
   console.log(req.body);
   SData(req.body.remote_ip, req.body);
   // creating a copy for local testing
@@ -221,7 +224,7 @@ app.post(userDataStorePath, jsonParser, function (req, res, next) {
 });
 
 // Use http://localhost:15005/oidc as authority
-var url = "http://localhost:" + port;
+var url = `http://${process.env.HOST_ADDR}:` + port;
 
 prependBaseUrlToMetadata(url);
 

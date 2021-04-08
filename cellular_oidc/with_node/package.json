@@ -5,14 +5,18 @@
   "main": "idp_provider.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon idp_provider.js",
-    "debug": "DEBUG=* nodemon idp_provider.js"
+    "start:local": "NODE_ENV=local nodemon idp_provider.js",
+    "start:inmec": "NODE_ENV=inmec nodemon idp_provider.js",
+    "debug:local": "DEBUG=* NODE_ENV=local nodemon idp_provider.js",
+    "debug:inmec": "DEBUG=* NODE_ENV=inmec nodemon idp_provider.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "custom-env": "^2.0.1",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "global": "^4.4.0",
     "jsrsasign": "^10.1.13",
