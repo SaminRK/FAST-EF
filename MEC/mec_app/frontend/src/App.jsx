@@ -9,10 +9,10 @@ const App = observer(() => {
     onSignIn: async (user) => {
       window.location.hash = "";
     },
-    authority: "http://localhost:15005/oidc",
+    authority: process.env.REACT_APP_IDP_PROVIDER_AUTHORITY,
     clientId: "abcdef",
     responseType: "id_token",
-    redirectUri: "http://localhost:3000/",
+    redirectUri: process.env.REACT_APP_IDP_PROVIDER_REDIRECT_URI,
   };
 
   return (
