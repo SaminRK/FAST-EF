@@ -2,6 +2,9 @@
 /openairinterface5g
 /config
 
+# Logs
+archives/
+
 # Python virtual environment 
 venv/
 
