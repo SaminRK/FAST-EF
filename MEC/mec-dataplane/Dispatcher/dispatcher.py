@@ -15,6 +15,7 @@ def getHeadInfo(raw_packet) :
     udp_dport = 0
     # registered mec server
     server_list = []
+    server_list.append("192.168.21.2")
     server_list.append("11.12.13.14")
     server_list.append("11.12.13.15")
     server_list.append("12.1.1.31")     # MEC Gateway
