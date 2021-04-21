@@ -1,17 +1,8 @@
-module.exports = {
-  genAccessToken() {
-    return parseInt(Math.random().toString().replace("0.", "")).toString(16);
-  },
+const jwt = require("jsonwebtoken");
 
-  verifyAccessToken(token) {
-    const tokens = SData("users").map((user) => user.accessToken);
-    if (tokens.includes(token)) {
-      console.log("token verified");
-      return true;
-    } else {
-      console.log("token verification failed");
-      return false;
-    }
+module.exports = {
+  genAccessToken(imsi) {
+    return jwt.sign(imsi, process.env.TOKEN_SECRET, { expiresIn: "86400s" });
   },
 
   getUserIdxFromImsi(imsi) {

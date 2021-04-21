@@ -1,6 +1,5 @@
 var atob = require("atob");
 const axios = require("axios");
-const { wasUeInAnotherMex } = require("./utility");
 
 const utility = require("./utility");
 
@@ -30,7 +29,7 @@ module.exports = {
       // fetch state from other mec
       let state = undefined;
 
-      const accessToken = utility.genAccessToken();
+      const accessToken = utility.genAccessToken({imsi: imsi});
 
       const ueIdx = utility.getUeIdxFromImsi(imsi);
       console.log("Ue index from imsi:", ueIdx);
