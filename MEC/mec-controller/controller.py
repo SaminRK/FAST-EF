@@ -51,6 +51,10 @@ def parse_msg(msg):
             print(store[enbUES1apId])
             print('SENDING DATA TO OIDC MODULE')
             try:
+                # Prefetching user data
+                response = requests.get(f'http://localhost:8000/user/data/?imsi={store[enbUES1apId]["imsi"]}')
+                store[enbUES1apId]['remote_ip'] = remote_ip
+                
                 requests.post(url='http://localhost:15005/oidc/store', json=store[enbUES1apId], timeout= 1.0)
                 print('SENT DATA TO OIDC MODULE')
             except Exception:
