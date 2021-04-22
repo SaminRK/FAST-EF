@@ -51,7 +51,7 @@ Here, mecId is the mec from which app state is to be fetched.
 
 GET /user/data/?imsi=123456798901&mecId=5
 
-Here, mecId is the mec from which app state is to be fetched.
+Here, mecId is the mec from which user data is to be fetched.
 
 - Response
 

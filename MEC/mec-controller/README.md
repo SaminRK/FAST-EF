@@ -23,8 +23,6 @@ GET /user/data/?imsi=12345678901
 
 ```js
 {
-  subscriptionData: {
-      "subscribedApps": [ 12345 ]
-    }
+  "subscribedApps": [ 12345 ]
 }
 ```

@@ -1,4 +1,5 @@
 const express = require("express");
+const axios = require("axios");
 
 const fs = require("fs");
 const app = express();
@@ -10,16 +11,16 @@ global.SData = require("simple-data-storage");
 
 require("custom-env").env(true);
 
-let subscriberData;
-const proxyUrl = "http://localhost:5000"
+let userData = null;
+const proxyUrl = "http://localhost:5000";
 
 if (process.env.NETWORK === "home") {
-  subscriberData = JSON.parse(fs.readFileSync("subscriberData.json"));
+  userData = JSON.parse(fs.readFileSync("userData.json"));
 } else {
-  subscriberData = null;
+  userData = null;
 }
 
-SData("users", subscriberData && subscriberData.users);
+SData("users", userData ? userData.users : []);
 
 const port = process.env.PORT || 8000;
 
@@ -29,7 +30,7 @@ app.get("/user/data", (req, res) => {
   const user = users.filter((user) => user.imsi === imsi);
   if (user.length > 0) {
     // user data found - home network
-    res.json({ subscriptinData: user[0].subscriptionData });
+    res.json(user[0].subscriptionData);
   } else {
     // user data not found - foreign network
     // fetch from home network
@@ -37,13 +38,18 @@ app.get("/user/data", (req, res) => {
       .get(`${proxyUrl}/user/data/`, {
         params: {
           imsi: imsi,
+          mecId: 5,
         },
       })
       .then((userDataRes) => {
-        console.log("User data received");
+        console.log("User data received from proxy");
         console.log("Response status:", userDataRes.status);
         console.log("User data response[data]");
         console.log(userDataRes.data);
+        users.push({
+          imsi: imsi,
+          subscriptionData: userDataRes.data,
+        });
         res.json(userDataRes.data);
       })
       .catch((error) => {
