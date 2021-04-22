@@ -28,7 +28,7 @@ app.get("/mec/app/state", mec.getMecState);
 
 app.post("/mec/app/notification", jsonParser, mec.notificationAboutUE);
 
-app.use(middleware.getUserIdxFromAccessToken);
+app.use(middleware.authenticateToken);
 
 app.get("/user/account", account.getUserAccount);
 

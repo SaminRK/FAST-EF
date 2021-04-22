@@ -18,3 +18,4 @@ venv/
 # JS package installs 
 node_modules/
 package-lock.json
+yarn.lock

@@ -1,6 +1,9 @@
 var port = 15005;
 
 var express = require("express");
+
+const axios = require("axios");
+
 var app = express();
 var cors = require("cors");
 var SData = require("simple-data-storage");
@@ -31,6 +34,8 @@ var metadata = {
   userinfo_endpoint: userInfoPath,
   end_session_endpoint: endSessionPath,
 };
+
+const mecManagerUrl = process.env.MEC_MANAGER_URL;
 
 function prependBaseUrlToMetadata(baseUrl) {
   for (var name in metadata) {
@@ -70,49 +75,81 @@ function hashAccessToken(access_token) {
 
 function genIdToken(remote_ip, aud, nonce, access_token) {
   var now = parseInt(Date.now() / 1000);
-  var payload = {
-    aud: aud,
-    iss: metadata.issuer,
-    nonce: nonce,
-    sid: "37889234079034890",
-    nbf: now,
-    iat: now,
-    exp: now + 36000,
-    idp: "some_idp",
-    amr: ["password"],
+  var payload = null;
+
+  // If subscription data for this user is not present, then fetch during authentication
+  const getSubscriptionData = () => {
+    if ('subscriptionData' in SData(remote_ip))
+      return Promise.resolve(SData(remote_ip).subscriptionData);
+    else
+      return axios
+        .get(`${mecManagerUrl}/user/data/`, {
+          params: {
+            imsi: SData(remote_ip).imsi,
+          },
+        })
+        .then((userDataRes) => {
+          console.log("User data received from MEC manager");
+          let remoteIpData = SData(remote_ip);
+          remoteIpData.subscriptionData = userDataRes.data;
+          return userDataRes.data;
+        });
   };
 
-  console.log(remote_ip);
+  getSubscriptionData()
+    .then((data) => {
+      console.log("Subscription data");
+      console.log(data);
 
-  if (access_token) {
-    payload.at_hash = hashAccessToken(access_token);
-    if (SData.has(remote_ip)) {
-      console.log("sending ", SData(remote_ip).imsi);
-      payload.sub = SData(remote_ip).imsi;
-    } else {
-      console.log("no data");
-      payload.sub = claims.sub;
-    }
-  } else {
-    for (var key in claims) {
-      payload[key] = claims[key];
-    }
-    if (SData.has(remote_ip)) {
-      console.log("sending ", SData(remote_ip).imsi);
-      payload.sub = SData(remote_ip).imsi;
-    } else {
-      console.log("no data");
-      payload.sub = claims.sub;
-    }
-  }
-  console.log(payload);
+      payload = {
+        aud: aud,
+        iss: metadata.issuer,
+        nonce: nonce,
+        sid: "37889234079034890",
+        nbf: now,
+        iat: now,
+        exp: now + 36000,
+        idp: "some_idp",
+        amr: ["password"],
+      };
 
-  return jsrsasign.jws.JWS.sign(
-    null,
-    { alg: "RS256", kid: "1" },
-    payload,
-    rsaKey.prvKeyObj
-  );
+      console.log(remote_ip);
+
+      if (access_token) {
+        payload.at_hash = hashAccessToken(access_token);
+        if (SData.has(remote_ip)) {
+          console.log("sending ", SData(remote_ip).imsi);
+          payload.sub = SData(remote_ip).imsi;
+        } else {
+          console.log("no data");
+          payload.sub = claims.sub;
+        }
+      } else {
+        for (var key in claims) {
+          payload[key] = claims[key];
+        }
+        if (SData.has(remote_ip)) {
+          console.log("sending ", SData(remote_ip).imsi);
+          payload.sub = SData(remote_ip).imsi;
+        } else {
+          console.log("no data");
+          payload.sub = claims.sub;
+        }
+      }
+
+      console.log(payload);
+
+      return jsrsasign.jws.JWS.sign(
+        null,
+        { alg: "RS256", kid: "1" },
+        payload,
+        rsaKey.prvKeyObj
+      );
+    })
+    .catch((err) => {
+      console.log("Error in Axios call");
+      console.log(error);
+    });
 }
 
 function isOidc(response_type) {
@@ -211,7 +248,7 @@ app.get(endSessionPath, function (req, res, next) {
 });
 
 app.post(userDataStorePath, jsonParser, function (req, res, next) {
-  console.log("User data store request:", req.body);
+  console.log("User data store request from MEC controller");
   console.log(req.body);
   SData(req.body.remote_ip, req.body);
   // creating a copy for local testing
@@ -219,7 +256,6 @@ app.post(userDataStorePath, jsonParser, function (req, res, next) {
   local_test_copy.remote_ip = "127.0.0.1";
   console.log(local_test_copy);
   SData(local_test_copy.remote_ip, local_test_copy);
-  console.log("recieved data from controller ");
   res.sendStatus(200);
 });
 

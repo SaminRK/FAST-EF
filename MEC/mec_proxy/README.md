@@ -15,7 +15,7 @@
 }
 ```
 
-mecId is the id of MEC which is sending this notification. 
+mecId is the id of MEC which is sending this notification.
 
 - Response
 
@@ -31,7 +31,7 @@ mecId is the id of MEC which is sending this notification.
 
 - Request
 
-GET /app/state?appId=12345&imsi=123456798901&mecId=5
+GET /app/state/?appId=12345&imsi=123456798901&mecId=5
 
 Here, mecId is the mec from which app state is to be fetched.
 
@@ -45,6 +45,26 @@ Here, mecId is the mec from which app state is to be fetched.
 }
 ```
 
-## Storage 
+**User data fetch**
 
-Loaded from `mecInfo.json`. 
+- Request
+
+GET /user/data/?imsi=123456798901&mecId=5
+
+Here, mecId is the mec from which user data is to be fetched.
+
+- Response
+
+200 OK
+
+```js
+{
+  subscriptionData: {
+    "subscribedApps": [ 12345 ]
+  }
+}
+```
+
+## Storage
+
+Loaded from `mecInfo.json`.

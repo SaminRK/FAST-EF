@@ -4,6 +4,7 @@ const middleware = require("./lib/middleware");
 const fs = require("fs");
 const express = require("express");
 const cors = require("cors");
+const userData = require("./lib/userData");
 var jsonParser = require("body-parser").json();
 
 global.SData = require("simple-data-storage");
@@ -21,6 +22,8 @@ app.use(cors());
 app.get("/app/state", appInfo.getAppState);
 
 app.post("/app/notify", jsonParser, appInfo.appUsageNotify);
+
+app.get("/user/data", userData.getUserData)
 
 // custom 404 page
 app.use(middleware.e404);
