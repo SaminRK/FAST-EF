@@ -9,8 +9,11 @@ from pycrate_asn1rt.utils import *
 from pycrate_mobile import NASLTE
 from pycrate_mobile import NAS
 from requests.exceptions import Timeout
+import argparse
 
 store = {}
+args = None
+mecManagerUrl = None
 
 def parse_msg(msg):
     PDU = S1AP.S1AP_PDU_Descriptions.S1AP_PDU
@@ -52,9 +55,12 @@ def parse_msg(msg):
             print(store[enbUES1apId])
             print('SENDING DATA TO OIDC MODULE')
             try:
-                # Prefetching user data
-                response = requests.get('http://localhost:8001/user/data', params={'imsi': 1234567890})
-                store[enbUES1apId]['subscriptionData'] = response.json()
+                if args.prefetch:
+                    print('Prefetching user data')
+                    # Prefetching user data
+                    response = requests.get(f'{mecManagerUrl}/user/data', params={'imsi': 1234567890})
+                    store[enbUES1apId]['subscriptionData'] = response.json()
+                
                 store[enbUES1apId]['remote_ip'] = remote_ip
                 
                 requests.post(url='http://localhost:15005/oidc/store', json=store[enbUES1apId], timeout= 1.0)
@@ -63,6 +69,19 @@ def parse_msg(msg):
                 print('COULD NOT SEND DATA')
 
 def main() :
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-p', '--prefetch', default=False, action='store_true')
+    parser.add_argument('-n', '--network', type=str, help='network (home | foreign)')
+    args = parser.parse_args() 
+
+    if not args.network:
+        parser.error('No network set, add --network (home | foreign)')
+    
+    if args.network == 'home':
+        mecManagerUrl = 'http://localhost:8000'
+    elif args.network == 'foreign': 
+        mecManagerUrl = 'http://localhost:8001'
+
     LOCAL_PORT = 9001
 
     ListenSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

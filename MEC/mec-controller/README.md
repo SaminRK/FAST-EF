@@ -7,6 +7,14 @@ Two parts: Controller and Manager. They work hand-in-hand.
   - Reads subscription data from json file
   - Has route to get subscription data of a user
 
+## Controller
+
+Run controller
+
+```sh
+python3 mec-controller.py [-p,--prefetch] -n ( home | foreign )
+```
+
 ## Manager
 
 # API
