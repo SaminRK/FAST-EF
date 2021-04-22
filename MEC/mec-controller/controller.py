@@ -1,6 +1,7 @@
 import socket
 import pprint
 import ipaddress
+import json
 import requests
 from datetime import datetime
 from pycrate_asn1dir import S1AP
@@ -52,7 +53,8 @@ def parse_msg(msg):
             print('SENDING DATA TO OIDC MODULE')
             try:
                 # Prefetching user data
-                response = requests.get(f'http://localhost:8000/user/data/?imsi={store[enbUES1apId]["imsi"]}')
+                response = requests.get('http://localhost:8001/user/data', params={'imsi': 1234567890})
+                store[enbUES1apId]['subscriptionData'] = response.json()
                 store[enbUES1apId]['remote_ip'] = remote_ip
                 
                 requests.post(url='http://localhost:15005/oidc/store', json=store[enbUES1apId], timeout= 1.0)
