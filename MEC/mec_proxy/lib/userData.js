@@ -18,10 +18,10 @@ module.exports = {
     const matchedMec = SData("mecs").filter((mec) => mec.id === mecId);
     console.log("matchedMec");
     console.log(matchedMec);
-    const mecManagerUrl = matchedMec[0].managerUrl;
+    const mecManagerAmsUrl = matchedMec[0].managerAmsUrl;
 
     axios
-      .get(`${mecManagerUrl}/user/data/`, {
+      .get(`${mecManagerAmsUrl}/manager/user/data/`, {
         params: {
           imsi: imsi,
         },

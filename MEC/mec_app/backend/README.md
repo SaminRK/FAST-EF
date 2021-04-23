@@ -60,7 +60,7 @@
 - Request
   Header `{ 'authorization': 'Bearer TOKEN' }`
 
-```
+```js
 {
   state: {
     count: 7

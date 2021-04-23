@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "main": "manager.js",
   "scripts": {
-    "start:home": "NODE_ENV=home nodemon manager.js",
-    "start:foreign": "NODE_ENV=foreign nodemon manager.js",
-    "debug:home": "DEBUG=* NODE_ENV=home nodemon manager.js",
-    "debug:foreign": "DEBUG=* NODE_ENV=foreign nodemon manager.js"
+    "start:home": "NODE_ENV=home nodemon manager-ams.js",
+    "start:foreign": "NODE_ENV=foreign nodemon manager-ams.js",
+    "debug:home": "DEBUG=* NODE_ENV=home nodemon manager-ams.js",
+    "debug:foreign": "DEBUG=* NODE_ENV=foreign nodemon manager-ams.js"
   },
   "author": "",
   "license": "ISC",

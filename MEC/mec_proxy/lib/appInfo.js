@@ -16,17 +16,22 @@ module.exports = {
 
     for (let mec of receivingMecs) {
       axios
-        .post(`${mec.url}/mec/app/notification/`, {
-          imsi: imsi,
+        .post(`${mec.managerAmsUrl}/ams/app/notification/`, {
+          imsi,
           mecId: sendingMecId,
+          appId,
         })
-        .then((notifyRes) => {})
+        .then((notifyRes) => {
+          console.log(
+            "Received notification response from AMS. Status",
+            notifyRes.status
+          );
+          res.sendStatus(notifyRes.status);
+        })
         .catch((error) => {
           console.log(error);
         });
     }
-
-    res.json({ status: "ok" });
   },
 
   getAppState(req, res, next) {
@@ -35,7 +40,7 @@ module.exports = {
     const mecId = parseInt(req.query.mecId);
 
     console.log(
-      "app state request for imsi:",
+      "App state request for imsi:",
       imsi,
       "to be sent to mecId:",
       mecId
@@ -47,16 +52,17 @@ module.exports = {
     const matchedMec = SData("mecs").filter((mec) => mec.id === mecId);
     console.log("matchedMec");
     console.log(matchedMec);
-    const mecUrl = matchedMec[0].url;
+    const managerAmsUrl = matchedMec[0].managerAmsUrl;
 
     axios
-      .get(`${mecUrl}/mec/app/state/`, {
+      .get(`${managerAmsUrl}/ams/get/state/`, {
         params: {
-          imsi: imsi,
+          imsi,
+          appId,
         },
       })
       .then((stateRes) => {
-        console.log("App state received from mecId:", mecId);
+        console.log("App state received from AMS of mecId:", mecId);
         console.log("Response status:", stateRes.status);
         console.log("state Response[data]");
         console.log(stateRes.data);

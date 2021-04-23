@@ -26,77 +26,75 @@ module.exports = {
         accessToken: user[0].accessToken,
       });
     } else {
-      // fetch state from other mec
       let state = undefined;
 
-      const accessToken = utility.genAccessToken({imsi: imsi});
+      const accessToken = utility.genAccessToken({ imsi: imsi });
 
       const ueIdx = utility.getUeIdxFromImsi(imsi);
       console.log("Ue index from imsi:", ueIdx);
 
-      if (ueIdx >= 0) {
-        // UE was in another MEC
-        const mecIdToReq = SData("ues")[ueIdx].mecId;
-        axios
-          .get(`${process.env.PROXY_URL}/app/state`, {
-            params: {
-              imsi: imsi,
-              mecId: mecIdToReq,
-              appId: process.env.APP_ID,
-            },
-          })
-          .then((stateRes) => {
-            // save imsi
-
-            console.log("stateRes[data]", stateRes.data);
-            SData("users", [
-              ...SData("users"),
-              {
-                imsi: imsi,
-                accessToken: accessToken,
-                state: stateRes.data.state,
+      const fetchState = () => {
+        if (ueIdx >= 0) {
+          // UE was in another MEC
+          
+          const mecIdToReq = SData("ues")[ueIdx].mecId;
+          console.log("fetching state from MEC id", mecIdToReq);
+          return axios
+            .get(`${process.env.AMS_URL}/ams/fetch/state`, {
+              params: {
+                imsi,
+                mecId: mecIdToReq,
+                appId: process.env.APP_ID,
               },
-            ]);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      } else {
-        // save imsi
+            })
+            .then((stateRes) => {
+              // save imsi
 
-        SData("users", [
-          ...SData("users"),
-          {
-            imsi: imsi,
+              console.log("stateRes[data]", stateRes.data);
+              return stateRes.data.state;
+            });
+        } else return Promise.resolve({ count: 0 });
+      };
+
+      fetchState()
+        .then((state) => {
+          SData("users", [
+            ...SData("users"),
+            {
+              imsi: imsi,
+              accessToken: accessToken,
+              state,
+            },
+          ]);
+
+          //notify neighbours
+
+          axios
+            .post(`${process.env.AMS_URL}/ams/app/notify`, {
+              imsi: imsi,
+              mecId: process.env.MEC_ID,
+              appId: process.env.APP_ID,
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
+          // provide access token to frontend
+
+          res.json({
+            message: "Success",
             accessToken: accessToken,
-            state: { count: 0 },
-          },
-        ]);
-      }
+          });
 
-      //notify neighbours
-
-      axios
-        .post(`${process.env.PROXY_URL}/app/notify`, {
-          imsi: imsi,
-          mecId: process.env.MEC_ID,
-          appId: process.env.APP_ID,
+          console.log("SData[users]");
+          console.log(SData("users"));
+          console.log("SData[ues]");
+          console.log(SData("ues"));
         })
         .catch((error) => {
           console.log(error);
         });
-
-      // provide access token to frontend
-
-      res.json({
-        message: "Success",
-        accessToken: accessToken,
-      });
     }
-    console.log("SData[users]");
-    console.log(SData("users"));
-    console.log("SData[ues]");
-    console.log(SData("ues"));
   },
 
   getUserAccount(req, res, next) {
