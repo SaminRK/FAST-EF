@@ -78,31 +78,6 @@
 
 ### With MEC
 
-**Notification of a UE using app**
-
-- Request
-
-POST /mec/app/notification
-
-```js
-{
-  imsi: 12345678901;
-  mecId: 5;
-}
-```
-
-mecId is of the MEC from which the UE is currently taking service.
-
-- Response
-
-200 OK
-
-```js
-{
-  status: "ok";
-}
-```
-
 **App state request**
 
 - Request
@@ -144,16 +119,6 @@ Sample format
         count: 1,
       },
     },
-  ],
-  ues: [
-    {
-      imsi: 12345678903,
-      mecId: 5
-    },
-    {
-      imsi: 12345678904,
-      mecId: 9
-    }
   ]
 }
 ```

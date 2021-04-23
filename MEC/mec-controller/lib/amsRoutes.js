@@ -24,54 +24,70 @@ module.exports = {
 
   notificationAboutUE(req, res) {
     const imsi = req.body.imsi;
-    const mecId = req.body.mecId;
+    const sendingMecId = req.body.mecId;
+    const appId = req.body.appId;
 
-    axios
-      .post(`${process.env.APP_URL}/mec/app/notification/`, {
-        imsi,
-        mecId,
-      })
-      .then((notifyRes) => {
-        console.log("Notifying app response status", notifyRes.status);
-        res.sendStatus(notifyRes.status);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    let ues = SData("ues");
+    const ueIdx = ues.findIndex((ue) => ue.imsi === imsi);
+
+    //if ue info exists, update; else add new entry
+    if (ueIdx >= 0) {
+      ues[ueIdx].mecId = sendingMecId;
+      SData("ues", ues);
+    } else {
+      SData("ues", [...SData("ues"), { imsi, mecId: sendingMecId, appId }]);
+    }
+
+    console.log("Notification about UE received");
+    console.log("Updated SData[ues]");
+    console.log(SData("ues"));
+
+    res.sendStatus(200);
   },
 
   fetchAppState(req, res, next) {
     const appId = parseInt(req.query.appId);
     const imsi = parseInt(req.query.imsi);
-    const mecId = parseInt(req.query.mecId);
+    const ues = SData("ues");
+    const ueIdx = ues.findIndex((ue) => ue.imsi === imsi);
 
-    console.log(
-      "app state request for imsi:",
-      imsi,
-      "to be sent to mecId:",
-      mecId
-    );
-
-    // Apply prefetching here
-
-    axios
-      .get(`${process.env.PROXY_URL}/app/state`, {
-        params: {
+    //if ue info exists, fetch state; else return 404
+    if (ueIdx >= 0) {
+      // Check if state is prefetched
+      if ("state" in ues[ueIdx]) {
+        console.log("State already prefetched");
+        res.json({ found: true, state: ues[ueIdx].state});
+      } else {
+        const mecId = ues[ueIdx].mecId;
+        console.log(
+          "app state request for imsi:",
           imsi,
-          mecId,
-          appId,
-        },
-      })
-      .then((stateRes) => {
-        console.log("App state received from proxy");
-        console.log("Response status:", stateRes.status);
-        console.log("state Response[data]");
-        console.log(stateRes.data);
-        res.json(stateRes.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+          "to be sent to mecId:",
+          mecId
+        );
+
+        axios
+          .get(`${process.env.PROXY_URL}/app/state`, {
+            params: {
+              imsi,
+              mecId,
+              appId,
+            },
+          })
+          .then((stateRes) => {
+            console.log("App state received from proxy");
+            console.log("Response status:", stateRes.status);
+            console.log("state Response[data]");
+            console.log(stateRes.data);
+            res.json({found: true, state: stateRes.data});
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    } else {
+      res.json({found: false});
+    }
   },
 
   getAppState(req, res, next) {
@@ -96,5 +112,40 @@ module.exports = {
       .catch((error) => {
         console.log(error);
       });
+  },
+
+  prefetchUeState(req, res, next) {
+    const imsi = req.body.imsi;
+    let ues = SData("ues");
+    const ueIdx = ues.findIndex((ue) => ue.imsi === imsi);
+
+    // Check if AMS knows about UE's previous MEC
+    if (ueIdx >= 0) {
+      console.log("Prefetching app state");
+
+      const mecId = ues[ueIdx].mecId;
+      const appId = ues[ueIdx].appId;
+
+      axios
+        .get(`${process.env.PROXY_URL}/app/state`, {
+          params: {
+            imsi,
+            mecId,
+            appId,
+          },
+        })
+        .then((stateRes) => {
+          console.log("App state received from proxy");
+          console.log("Response status:", stateRes.status);
+          console.log("state Response[data]");
+          console.log(stateRes.data);
+          ues[ueIdx].state = stateRes.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    res.sendStatus(200);
   },
 };

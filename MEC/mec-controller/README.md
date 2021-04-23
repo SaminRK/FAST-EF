@@ -12,7 +12,7 @@ Two parts: Controller and Manager. They work hand-in-hand.
 Run controller
 
 ```sh
-python3 mec-controller.py [-p,--prefetch] -n ( home | foreign )
+python3 controller.py [-u,--prefetch_user_data] [-s,--prefetch_state] -n ( home | foreign )
 ```
 
 ## Manager
@@ -45,7 +45,7 @@ AMS APIs are also included in this server.
 
 **App Usage Notify**
 
-Sent by MEC app in this MEC. Notification is to be sent to proxy. 
+Sent by MEC app in this MEC. Notification is to be sent to proxy.
 
 - Request
 
@@ -86,11 +86,17 @@ mecId is of the MEC from which the UE is currently taking service.
 
 **App state fetch**
 
+- Sent by MEC app. 
+- AMS checks if it knows UE's previous MEC info. 
+  - If yes, 
+    - fetches state from other MEC. (prefetching might store state locally)
+    - responses state info. Set found to true.
+  - Otherwise, 
+    - returns 404 status code. Set found to false.
+
 - Request
 
-GET /ams/app/state/?appId=12345&imsi=123456798901&mecId=5
-
-Here, mecId is the mec from which app state is to be fetched.
+GET /ams/fetch/state/?appId=12345&imsi=123456798901
 
 - Response
 
@@ -98,7 +104,8 @@ Here, mecId is the mec from which app state is to be fetched.
 
 ```js
 {
-  state: { ... }
+  "found": true / false,
+  "state": { ... }
 }
 ```
 
@@ -108,7 +115,7 @@ To be requested by MEC Proxy.
 
 - Request
 
-GET /ams/app/state/?appId=12345&imsi=12345678901
+GET /ams/get/state/?appId=12345&imsi=12345678901
 
 - Response
 
@@ -121,3 +128,59 @@ GET /ams/app/state/?appId=12345&imsi=12345678901
 ```
 
 Or, 404 NOT FOUND or 500 Error
+
+**Prefetch state for a UE**
+
+Sent by MEC controller (manager). AMS prefetches state and saves in local data storage.
+
+- Request
+
+POST /ams/prefetch/state
+
+```js
+{
+  "imsi": 12345678901
+}
+```
+
+- Response
+
+200 OK
+
+## Storage
+
+```js
+{
+  "users": [
+    {
+      "imsi": 1234567890,
+      "subscriptionData": {
+        "subscribedApps": [ 12345 ]
+      }
+    },
+  ],
+
+  "ues": [
+    {
+      "imsi": 12345678903,
+      "mecId": 5,
+      "appId": 12345, 
+      "state": {
+        "count": 8
+      } 
+    },
+    {
+      "imsi": 12345678904,
+      "mecId": 9,
+      "appId": 12345,
+      "state": {
+        "count": 10
+      }
+    }
+  ]
+}
+```
+
+`users` is used by MEC manager.
+
+`ues` is used by AMS.

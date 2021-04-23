@@ -30,30 +30,24 @@ module.exports = {
 
       const accessToken = utility.genAccessToken({ imsi: imsi });
 
-      const ueIdx = utility.getUeIdxFromImsi(imsi);
-      console.log("Ue index from imsi:", ueIdx);
-
       const fetchState = () => {
-        if (ueIdx >= 0) {
-          // UE was in another MEC
-          
-          const mecIdToReq = SData("ues")[ueIdx].mecId;
-          console.log("fetching state from MEC id", mecIdToReq);
-          return axios
-            .get(`${process.env.AMS_URL}/ams/fetch/state`, {
-              params: {
-                imsi,
-                mecId: mecIdToReq,
-                appId: process.env.APP_ID,
-              },
-            })
-            .then((stateRes) => {
-              // save imsi
-
-              console.log("stateRes[data]", stateRes.data);
+        console.log("Checking if AMS has any state info");
+        return axios
+          .get(`${process.env.AMS_URL}/ams/fetch/state`, {
+            params: {
+              imsi,
+              appId: process.env.APP_ID,
+            },
+          })
+          .then((stateRes) => {
+            console.log(stateRes.status)
+            if (stateRes.data.found) {
+              console.log("received state", stateRes.data.state);
               return stateRes.data.state;
-            });
-        } else return Promise.resolve({ count: 0 });
+            } else {
+              return Promise.resolve({ count: 0 });
+            }
+          });
       };
 
       fetchState()
@@ -61,8 +55,8 @@ module.exports = {
           SData("users", [
             ...SData("users"),
             {
-              imsi: imsi,
-              accessToken: accessToken,
+              imsi,
+              accessToken,
               state,
             },
           ]);
@@ -88,8 +82,6 @@ module.exports = {
 
           console.log("SData[users]");
           console.log(SData("users"));
-          console.log("SData[ues]");
-          console.log(SData("ues"));
         })
         .catch((error) => {
           console.log(error);

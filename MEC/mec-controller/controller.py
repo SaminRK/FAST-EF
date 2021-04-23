@@ -3,6 +3,8 @@ import pprint
 import ipaddress
 import json
 import requests
+import aiohttp
+import asyncio
 from datetime import datetime
 from pycrate_asn1dir import S1AP
 from pycrate_asn1rt.utils import *
@@ -13,7 +15,7 @@ import argparse
 
 store = {}
 args = None
-mecManagerUrl = None
+mecManagerAmsUrl = None
 
 def parse_msg(msg):
     PDU = S1AP.S1AP_PDU_Descriptions.S1AP_PDU
@@ -55,22 +57,30 @@ def parse_msg(msg):
             print(store[enbUES1apId])
             print('SENDING DATA TO OIDC MODULE')
             try:
-                if args.prefetch:
-                    print('Prefetching user data')
-                    # Prefetching user data
-                    response = requests.get(f'{mecManagerUrl}/user/data', params={'imsi': 1234567890})
-                    store[enbUES1apId]['subscriptionData'] = response.json()
-                
-                store[enbUES1apId]['remote_ip'] = remote_ip
-                
-                requests.post(url='http://localhost:15005/oidc/store', json=store[enbUES1apId], timeout= 1.0)
-                print('SENT DATA TO OIDC MODULE')
+                async def async_main():
+                    async with aiohttp.ClientSession() as session:
+                        if args.prefetch_user_data:
+                            print('Prefetching user data')
+                            async with session.get(f'{mecManagerAmsUrl}/user/data', params={'imsi': store[enbUES1apId]['imsi']}) as resp:
+                                print(resp.status)
+                                store[enbUES1apId]['subscriptionData'] = await resp.json()
+                                async with session.post('http://localhost:15005/oidc/store', json=store[enbUES1apId]) as resp_post:
+                                    print(resp_post.status)
+                                    print('SENT DATA TO OIDC MODULE')
+                        
+                        if arg.prefetch_state:
+                            print('Telling AMS that UE has entered. Prefetching state')
+                            async with session.post(f'{mecManagerAmsUrl}/ams/prefetch/state', json={'imsi': store[enbUES1apId]['imsi']}) as resp:
+                                print(resp.status)
+
+                asyncio.get_event_loop().run_until_complete(async_main())            
             except Exception:
                 print('COULD NOT SEND DATA')
 
 def main() :
     parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--prefetch', default=False, action='store_true')
+    parser.add_argument('-u', '--prefetch_user_data', default=False, action='store_true')
+    parser.add_argument('-s', '--prefetch_state', default=False, action='store_true')
     parser.add_argument('-n', '--network', type=str, help='network (home | foreign)')
     args = parser.parse_args() 
 
@@ -78,9 +88,9 @@ def main() :
         parser.error('No network set, add --network (home | foreign)')
     
     if args.network == 'home':
-        mecManagerUrl = 'http://localhost:8000'
+        mecManagerAmsUrl = 'http://localhost:8000'
     elif args.network == 'foreign': 
-        mecManagerUrl = 'http://localhost:8001'
+        mecManagerAmsUrl = 'http://localhost:8001'
 
     LOCAL_PORT = 9001
 
