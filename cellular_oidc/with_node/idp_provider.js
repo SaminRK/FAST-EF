@@ -79,11 +79,11 @@ function genIdToken(remote_ip, aud, nonce, access_token) {
 
   // If subscription data for this user is not present, then fetch during authentication
   const getSubscriptionData = () => {
-    if ('subscriptionData' in SData(remote_ip))
+    if ("subscriptionData" in SData(remote_ip))
       return Promise.resolve(SData(remote_ip).subscriptionData);
     else
       return axios
-        .get(`${mecManagerUrl}/user/data/`, {
+        .get(`${mecManagerUrl}/manager/user/data/`, {
           params: {
             imsi: SData(remote_ip).imsi,
           },
@@ -207,6 +207,8 @@ app.get(authorizationPath, function (req, res, next) {
     url = addFragment(url, "expires_in", "70");
     url = addFragment(url, "scope", req.query.scope);
   }
+
+  console.log("Client remote address", req.socket.remoteAddress);
 
   if (isOidc(response_type)) {
     url = addFragment(
