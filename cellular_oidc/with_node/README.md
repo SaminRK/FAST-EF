@@ -10,11 +10,11 @@ POST /oidc/store
 
 ```js
 {
-  'enb_ue_s1ap_id': 1234567,
-  'imsi': 1234567890,
-  'remote_ip': '12.1.1.2',
-  'subscriptionData': {
-    'subscribedApps': [ 12345 ]
+  "enb_ue_s1ap_id": 1234567,
+  "imsi": 1234567890,
+  "remote_ip": "12.1.1.2",
+  "subscriptionData": {
+    "subscribedApps": [ 12345 ]
   }
 }
 ```

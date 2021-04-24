@@ -16,7 +16,6 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 SData("users", []);
-SData("ues", []);
 
 app.use(cors());
 
@@ -25,8 +24,6 @@ app.use(express.static(__dirname + "/public"));
 app.post("/user/save-from-id-token", jsonParser, account.saveFromIdToken);
 
 app.get("/mec/app/state", mec.getMecState);
-
-app.post("/mec/app/notification", jsonParser, mec.notificationAboutUE);
 
 app.use(middleware.authenticateToken);
 

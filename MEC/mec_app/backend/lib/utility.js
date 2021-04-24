@@ -9,9 +9,4 @@ module.exports = {
     const users = SData("users")
     return users.findIndex( user => user.imsi === imsi)
   },
-
-  getUeIdxFromImsi(imsi) {
-    const ues = SData("ues")
-    return ues.findIndex( ue => ue.imsi === imsi)
-  },
 };

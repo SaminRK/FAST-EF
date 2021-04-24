@@ -29,6 +29,8 @@ mecId is the id of MEC which is sending this notification.
 
 **App state fetch**
 
+Requested by one MEC to fetch state from another MEC.
+
 - Request
 
 GET /app/state/?appId=12345&imsi=123456798901&mecId=5

@@ -26,77 +26,67 @@ module.exports = {
         accessToken: user[0].accessToken,
       });
     } else {
-      // fetch state from other mec
       let state = undefined;
 
-      const accessToken = utility.genAccessToken({imsi: imsi});
+      const accessToken = utility.genAccessToken({ imsi: imsi });
 
-      const ueIdx = utility.getUeIdxFromImsi(imsi);
-      console.log("Ue index from imsi:", ueIdx);
-
-      if (ueIdx >= 0) {
-        // UE was in another MEC
-        const mecIdToReq = SData("ues")[ueIdx].mecId;
-        axios
-          .get(`${process.env.PROXY_URL}/app/state`, {
+      const fetchState = () => {
+        console.log("Checking if AMS has any state info");
+        return axios
+          .get(`${process.env.AMS_URL}/ams/fetch/state`, {
             params: {
-              imsi: imsi,
-              mecId: mecIdToReq,
+              imsi,
               appId: process.env.APP_ID,
             },
           })
           .then((stateRes) => {
-            // save imsi
-
-            console.log("stateRes[data]", stateRes.data);
-            SData("users", [
-              ...SData("users"),
-              {
-                imsi: imsi,
-                accessToken: accessToken,
-                state: stateRes.data.state,
-              },
-            ]);
-          })
-          .catch((error) => {
-            console.log(error);
+            console.log(stateRes.status)
+            if (stateRes.data.found) {
+              console.log("received state", stateRes.data.state);
+              return stateRes.data.state;
+            } else {
+              return Promise.resolve({ count: 0 });
+            }
           });
-      } else {
-        // save imsi
+      };
 
-        SData("users", [
-          ...SData("users"),
-          {
-            imsi: imsi,
+      fetchState()
+        .then((state) => {
+          SData("users", [
+            ...SData("users"),
+            {
+              imsi,
+              accessToken,
+              state,
+            },
+          ]);
+
+          //notify neighbours
+
+          axios
+            .post(`${process.env.AMS_URL}/ams/app/notify`, {
+              imsi: imsi,
+              mecId: process.env.MEC_ID,
+              appId: process.env.APP_ID,
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
+          // provide access token to frontend
+
+          res.json({
+            message: "Success",
             accessToken: accessToken,
-            state: { count: 0 },
-          },
-        ]);
-      }
+          });
 
-      //notify neighbours
-
-      axios
-        .post(`${process.env.PROXY_URL}/app/notify`, {
-          imsi: imsi,
-          mecId: process.env.MEC_ID,
-          appId: process.env.APP_ID,
+          console.log("SData[users]");
+          console.log(SData("users"));
         })
         .catch((error) => {
           console.log(error);
         });
-
-      // provide access token to frontend
-
-      res.json({
-        message: "Success",
-        accessToken: accessToken,
-      });
     }
-    console.log("SData[users]");
-    console.log(SData("users"));
-    console.log("SData[ues]");
-    console.log(SData("ues"));
   },
 
   getUserAccount(req, res, next) {

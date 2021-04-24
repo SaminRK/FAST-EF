@@ -1,10 +1,12 @@
 const express = require("express");
 const axios = require("axios");
 
+const amsRoutes = require("./lib/amsRoutes");
+
 const fs = require("fs");
+const { json } = require("express");
 const app = express();
 
-const dotenv = require("dotenv");
 var jsonParser = require("body-parser").json();
 
 global.SData = require("simple-data-storage");
@@ -12,7 +14,6 @@ global.SData = require("simple-data-storage");
 require("custom-env").env(true);
 
 let userData = null;
-const proxyUrl = "http://localhost:5000";
 
 if (process.env.NETWORK === "home") {
   userData = JSON.parse(fs.readFileSync("userData.json"));
@@ -21,10 +22,11 @@ if (process.env.NETWORK === "home") {
 }
 
 SData("users", userData ? userData.users : []);
+SData("ues", []);
 
 const port = process.env.PORT || 8000;
 
-app.get("/user/data", (req, res) => {
+app.get("/manager/user/data", (req, res) => {
   const imsi = parseInt(req.query.imsi);
   const users = SData("users");
   const user = users.filter((user) => user.imsi === imsi);
@@ -35,7 +37,7 @@ app.get("/user/data", (req, res) => {
     // user data not found - foreign network
     // fetch from home network
     axios
-      .get(`${proxyUrl}/user/data/`, {
+      .get(`${process.env.PROXY_URL}/user/data/`, {
         params: {
           imsi: imsi,
           mecId: 5,
@@ -58,6 +60,16 @@ app.get("/user/data", (req, res) => {
       });
   }
 });
+
+app.post("/ams/app/notify", jsonParser, amsRoutes.appUsageNotify);
+
+app.post("/ams/app/notification", jsonParser, amsRoutes.notificationAboutUE);
+
+app.get("/ams/fetch/state", amsRoutes.fetchAppState);
+
+app.get("/ams/get/state", amsRoutes.getAppState);
+
+app.post("/ams/prefetch/state", jsonParser, amsRoutes.prefetchUeState);
 
 // custom 404 page
 app.use((req, res) => {

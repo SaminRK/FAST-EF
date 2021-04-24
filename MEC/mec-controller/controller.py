@@ -3,6 +3,8 @@ import pprint
 import ipaddress
 import json
 import requests
+import aiohttp
+import asyncio
 from datetime import datetime
 from pycrate_asn1dir import S1AP
 from pycrate_asn1rt.utils import *
@@ -13,9 +15,23 @@ import argparse
 
 store = {}
 args = None
-mecManagerUrl = None
+mecManagerAmsUrl = None
+
+async def prefetch_subscription_data(session, store, enbUES1apId):
+    async with session.get(f'{mecManagerAmsUrl}/manager/user/data', params={'imsi': store[enbUES1apId]['imsi']}) as resp:
+        print('prefetch user data response', resp.status)
+        store[enbUES1apId]['subscriptionData'] = await resp.json()
+        async with session.post('http://localhost:15005/oidc/store', json=store[enbUES1apId]) as resp_post:
+            print('user data post to idp response', resp_post.status)
+            print('SENT DATA TO OIDC MODULE')
+
+async def prefetch_state(session, store, enbUES1apId):
+    async with session.post(f'{mecManagerAmsUrl}/ams/prefetch/state', json={'imsi': store[enbUES1apId]['imsi']}) as resp:
+        print('prefetch state response', resp.status)
 
 def parse_msg(msg):
+    global store
+
     PDU = S1AP.S1AP_PDU_Descriptions.S1AP_PDU
     PDU.from_aper(msg)
     s1ap_obj = PDU.get_val()
@@ -55,34 +71,43 @@ def parse_msg(msg):
             print(store[enbUES1apId])
             print('SENDING DATA TO OIDC MODULE')
             try:
-                if args.prefetch:
-                    print('Prefetching user data')
-                    # Prefetching user data
-                    response = requests.get(f'{mecManagerUrl}/user/data', params={'imsi': 1234567890})
-                    store[enbUES1apId]['subscriptionData'] = response.json()
-                
-                store[enbUES1apId]['remote_ip'] = remote_ip
-                
-                requests.post(url='http://localhost:15005/oidc/store', json=store[enbUES1apId], timeout= 1.0)
-                print('SENT DATA TO OIDC MODULE')
-            except Exception:
+                async def asyncio_main():
+                    async with aiohttp.ClientSession() as session:
+                        tasks = []
+                        if args.prefetch_user_data:
+                            print('Prefetching user data')
+                            tasks.append(asyncio.ensure_future(prefetch_subscription_data(session, store, enbUES1apId)))
+                        
+                        if args.prefetch_state:
+                            print('Prefetching state. Telling AMS that UE has entered.')
+                            tasks.append(asyncio.ensure_future(prefetch_state(session, store, enbUES1apId)))
+                        
+                        await asyncio.gather(*tasks)
+
+                asyncio.run(asyncio_main())           
+            except Exception as e:
+                print(e)
                 print('COULD NOT SEND DATA')
 
 def main() :
     parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--prefetch', default=False, action='store_true')
+    parser.add_argument('-u', '--prefetch_user_data', default=False, action='store_true')
+    parser.add_argument('-s', '--prefetch_state', default=False, action='store_true')
     parser.add_argument('-n', '--network', type=str, help='network (home | foreign)')
+    
+    global args
     args = parser.parse_args() 
 
     if not args.network:
         parser.error('No network set, add --network (home | foreign)')
     
+    global mecManagerAmsUrl
     if args.network == 'home':
-        mecManagerUrl = 'http://localhost:8000'
+        mecManagerAmsUrl = 'http://localhost:8000'
     elif args.network == 'foreign': 
-        mecManagerUrl = 'http://localhost:8001'
+        mecManagerAmsUrl = 'http://localhost:8001'
 
-    LOCAL_PORT = 9001
+    LOCAL_PORT = 9003
 
     ListenSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     ListenSock.bind(('0.0.0.0', LOCAL_PORT))
@@ -97,8 +122,11 @@ def main() :
     while clientSock:
         try:
             msg = clientSock.recv(4096)
-            parse_msg(msg)
-        except Exception:
+            print(msg)
+            # parse_msg(msg)
+            local_asyncio(msg)
+        except Exception as e:
+            print(e)
             break
 
 if __name__ == '__main__' :
