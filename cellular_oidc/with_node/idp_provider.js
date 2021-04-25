@@ -79,24 +79,26 @@ function genIdToken(remote_ip, aud, nonce, access_token) {
 
   // If subscription data for this user is not present, then fetch during authentication
   const getSubscriptionData = () => {
+    if (!SData.has(remote_ip)) return Promise.resolve(null);
+
     if ("subscriptionData" in SData(remote_ip))
       return Promise.resolve(SData(remote_ip).subscriptionData);
-    else
-      return axios
-        .get(`${mecManagerUrl}/manager/user/data/`, {
-          params: {
-            imsi: SData(remote_ip).imsi,
-          },
-        })
-        .then((userDataRes) => {
-          console.log("User data received from MEC manager");
-          let remoteIpData = SData(remote_ip);
-          remoteIpData.subscriptionData = userDataRes.data;
-          return userDataRes.data;
-        });
+
+    return axios
+      .get(`${mecManagerUrl}/manager/user/data/`, {
+        params: {
+          imsi: SData(remote_ip).imsi,
+        },
+      })
+      .then((userDataRes) => {
+        console.log("User data received from MEC manager");
+        let remoteIpData = SData(remote_ip);
+        remoteIpData.subscriptionData = userDataRes.data;
+        return userDataRes.data;
+      });
   };
 
-  getSubscriptionData()
+  return getSubscriptionData()
     .then((data) => {
       console.log("Subscription data");
       console.log(data);
@@ -210,21 +212,21 @@ app.get(authorizationPath, function (req, res, next) {
 
   console.log("Client remote address", req.socket.remoteAddress);
 
-  if (isOidc(response_type)) {
-    url = addFragment(
-      url,
-      "id_token",
-      genIdToken(
-        req.socket.remoteAddress,
-        req.query.client_id,
-        req.query.nonce,
-        access_token
-      )
-    );
-    url = addFragment(url, "session_state", "123");
-  }
+  genIdToken(
+    req.socket.remoteAddress,
+    req.query.client_id,
+    req.query.nonce,
+    access_token
+  ).then((idToken) => {
+    console.log("idToken", idToken);
 
-  res.redirect(url);
+    if (isOidc(response_type)) {
+      url = addFragment(url, "id_token", idToken);
+      url = addFragment(url, "session_state", "123");
+    }
+
+    res.redirect(url);
+  });
 });
 
 app.get(userInfoPath, function (req, res, next) {

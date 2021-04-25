@@ -122,9 +122,7 @@ def main() :
     while clientSock:
         try:
             msg = clientSock.recv(4096)
-            print(msg)
-            # parse_msg(msg)
-            local_asyncio(msg)
+            parse_msg(msg)
         except Exception as e:
             print(e)
             break
