@@ -17,6 +17,7 @@ build/
 [Oo]bj/
 bower_components/
 node_modules/
+package-lock.json
 
 # Enable "build/" folder in the NuGet Packages folder since NuGet packages use it for MSBuild targets
 !packages/*/build/
