@@ -11,10 +11,6 @@ module.exports = {
   resolve: {
     extensions: [".js"],
   },
-  devServer: {
-    port: 8080,
-    historyApiFallback: true,
-  },
   module: {
     rules: [
       {
