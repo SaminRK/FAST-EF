@@ -1,6 +1,7 @@
 import axios from "axios";
-import { apiUrl } from "./utils";
 import userStore from "../UserStore";
+
+const apiUrl = "http://localhost:4000";
 
 const makeAxiosConfig = () => ({
   headers: {
@@ -21,11 +22,18 @@ export const saveUserFromIdToken = async (idToken) => {
       },
     }
   );
+  userStore.accessToken = res.data.accessToken;
+  console.log("accessToken", userStore.accessToken);
+  
   return res.data.accessToken;
 };
 
 export const getAccount = async () => {
   const res = await axios.get(`${apiUrl}/user/account`, makeAxiosConfig());
+  
+  userStore.updateImsi(res.data.imsi);
+  console.log("imsi", userStore.imsi);
+  
   return res.data.imsi;
 };
 
@@ -34,10 +42,11 @@ export const getBackendState = async () => {
     const res = await axios.get(`${apiUrl}/state`, makeAxiosConfig());
     if (res.data.state) {
       console.log("fetched state from backend", res.data.state);
-      return res.data.state;
+      userStore.updateCount(res.data.state.count);
     }
+  } else {
+    console.log('access token not present?')
   }
-  return undefined;
 };
 
 export const updateBackendState = async (state) => {
