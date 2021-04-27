@@ -4,6 +4,7 @@ class UserStore {
   imsi = "";
   accessToken = "";
   count = undefined;
+  redirected = false;
 
   constructor() {
     makeAutoObservable(this);
