@@ -48,7 +48,7 @@ Oidc.Log.level = Oidc.Log.WARN;
 
 var hostAddr = "localhost";
 var appAddr = `${hostAddr}:15000`;
-var idpAddr = `${hostAddr}:15005`;
+var idpAddr = `${hostAddr}:15000`;
 
 var settings = {
   authority: `http://${idpAddr}/oidc`,
