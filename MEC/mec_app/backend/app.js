@@ -27,6 +27,8 @@ app.get("/mec/app/state", mec.getMecState);
 
 app.use(middleware.authenticateToken);
 
+app.get("/user/login", account.login);
+
 app.get("/user/account", account.getUserAccount);
 
 app.get("/state", state.getState);
