@@ -4,12 +4,18 @@
 ///////////////////////////////
 // UI event handlers
 ///////////////////////////////
-document.getElementById('signin').addEventListener("click", signin, false);
-document.getElementById('processSignin').addEventListener("click", processSigninResponse, false);
-document.getElementById('signinDifferentCallback').addEventListener("click", signinDifferentCallback, false);
-document.getElementById('signout').addEventListener("click", signout, false);
-document.getElementById('processSignout').addEventListener("click", processSignoutResponse, false);
-document.getElementById('links').addEventListener('change', toggleLinks, false);
+document.getElementById("signin").addEventListener("click", signin, false);
+document
+  .getElementById("processSignin")
+  .addEventListener("click", processSigninResponse, false);
+document
+  .getElementById("signinDifferentCallback")
+  .addEventListener("click", signinDifferentCallback, false);
+document.getElementById("signout").addEventListener("click", signout, false);
+document
+  .getElementById("processSignout")
+  .addEventListener("click", processSignoutResponse, false);
+document.getElementById("links").addEventListener("change", toggleLinks, false);
 
 ///////////////////////////////
 // OidcClient config
@@ -17,20 +23,20 @@ document.getElementById('links').addEventListener('change', toggleLinks, false);
 Oidc.Log.logger = console;
 Oidc.Log.level = Oidc.Log.INFO;
 
-var hostAddr = '11.12.13.14';
+var hostAddr = "localhost";
 var appAddr = `${hostAddr}:15000`;
-var idpAddr = `${hostAddr}:15005`;
+var idpAddr = `${hostAddr}:15000`;
 
 var settings = {
-    authority: `http://${idpAddr}/oidc`,
-    client_id: 'js.tokenmanager',
-    redirect_uri: `http://${appAddr}/oidc-client-sample.html`,
-    post_logout_redirect_uri: `http://${appAddr}/oidc-client-sample.html`,
-    response_type: 'id_token token',
-    scope: 'openid email roles',
+  authority: `http://${idpAddr}/oidc`,
+  client_id: "js.tokenmanager",
+  redirect_uri: `http://${appAddr}/oidc-client-sample.html`,
+  post_logout_redirect_uri: `http://${appAddr}/oidc-client-sample.html`,
+  response_type: "id_token token",
+  scope: "openid email roles",
 
-    filterProtocolClaims: true,
-    loadUserInfo: true
+  filterProtocolClaims: true,
+  loadUserInfo: true,
 };
 var client = new Oidc.OidcClient(settings);
 
@@ -38,80 +44,99 @@ var client = new Oidc.OidcClient(settings);
 // functions for UI elements
 ///////////////////////////////
 function signin() {
-    client.createSigninRequest({ state: { bar: 15 } }).then(function(req) {
-        log("signin request", req, "<a href='" + req.url + "'>go signin</a>");
-        if (followLinks()) {
-            window.location = req.url;
-        }
-    }).catch(function(err) {
-        log(err);
+  client
+    .createSigninRequest({ state: { bar: 15 } })
+    .then(function (req) {
+      log("signin request", req, "<a href='" + req.url + "'>go signin</a>");
+      if (followLinks()) {
+        window.location = req.url;
+      }
+    })
+    .catch(function (err) {
+      log(err);
     });
 }
 
 var signinResponse;
 function processSigninResponse() {
-    client.processSigninResponse().then(function(response) {
-        signinResponse = response;
-        log("signin response", signinResponse);
-    }).catch(function(err) {
-        log(err);
+  client
+    .processSigninResponse()
+    .then(function (response) {
+      signinResponse = response;
+      log("signin response", signinResponse);
+    })
+    .catch(function (err) {
+      log(err);
     });
 }
 
-function signinDifferentCallback(){
-    client.createSigninRequest({ state: { bar: 15 }, redirect_uri: `http://${appAddr}/oidc-client-sample-callback.html` }).then(function(req) {
-        log("signin request", req, "<a href='" + req.url + "'>go signin</a>");
-        if (followLinks()) {
-            window.location = req.url;
-        }
-    }).catch(function(err) {
-        log(err);
+function signinDifferentCallback() {
+  client
+    .createSigninRequest({
+      state: { bar: 15 },
+      redirect_uri: `http://${appAddr}/oidc-client-sample-callback.html`,
+    })
+    .then(function (req) {
+      log("signin request", req, "<a href='" + req.url + "'>go signin</a>");
+      if (followLinks()) {
+        window.location = req.url;
+      }
+    })
+    .catch(function (err) {
+      log(err);
     });
 }
 
 function signout() {
-    client.createSignoutRequest({ id_token_hint: signinResponse && signinResponse.id_token, state: { foo: 5 } }).then(function(req) {
-        log("signout request", req, "<a href='" + req.url + "'>go signout</a>");
-        if (followLinks()) {
-            window.location = req.url;
-        }
+  client
+    .createSignoutRequest({
+      id_token_hint: signinResponse && signinResponse.id_token,
+      state: { foo: 5 },
+    })
+    .then(function (req) {
+      log("signout request", req, "<a href='" + req.url + "'>go signout</a>");
+      if (followLinks()) {
+        window.location = req.url;
+      }
     });
 }
 
 function processSignoutResponse() {
-    client.processSignoutResponse().then(function(response) {
-        signinResponse = null;
-        log("signout response", response);
-    }).catch(function(err) {
-        log(err);
+  client
+    .processSignoutResponse()
+    .then(function (response) {
+      signinResponse = null;
+      log("signout response", response);
+    })
+    .catch(function (err) {
+      log(err);
     });
 }
 
 function toggleLinks() {
-    var val = document.getElementById('links').checked;
-    localStorage.setItem("follow", val);
+  var val = document.getElementById("links").checked;
+  localStorage.setItem("follow", val);
 
-    var display = val ? 'none' : '';
+  var display = val ? "none" : "";
 
-    document.getElementById('processSignin').style.display = display;
-    document.getElementById('processSignout').style.display = display;
+  document.getElementById("processSignin").style.display = display;
+  document.getElementById("processSignout").style.display = display;
 }
 
 function followLinks() {
-    return localStorage.getItem("follow") === "true";
+  return localStorage.getItem("follow") === "true";
 }
 
 var follow = followLinks();
-var display = follow ? 'none' : '';
-document.getElementById('links').checked = follow;
-document.getElementById('processSignin').style.display = display;
-document.getElementById('processSignout').style.display = display;
+var display = follow ? "none" : "";
+document.getElementById("links").checked = follow;
+document.getElementById("processSignin").style.display = display;
+document.getElementById("processSignout").style.display = display;
 
 if (followLinks()) {
-    if (window.location.href.indexOf("#") >= 0) {
-        processSigninResponse();
-    }
-    else if (window.location.href.indexOf("?") >= 0) {
-        processSignoutResponse();
-    }
+  if (window.location.href.indexOf("#") >= 0) {
+    processSigninResponse();
+  } else if (window.location.href.indexOf("?") >= 0) {
+    processSignoutResponse();
+  }
 }

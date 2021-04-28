@@ -5,7 +5,7 @@
   "main": "lib/oidc-client.min.js",
   "scripts": {
     "build": "gulp",
-    "start": "node samples/VanillaJS/server.js",
+    "start": "nodemon samples/VanillaJS/server.js",
     "test": "mocha --compilers js:babel-register test/unit/*.spec.js",
     "all": "gulp build & mocha --compilers js:babel-register test/unit/*.spec.js"
   },
@@ -34,6 +34,7 @@
     "base64-js": "^1.5.1",
     "core-js": "^3.8.3",
     "crypto-js": "^4.0.0",
+    "nodemon": "^2.0.7",
     "serialize-javascript": "^4.0.0"
   },
   "devDependencies": {

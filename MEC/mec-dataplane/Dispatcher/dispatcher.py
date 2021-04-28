@@ -2,9 +2,24 @@ import argparse
 import socket
 import binascii
 import struct
+import requests
+import json 
 # import sysv_ipc
 import hashlib
 from datetime import datetime
+
+is_subscribed = {}
+AUTH_MODULE_ADDR = "http://localhost:15005"
+
+def check_if_subscribed(ip):
+    if ip in is_subscribed:
+        pass
+    else: 
+        response = requests.get(f"{AUTH_MODULE_ADDR}/user/data", params={'ip': ip})
+        is_subscribed[ip] = response.json()
+    
+    print('is_subscribed', is_subscribed)
+    return True 
 
 def getHeadInfo(raw_packet) :
 
@@ -65,13 +80,13 @@ def getHeadInfo(raw_packet) :
         udp_dport = udp_header[1]
         #print "ip dst: {0}, udp port: {1}".format(socket.inet_ntoa(ip_header[9]), udp_sport)
     for i in server_list:    
-        if socket.inet_ntoa(ip_header[9]) == i:# or udp_dport == 53: #//MNC: 10 
+        if socket.inet_ntoa(ip_header[9]) == i and check_if_subscribed(i):# or udp_dport == 53: #//MNC: 10 
             return True, gtp_header[3], socket.inet_ntoa(ip_header[8]) # MNC: 9
     return False, gtp_header[3], socket.inet_ntoa(ip_header[8])        # MNC: 9
 
 # Run 
-# (foreign) python3 dispatcher.py -p 7000 -c 192.168.61.5 -m 10.20.40.3 
-# (home) python3 dispatcher.py -p 7001 -c 192.168.61.9 -m 10.20.50.3
+# (foreign) python3 dispatcher.py -n foreign 
+# (home) python3 dispatcher.py -n home
 
 def main() :
     my_parser = argparse.ArgumentParser()

@@ -12,28 +12,15 @@ module.exports = {
 
       if (err) return res.sendStatus(403);
 
+      console.log("JWT token verified.");
       const users = SData("users");
       req.idx = users.findIndex((user) => user.imsi === userFromJwt.imsi);
+      req.imsi = userFromJwt.imsi;
 
-      console.log("Found user from jwt token. User idx:", req.idx);
+      console.log("User idx:", req.idx, " imsi:", req.imsi);
 
       next();
     });
-  },
-
-  getUserIdxFromAccessToken(req, res, next) {
-    const accessToken = req.headers.authorization.split(" ")[1];
-    console.log("accessToken", accessToken);
-    const users = SData("users");
-    req.idx = users.findIndex((user) => user.accessToken === accessToken);
-    if (req.idx >= 0) {
-      next();
-    } else {
-      console.log("invalid access token");
-      res.type("text/plain");
-      res.status(404);
-      res.send("404 - Not Found");
-    }
   },
 
   e404(req, res) {

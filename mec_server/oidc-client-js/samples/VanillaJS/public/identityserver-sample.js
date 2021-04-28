@@ -27,13 +27,11 @@ document.getElementById('popupSignout').addEventListener("click", popupSignout, 
 Oidc.Log.logger = console;
 Oidc.Log.level = Oidc.Log.DEBUG;
 
-var appAddr = '11.12.13.14:15000';
-
 var settings = {
     authority: 'https://demo.identityserver.io/',
     client_id: 'implicit',
-    redirect_uri: `http://${appAddr}/identityserver-sample.html`,
-    post_logout_redirect_uri: `http://${appAddr}/identityserver-sample.html`,
+    redirect_uri: 'http://localhost:15000/identityserver-sample.html',
+    post_logout_redirect_uri: 'http://localhost:15000/identityserver-sample.html',
     response_type: 'id_token token',
     //response_mode:'fragment',
     scope: 'openid profile email api',

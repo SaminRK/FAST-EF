@@ -26,6 +26,7 @@ var authorizationPath = path + "/connect/authorize";
 var userInfoPath = path + "/connect/userinfo";
 var endSessionPath = path + "/connect/endsession";
 var userDataStorePath = path + "/store";
+var userDataPath = "/user/data";
 
 var metadata = {
   issuer: path,
@@ -73,30 +74,33 @@ function hashAccessToken(access_token) {
   return left_b64u;
 }
 
+const getSubscriptionData = (remote_ip) => {
+  if (!SData.has(remote_ip)) return Promise.resolve(null);
+
+  if ("subscriptionData" in SData(remote_ip))
+    return Promise.resolve(SData(remote_ip).subscriptionData);
+
+  return axios
+    .get(`${mecManagerUrl}/manager/user/data/`, {
+      params: {
+        imsi: SData(remote_ip).imsi,
+      },
+    })
+    .then((userDataRes) => {
+      console.log("User data received from MEC manager");
+      let remoteIpData = SData(remote_ip);
+      remoteIpData.subscriptionData = userDataRes.data;
+      return userDataRes.data;
+    });
+};
+
 function genIdToken(remote_ip, aud, nonce, access_token) {
   var now = parseInt(Date.now() / 1000);
   var payload = null;
 
   // If subscription data for this user is not present, then fetch during authentication
-  const getSubscriptionData = () => {
-    if ("subscriptionData" in SData(remote_ip))
-      return Promise.resolve(SData(remote_ip).subscriptionData);
-    else
-      return axios
-        .get(`${mecManagerUrl}/manager/user/data/`, {
-          params: {
-            imsi: SData(remote_ip).imsi,
-          },
-        })
-        .then((userDataRes) => {
-          console.log("User data received from MEC manager");
-          let remoteIpData = SData(remote_ip);
-          remoteIpData.subscriptionData = userDataRes.data;
-          return userDataRes.data;
-        });
-  };
 
-  getSubscriptionData()
+  return getSubscriptionData(remote_ip)
     .then((data) => {
       console.log("Subscription data");
       console.log(data);
@@ -210,21 +214,21 @@ app.get(authorizationPath, function (req, res, next) {
 
   console.log("Client remote address", req.socket.remoteAddress);
 
-  if (isOidc(response_type)) {
-    url = addFragment(
-      url,
-      "id_token",
-      genIdToken(
-        req.socket.remoteAddress,
-        req.query.client_id,
-        req.query.nonce,
-        access_token
-      )
-    );
-    url = addFragment(url, "session_state", "123");
-  }
+  genIdToken(
+    req.socket.remoteAddress,
+    req.query.client_id,
+    req.query.nonce,
+    access_token
+  ).then((idToken) => {
+    console.log("idToken", idToken);
 
-  res.redirect(url);
+    if (isOidc(response_type)) {
+      url = addFragment(url, "id_token", idToken);
+      url = addFragment(url, "session_state", "123");
+    }
+
+    res.redirect(url);
+  });
 });
 
 app.get(userInfoPath, function (req, res, next) {
@@ -259,6 +263,16 @@ app.post(userDataStorePath, jsonParser, function (req, res, next) {
   console.log(local_test_copy);
   SData(local_test_copy.remote_ip, local_test_copy);
   res.sendStatus(200);
+});
+
+app.get(userDataPath, (req, res, next) => {
+  console.log("User data requested by dataplane dispatcher");
+  var ue_ip = req.query.ip;
+  getSubscriptionData(ue_ip).then((data) => {
+    console.log("Subscription data");
+    console.log(data);
+    res.json(data);
+  });
 });
 
 // Use http://localhost:15005/oidc as authority

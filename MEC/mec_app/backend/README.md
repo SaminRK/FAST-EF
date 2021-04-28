@@ -1,6 +1,7 @@
 # Backend
 
-## Run 
+## Run
+
 - Home MEC: `npm run start:home`
 - Foreign MEC: `npm run start:foreign`
 
@@ -27,6 +28,22 @@
 }
 ```
 
+**GET /user/login**
+
+- Request
+  Header `{ 'authorization': 'Bearer TOKEN' }`
+
+- Response
+
+```js
+{
+  imsi: 12345678901,
+  state: {
+    count: 6
+  }
+}
+```
+
 **GET /user/account**
 
 - Request
@@ -36,7 +53,7 @@
 
 ```js
 {
-  imsi: 12345678901;
+  imsi: 12345678901,
 }
 ```
 
@@ -63,7 +80,7 @@
 ```js
 {
   state: {
-    count: 7
+    count: 7;
   }
 }
 ```
@@ -107,19 +124,17 @@ Sample format
   users: [
     {
       imsi: 12345678901,
-      accessToken: "7d56ac912",
       state: {
         count: 3,
       },
     },
     {
       imsi: 12345678902,
-      accessToken: "218a23e0b",
       state: {
         count: 1,
       },
     },
-  ]
+  ];
 }
 ```
 
