@@ -17,13 +17,18 @@ store = {}
 args = None
 mecManagerAmsUrl = None
 
-async def prefetch_subscription_data(session, store, enbUES1apId):
-    async with session.get(f'{mecManagerAmsUrl}/manager/user/data', params={'imsi': store[enbUES1apId]['imsi']}) as resp:
-        print('prefetch user data response', resp.status)
-        store[enbUES1apId]['subscriptionData'] = await resp.json()
+async def send_subscription_data_to_idp(session, store, enbUES1apId, prefetch):
+    if prefetch:
+        print('Prefetching user data')
+        async with session.get(f'{mecManagerAmsUrl}/manager/user/data', params={'imsi': store[enbUES1apId]['imsi']}) as resp:
+            print('Prefetch user data response', resp.status)
+            store[enbUES1apId]['subscriptionData'] = await resp.json()
+            async with session.post('http://localhost:15005/oidc/store', json=store[enbUES1apId]) as resp_post:
+                print('user data post to idp response', resp_post.status)
+    else: 
         async with session.post('http://localhost:15005/oidc/store', json=store[enbUES1apId]) as resp_post:
             print('user data post to idp response', resp_post.status)
-            print('SENT DATA TO OIDC MODULE')
+            
 
 async def prefetch_state(session, store, enbUES1apId):
     async with session.post(f'{mecManagerAmsUrl}/ams/prefetch/state', json={'imsi': store[enbUES1apId]['imsi']}) as resp:
@@ -74,9 +79,9 @@ def parse_msg(msg):
                 async def asyncio_main():
                     async with aiohttp.ClientSession() as session:
                         tasks = []
-                        if args.prefetch_user_data:
-                            print('Prefetching user data')
-                            tasks.append(asyncio.ensure_future(prefetch_subscription_data(session, store, enbUES1apId)))
+                        
+                        tasks.append(asyncio.ensure_future(send_subscription_data_to_idp(session, 
+                            store, enbUES1apId, args.prefetch_user_data)))
                         
                         if args.prefetch_state:
                             print('Prefetching state. Telling AMS that UE has entered.')
@@ -84,7 +89,8 @@ def parse_msg(msg):
                         
                         await asyncio.gather(*tasks)
 
-                asyncio.run(asyncio_main())           
+                asyncio.run(asyncio_main())
+                print('SENT DATA TO OIDC MODULE')           
             except Exception as e:
                 print(e)
                 print('COULD NOT SEND DATA')

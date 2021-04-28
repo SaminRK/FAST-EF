@@ -54,3 +54,21 @@ GET /oidc/.well-known/openid-configuration
 - Response
 
 Browser redirected to `redirect_uri` with tokens as fragment to the URL.
+
+**User subscription data request**
+
+Requested by dataplane dispatcher.
+
+- Request
+
+GET /user/data/?ip=12.1.1.2
+
+- Response
+
+200 OK
+
+```js
+{
+  "subscribedApps": [ 12345 ]
+}
+```
