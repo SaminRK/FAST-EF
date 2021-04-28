@@ -1,10 +1,10 @@
 {
   "users": [
     {
-      "imsi": 1234567890,
+      "imsi": 508931234561001,
       "subscriptionData": {
-        "subscribedApps": [ 12345 ]
-      } 
+        "subscribedApps": [12345]
+      }
     }
   ]
 }

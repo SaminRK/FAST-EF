@@ -99,7 +99,7 @@ def main() :
     parser = argparse.ArgumentParser()
     parser.add_argument('-u', '--prefetch_user_data', default=False, action='store_true')
     parser.add_argument('-s', '--prefetch_state', default=False, action='store_true')
-    parser.add_argument('-n', '--network', type=str, help='network (home | foreign)')
+    parser.add_argument('-n', '--network', default='home', type=str, help='network (home | foreign)')
     
     global args
     args = parser.parse_args() 
@@ -113,7 +113,7 @@ def main() :
     elif args.network == 'foreign': 
         mecManagerAmsUrl = 'http://localhost:8001'
 
-    LOCAL_PORT = 9003
+    LOCAL_PORT = 9001
 
     ListenSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     ListenSock.bind(('0.0.0.0', LOCAL_PORT))

@@ -23,7 +23,7 @@
 #define ADDR_STRLEN 50
 
 #define UE_SUBNET   "12.1.1.30"  
-#define ENB_IP      "192.168.43.224"
+#define ENB_IP      "192.168.45.220"
 
 typedef struct{
 	char ip[50];
@@ -50,8 +50,8 @@ int main(){
 	struct in_addr enb = {.s_addr = 0};
 	enb.s_addr = ((in_addr_t)192 |
 	     ((in_addr_t)168 << 8) |
-	     ((in_addr_t)43 << 16) |
-	     ((in_addr_t)224 << 24));
+	     ((in_addr_t)45 << 16) |
+	     ((in_addr_t)220 << 24));
 
     ue_info ue1;
     strcpy(ue1.ip, "12.1.1.2");

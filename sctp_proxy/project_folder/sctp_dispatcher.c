@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
     // Samin
     // char epc_host[30] = "192.168.0.106"
     // Sadman
-    char epc_host[30] = "192.168.43.99";
+    char epc_host[30] = "192.168.45.225";
     char *locals[] = {epc_host};
 
     if(argc < 2){  

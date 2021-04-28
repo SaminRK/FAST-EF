@@ -9,7 +9,7 @@ import hashlib
 from datetime import datetime
 
 is_subscribed = {}
-AUTH_MODULE_ADDR = "http://localhost:15005"
+AUTH_MODULE_ADDR = None
 
 def check_if_subscribed(ip):
     if ip in is_subscribed:
@@ -89,6 +89,8 @@ def getHeadInfo(raw_packet) :
 # (home) python3 dispatcher.py -n home
 
 def main() :
+    global AUTH_MODULE_ADDR
+    
     my_parser = argparse.ArgumentParser()
     my_parser.add_argument('-n', '--network', type=str, help='network (home | foreign)')
     args = my_parser.parse_args()
@@ -101,10 +103,12 @@ def main() :
         CORE_IP = '192.168.61.5'    # spgwu ip address
         MEC_IP = '10.20.40.3'
         LOCAL_PORT = 7000
+        AUTH_MODULE_ADDR = "http://10.20.40.3:15005"
     else:
         CORE_IP = '192.168.61.9'
         MEC_IP = '10.20.50.3'
         LOCAL_PORT = 7001
+        AUTH_MODULE_ADDR = "http://10.20.50.3:15005"
 
     # receive the traffic
     ListenSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # IP, UDP
