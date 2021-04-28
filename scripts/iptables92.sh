@@ -6,8 +6,8 @@ sudo iptables -P FORWARD ACCEPT
 EPC_HOST='192.168.0.106'
 ENB_NETWORK='192.168.0.0/24'
 # Sadman
-EPC_HOST='192.168.43.99'
-ENB_NETWORK='192.168.43.224'
+EPC_HOST='192.168.45.225'
+ENB_NETWORK='192.168.45.220'
 
 sudo iptables -t nat -I PREROUTING 1 -s ${ENB_NETWORK} -d ${EPC_HOST} -p UDP --dport 7152 -j REDIRECT --to-ports 7000
 sudo iptables -t nat -I PREROUTING 2 -s ${ENB_NETWORK} -d ${EPC_HOST} -p UDP --dport 8152 -j REDIRECT --to-ports 7001

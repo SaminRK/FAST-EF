@@ -23,7 +23,7 @@
 #define ADDR_STRLEN 50
 
 #define UE_SUBNET   "12.1.1.30"  
-#define ENB_IP      "192.168.43.224"
+#define ENB_IP      "192.168.45.220"
 
 typedef struct{
 	char ip[50];
