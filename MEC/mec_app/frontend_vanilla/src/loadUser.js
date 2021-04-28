@@ -1,22 +1,18 @@
-import {
-  saveUserFromIdToken,
-  login,
-} from "./services/api";
+import { saveUserFromIdToken, login } from "./services/api";
+import { IDP_ADDR, REDIRECT_URI } from "./constants";
 
 console.log("current url", window.location.href);
 
 const sampleIdToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 
-const idpAddr = "http://localhost:15005";
-
-const redirectToAuthorize = (code) => {
+const redirectToAuthorize = () => {
   console.log("redirecting to idp authorize endpoint");
 
-  var tokenUrl = new URL(idpAddr + "/oidc/connect/authorize");
+  var tokenUrl = new URL(IDP_ADDR + "/oidc/connect/authorize");
 
   tokenUrl.searchParams.append("response_type", "id_token");
-  tokenUrl.searchParams.append("redirect_uri", "http://localhost:8080");
+  tokenUrl.searchParams.append("redirect_uri", REDIRECT_URI);
   tokenUrl.searchParams.append("state", "abc");
 
   window.location.replace(tokenUrl);

@@ -1,6 +1,7 @@
 import axios from "axios";
+import {API_URL} from "../constants";
 
-const apiUrl = "http://localhost:4000";
+const apiUrl = API_URL;
 
 const makeAxiosConfig = () => ({
   headers: {
