@@ -25,6 +25,8 @@ module.exports = {
 
       const accessToken = utility.genAccessToken({ imsi: imsi });
 
+      // save user
+
       SData("users", [
         ...SData("users"),
         {
@@ -46,12 +48,26 @@ module.exports = {
 
     // Now,
     //   fetch user state from other mec
-    //   save user imsi
     //   notify neighbours
-    const users = SData("users");
-    const imsi = users[req.idx].imsi;
+
+    //if user entry not present, create one
+    console.log("users", SData("users"));
+
+    if (req.idx === -1) {
+      SData("users", [
+        ...SData("users"),
+        {
+          imsi: req.imsi,
+        },
+      ]);
+    }
+
+    const imsi = req.imsi;
 
     let state = undefined;
+    const users = SData("users");
+    req.idx = users.findIndex((user) => user.imsi === req.imsi);
+    console.log("Updated req.idx", req.idx);
 
     const fetchState = () => {
       console.log("Checking if AMS has any state info");
@@ -73,34 +89,41 @@ module.exports = {
         });
     };
 
-    fetchState()
-      .then((state) => {
-        users[req.idx].state = state;
-        SData("users", users);
-
-        //notify neighbours
-
-        axios
-          .post(`${process.env.AMS_URL}/ams/app/notify`, {
-            imsi: imsi,
-            mecId: process.env.MEC_ID,
-            appId: process.env.APP_ID,
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-
-        console.log("SData[users]");
-        console.log(SData("users"));
-
-        res.json({ 
-          imsi: users[req.idx].imsi,
-          state
-        });
-      })
-      .catch((error) => {
-        console.log(error);
+    if ("state" in users[req.idx]) {
+      res.json({
+        imsi: users[req.idx].imsi,
+        state: users[req.idx].state,
       });
+    } else {
+      fetchState()
+        .then((state) => {
+          users[req.idx].state = state;
+          SData("users", users);
+
+          //notify neighbours
+
+          axios
+            .post(`${process.env.AMS_URL}/ams/app/notify`, {
+              imsi: imsi,
+              mecId: process.env.MEC_ID,
+              appId: process.env.APP_ID,
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
+          console.log("SData[users]");
+          console.log(SData("users"));
+
+          res.json({
+            imsi: users[req.idx].imsi,
+            state,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   },
 
   getUserAccount(req, res, next) {
