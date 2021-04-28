@@ -1,10 +1,7 @@
 import {
   saveUserFromIdToken,
-  getAccount,
-  getBackendState,
+  login,
 } from "./services/api";
-
-import userStore from "./UserStore";
 
 console.log("current url", window.location.href);
 
@@ -13,23 +10,11 @@ const sampleIdToken =
 
 const idpAddr = "http://localhost:15005";
 
-const redirectToAuth = () => {
-  console.log("redirecting to idp auth endpoint");
+const redirectToAuthorize = (code) => {
+  console.log("redirecting to idp authorize endpoint");
 
-  var authUrl = new URL(idpAddr + "/oidc/connect/authorize");
+  var tokenUrl = new URL(idpAddr + "/oidc/connect/authorize");
 
-  tokenUrl.searchParams.append("response_type", "code");
-  tokenUrl.searchParams.append("redirect_uri", "http://localhost:8080");
-  tokenUrl.searchParams.append("state", "abc");
-  window.location.replace(authUrl);
-};
-
-const redirectToToken = (code) => {
-  console.log("redirecting to idp token endpoint");
-
-  var tokenUrl = new URL(idpAddr + "/oidc/connect/token");
-
-  tokenUrl.searchParams.append("code", code);
   tokenUrl.searchParams.append("response_type", "id_token");
   tokenUrl.searchParams.append("redirect_uri", "http://localhost:8080");
   tokenUrl.searchParams.append("state", "abc");
@@ -39,32 +24,30 @@ const redirectToToken = (code) => {
 
 const parseQueryParam = (queryStr) => {
   const items = queryStr.split("&");
-  
+
   let queryObj = {};
 
   items.forEach((item) => {
     const keyAndValue = item.split("=");
     queryObj[keyAndValue[0]] = keyAndValue[1];
-  })
+  });
 
   return queryObj;
 };
 
 const hash = window.location.hash;
-console.log("hash", hash);
-const queryObj = parseQueryParam(hash.substring(1));
+console.log("URL hash", hash);
 
-if ('code' in queryObj) {
-  redirectToToken(queryObj.code);
-} else if ('token' in queryObj) {
-  
+if (hash === "") {
+  if (window.localStorage.accessToken == null) {
+    redirectToAuthorize();
+  } else {
+    login();
+  }
+} else {
+  const queryObj = parseQueryParam(hash.substring(1));
+
+  saveUserFromIdToken(queryObj.id_token).then(() => {
+    login();
+  });
 }
-
-if (hash == "") {
-  redirectToAuth();
-}
-
-saveUserFromIdToken(sampleIdToken).then(() => {
-  getAccount();
-  getBackendState();
-});

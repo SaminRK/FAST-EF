@@ -5,7 +5,7 @@ const apiUrl = "http://localhost:4000";
 
 const makeAxiosConfig = () => ({
   headers: {
-    Authorization: `Bearer ${userStore.accessToken}`,
+    Authorization: `Bearer ${window.localStorage.accessToken}`,
     "Content-Type": "application/json",
   },
 });
@@ -22,10 +22,18 @@ export const saveUserFromIdToken = async (idToken) => {
       },
     }
   );
-  userStore.accessToken = res.data.accessToken;
-  console.log("accessToken", userStore.accessToken);
+  // userStore.accessToken = res.data.accessToken;
+  window.localStorage.accessToken = res.data.accessToken;
+  console.log("accessToken", window.localStorage.accessToken);
+};
+
+export const login = async () => {
+  const res = await axios.get(`${apiUrl}/user/login`, makeAxiosConfig());
   
-  return res.data.accessToken;
+  userStore.updateImsi(res.data.imsi);
+  console.log("imsi", userStore.imsi);
+  userStore.updateCount(res.data.state.count);
+  console.log("count", userStore.count);
 };
 
 export const getAccount = async () => {
