@@ -15,3 +15,5 @@ sudo iptables -t nat -I PREROUTING 2 -s ${ENB_NETWORK} -d ${EPC_HOST} -p UDP --d
 # sudo iptables -t nat -I PREROUTING 2 -s ${ENB_NETWORK} -d ${EPC_HOST} -p UDP --dport 8152 -j DNAT --to-destination 192.168.61.9:2152
 sudo iptables -t nat -I PREROUTING 3 -s ${ENB_NETWORK} -d ${EPC_HOST} -p sctp --dport 16412 -j DNAT --to-destination ${EPC_HOST}:36414
 sudo iptables -t nat -I PREROUTING 4 -s ${ENB_NETWORK} -d ${EPC_HOST} -p sctp --dport 26412 -j DNAT --to-destination ${EPC_HOST}:36415
+# Proxy
+sudo iptables -t nat -I PREROUTING 5 -s ${ENB_NETWORK} -d ${EPC_HOST} -p tcp --dport 6868 -j DNAT --to-destination 192.168.61.6:3868
