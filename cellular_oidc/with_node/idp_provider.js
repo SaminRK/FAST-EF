@@ -266,7 +266,7 @@ app.post(userDataStorePath, jsonParser, function (req, res, next) {
 });
 
 app.get(userDataPath, (req, res, next) => {
-  console.log("User data requested by dataplane dispatcher");
+  console.log("User data requested by dataplane dispatcher for ip", req.query.ip);
   var ue_ip = req.query.ip;
   getSubscriptionData(ue_ip).then((data) => {
     console.log("Subscription data");
