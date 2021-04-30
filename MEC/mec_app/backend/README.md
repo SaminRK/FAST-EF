@@ -38,6 +38,18 @@
 ```js
 {
   imsi: 12345678901,
+}
+```
+
+**GET /initstate**
+
+- Request
+  Header `{ 'authorization': 'Bearer TOKEN' }`
+
+- Response
+
+```js
+{
   state: {
     count: 6
   }

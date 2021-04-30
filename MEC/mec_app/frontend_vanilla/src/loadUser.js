@@ -1,4 +1,4 @@
-import { saveUserFromIdToken, login } from "./services/api";
+import { saveUserFromIdToken, login, getInitialState } from "./services/api";
 import { IDP_ADDR, REDIRECT_URI } from "./constants";
 
 console.log("current url", window.location.href);
@@ -38,12 +38,14 @@ if (hash === "") {
   if (window.localStorage.accessToken == null) {
     redirectToAuthorize();
   } else {
-    login();
+    await login();
+    await getInitialState();
   }
 } else {
   const queryObj = parseQueryParam(hash.substring(1));
 
   saveUserFromIdToken(queryObj.id_token).then(() => {
-    login();
+    await login();
+    await getInitialState();
   });
 }
