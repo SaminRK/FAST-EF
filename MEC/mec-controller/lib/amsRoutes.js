@@ -38,7 +38,7 @@ module.exports = {
       SData("ues", [...SData("ues"), { imsi, mecId: sendingMecId, appId }]);
     }
 
-    console.log("Notification about UE received");
+    console.log("Notification about UE received. time", new Date().getTime());
     console.log("Updated SData[ues]");
     console.log(SData("ues"));
 
@@ -56,7 +56,7 @@ module.exports = {
       // Check if state is prefetched
       if ("state" in ues[ueIdx]) {
         console.log("State already prefetched");
-        res.json({ found: true, state: ues[ueIdx].state});
+        res.json({ found: true, state: ues[ueIdx].state });
       } else {
         const mecId = ues[ueIdx].mecId;
         console.log(
@@ -79,14 +79,14 @@ module.exports = {
             console.log("Response status:", stateRes.status);
             console.log("state Response[data]");
             console.log(stateRes.data);
-            res.json({found: true, state: stateRes.data});
+            res.json({ found: true, state: stateRes.data });
           })
           .catch((error) => {
             console.log(error);
           });
       }
     } else {
-      res.json({found: false});
+      res.json({ found: false });
     }
   },
 
@@ -115,13 +115,16 @@ module.exports = {
   },
 
   prefetchUeState(req, res, next) {
-    const imsi = req.body.imsi;
+    const imsi = parseInt(req.body.imsi);
+    console.log("Prefetch state request received for IMSI", imsi);
+
     let ues = SData("ues");
     const ueIdx = ues.findIndex((ue) => ue.imsi === imsi);
 
     // Check if AMS knows about UE's previous MEC
     if (ueIdx >= 0) {
-      console.log("Prefetching app state");
+      const st = new Date().getTime();
+      console.log("Prefetching app state start. time", st);
 
       const mecId = ues[ueIdx].mecId;
       const appId = ues[ueIdx].appId;
@@ -135,7 +138,10 @@ module.exports = {
           },
         })
         .then((stateRes) => {
-          console.log("App state received from proxy");
+          console.log(
+            "App state prefetched. Total time",
+            new Date().getTime() - st
+          );
           console.log("Response status:", stateRes.status);
           console.log("state Response[data]");
           console.log(stateRes.data);

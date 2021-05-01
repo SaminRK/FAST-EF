@@ -78,7 +78,8 @@ module.exports = {
     const users = SData("users");
 
     const fetchState = () => {
-      console.log("Checking if AMS has any state info");
+      const st = new Date().getTime();
+      console.log("State fetch from AMS start. time", st);
       return axios
         .get(`${process.env.AMS_URL}/ams/fetch/state`, {
           params: {
@@ -90,6 +91,7 @@ module.exports = {
           console.log(stateRes.status);
           if (stateRes.data.found) {
             console.log("Received state", stateRes.data.state);
+            console.log("State fetch time", new Date().getTime() - st);
             return stateRes.data.state;
           } else {
             return Promise.resolve({ count: 0 });
@@ -108,12 +110,17 @@ module.exports = {
           SData("users", users);
 
           //notify neighbours
-
+          const nt = new Date().getTime();
+          console.log("Notify start", nt);
           axios
             .post(`${process.env.AMS_URL}/ams/app/notify`, {
               imsi: req.imsi,
               mecId: process.env.MEC_ID,
               appId: process.env.APP_ID,
+            })
+            .then((notifyRes) => {
+              console.log("Notify response from manager", notifyRes.status);
+              console.log("Notify time", new Date().getTime() - nt);
             })
             .catch((error) => {
               console.log(error);
