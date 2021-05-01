@@ -119,7 +119,7 @@ GET /mec/app/state/?imsi=12345678901
 
 ```js
 {
-  state: { ... }
+  countStr: "33333....33"
 }
 ```
 

@@ -2,9 +2,9 @@ const axios = require("axios");
 
 module.exports = {
   appUsageNotify(req, res, next) {
-    const imsi = parseInt(req.body.imsi);
-    const appId = parseInt(req.body.appId);
-    const sendingMecId = parseInt(req.body.mecId);
+    const imsi = parseInt(req.query.imsi);
+    const appId = parseInt(req.query.appId);
+    const sendingMecId = parseInt(req.query.mecId);
     console.log("sendingMecId", sendingMecId);
 
     axios
@@ -79,8 +79,8 @@ module.exports = {
           .then((stateRes) => {
             console.log("App state received from proxy");
             console.log("Response status:", stateRes.status);
-            console.log("state Response[data]");
-            console.log(stateRes.data);
+            // console.log("state Response[data]");
+            // console.log(stateRes.data);
             res.json({ found: true, state: stateRes.data });
           })
           .catch((error) => {
@@ -107,8 +107,8 @@ module.exports = {
       .then((stateRes) => {
         console.log("App state received from app. Sending to proxy.");
         console.log("Response status:", stateRes.status);
-        console.log("state Response[data]");
-        console.log(stateRes.data);
+        // console.log("state Response[data]");
+        // console.log(stateRes.data);
         res.json(stateRes.data);
       })
       .catch((error) => {

@@ -90,9 +90,14 @@ module.exports = {
         .then((stateRes) => {
           console.log(stateRes.status);
           if (stateRes.data.found) {
-            console.log("Received state", stateRes.data.state);
+            
             console.log("State fetch time", new Date().getTime() - st);
-            return stateRes.data.state;
+
+            //Get integer from state string
+            const countStr = stateRes.data.state.countStr;
+            console.log("Received state. size", countStr.length);
+
+            return { count: parseInt(countStr[countStr.length - 1]) };
           } else {
             return Promise.resolve({ count: 0 });
           }

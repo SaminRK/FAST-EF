@@ -66,8 +66,8 @@ module.exports = {
       .then((stateRes) => {
         console.log("App state received from AMS of mecId:", mecId);
         console.log("Response status:", stateRes.status);
-        console.log("state Response[data]");
-        console.log(stateRes.data);
+        // console.log("state Response[data]");
+        // console.log(stateRes.data);
         res.json(stateRes.data);
       })
       .catch((error) => {

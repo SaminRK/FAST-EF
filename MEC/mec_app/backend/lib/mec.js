@@ -1,3 +1,4 @@
+const { getLargeState } = require("./utility");
 const utility = require("./utility");
 
 module.exports = {
@@ -13,7 +14,8 @@ module.exports = {
     const users = SData("users");
     const userIdx = utility.getUserIdxFromImsi(imsi);
     if (userIdx >= 0) {
-      res.json(users[userIdx].state);
+      const countStr = getLargeState(userIdx);
+      res.json({ countStr });
     } else {
       res.sendStatus(404);
     }
