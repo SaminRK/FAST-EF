@@ -16,6 +16,6 @@ sudo iptables -t nat -I PREROUTING 2 -s ${ENB_NETWORK} -d ${EPC_HOST} -p UDP --d
 sudo iptables -t nat -I PREROUTING 3 -s ${ENB_NETWORK} -d ${EPC_HOST} -p sctp --dport 16412 -j DNAT --to-destination ${EPC_HOST}:36414
 sudo iptables -t nat -I PREROUTING 4 -s ${ENB_NETWORK} -d ${EPC_HOST} -p sctp --dport 26412 -j DNAT --to-destination ${EPC_HOST}:36415
 # MEC Proxy -> MEC Manager 
-sudo iptables -t nat -I PREROUTING 6 -s ${ENB_NETWORK} -d ${EPC_HOST} -p tcp --dport 8011 -j DNAT --to-destination 10.20.40.3:8000
-sudo iptables -t nat -I PREROUTING 7 -s ${ENB_NETWORK} -d ${EPC_HOST} -p tcp --dport 8012 -j DNAT --to-destination 10.20.50.3:8000
+sudo iptables -t nat -I PREROUTING 5 -s ${ENB_NETWORK} -d ${EPC_HOST} -p tcp --dport 8011 -j DNAT --to-destination 10.20.40.3:8000
+sudo iptables -t nat -I PREROUTING 6 -s ${ENB_NETWORK} -d ${EPC_HOST} -p tcp --dport 8012 -j DNAT --to-destination 10.20.50.3:8000
 
