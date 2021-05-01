@@ -60,9 +60,9 @@ app.get("/manager/user/data", (req, res) => {
   }
 });
 
-app.post("/ams/app/notify", jsonParser, amsRoutes.appUsageNotify);
+app.get("/ams/app/notify", amsRoutes.appUsageNotify);
 
-app.post("/ams/app/notification", jsonParser, amsRoutes.notificationAboutUE);
+app.get("/ams/app/notification", amsRoutes.notificationAboutUE);
 
 app.get("/ams/fetch/state", amsRoutes.fetchAppState);
 

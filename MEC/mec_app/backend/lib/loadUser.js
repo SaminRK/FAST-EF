@@ -113,10 +113,12 @@ module.exports = {
           const nt = new Date().getTime();
           console.log("Notify start", nt);
           axios
-            .post(`${process.env.AMS_URL}/ams/app/notify`, {
-              imsi: req.imsi,
-              mecId: process.env.MEC_ID,
-              appId: process.env.APP_ID,
+            .get(`${process.env.AMS_URL}/ams/app/notify`, {
+              params: {
+                imsi: req.imsi,
+                mecId: process.env.MEC_ID,
+                appId: process.env.APP_ID,
+              },
             })
             .then((notifyRes) => {
               console.log("Notify response from manager", notifyRes.status);

@@ -8,10 +8,12 @@ module.exports = {
     console.log("sendingMecId", sendingMecId);
 
     axios
-      .post(`${process.env.PROXY_URL}/app/notify`, {
-        imsi,
-        mecId: sendingMecId,
-        appId,
+      .get(`${process.env.PROXY_URL}/app/notify`, {
+        params: {
+          imsi,
+          mecId: sendingMecId,
+          appId,
+        },
       })
       .then((notifyRes) => {
         console.log("notifying proxy response status", notifyRes.status);
@@ -23,9 +25,9 @@ module.exports = {
   },
 
   notificationAboutUE(req, res) {
-    const imsi = req.body.imsi;
-    const sendingMecId = req.body.mecId;
-    const appId = req.body.appId;
+    const imsi = parseInt(req.query.imsi);
+    const sendingMecId = parseInt(req.query.mecId);
+    const appId = parseInt(req.query.appId);
 
     let ues = SData("ues");
     const ueIdx = ues.findIndex((ue) => ue.imsi === imsi);

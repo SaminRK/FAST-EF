@@ -2,9 +2,9 @@ const axios = require("axios");
 
 module.exports = {
   appUsageNotify(req, res, next) {
-    const imsi = parseInt(req.body.imsi);
-    const appId = parseInt(req.body.appId);
-    const sendingMecId = parseInt(req.body.mecId);
+    const imsi = parseInt(req.query.imsi);
+    const appId = parseInt(req.query.appId);
+    const sendingMecId = parseInt(req.query.mecId);
     console.log("sendingMecId", sendingMecId);
 
     const receivingMecs = SData("mecs").filter(
@@ -16,10 +16,12 @@ module.exports = {
 
     for (let mec of receivingMecs) {
       axios
-        .post(`${mec.managerAmsUrl}/ams/app/notification/`, {
-          imsi,
-          mecId: sendingMecId,
-          appId,
+        .get(`${mec.managerAmsUrl}/ams/app/notification/`, {
+          params: {
+            imsi,
+            mecId: sendingMecId,
+            appId,
+          },
         })
         .then((notifyRes) => {
           console.log(

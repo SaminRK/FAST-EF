@@ -21,9 +21,9 @@ app.use(cors());
 
 app.get("/app/state", appInfo.getAppState);
 
-app.post("/app/notify", jsonParser, appInfo.appUsageNotify);
+app.get("/app/notify", appInfo.appUsageNotify);
 
-app.get("/user/data", userData.getUserData)
+app.get("/user/data", userData.getUserData);
 
 // custom 404 page
 app.use(middleware.e404);
