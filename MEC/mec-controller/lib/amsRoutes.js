@@ -145,8 +145,8 @@ module.exports = {
             new Date().getTime() - st
           );
           console.log("Response status:", stateRes.status);
-          console.log("state Response[data]");
-          console.log(stateRes.data);
+          // console.log("state Response[data]");
+          // console.log(stateRes.data);
           ues[ueIdx].state = stateRes.data;
         })
         .catch((error) => {
