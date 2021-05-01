@@ -79,10 +79,14 @@ def getHeadInfo(raw_packet) :
         udp_sport = udp_header[0]
         udp_dport = udp_header[1]
         #print "ip dst: {0}, udp port: {1}".format(socket.inet_ntoa(ip_header[9]), udp_sport)
+    
+    ip_src = socket.inet_ntoa(ip_header[8])
+    ip_dest = socket.inet_ntoa(ip_header[9])
+    
     for i in server_list:    
-        if socket.inet_ntoa(ip_header[9]) == i and check_if_subscribed(i):# or udp_dport == 53: #//MNC: 10 
-            return True, gtp_header[3], socket.inet_ntoa(ip_header[8]) # MNC: 9
-    return False, gtp_header[3], socket.inet_ntoa(ip_header[8])        # MNC: 9
+        if ip_dest == i and check_if_subscribed(ip_src):# or udp_dport == 53: #//MNC: 10 
+            return True, gtp_header[3], ip_src # MNC: 9
+    return False, gtp_header[3], ip_src        # MNC: 9
 
 # Run 
 # (foreign) python3 dispatcher.py -n foreign 
