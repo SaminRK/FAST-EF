@@ -38,14 +38,16 @@ if (hash === "") {
   if (window.localStorage.accessToken == null) {
     redirectToAuthorize();
   } else {
-    await login();
-    await getInitialState();
+    login().then(() => {
+      getInitialState().then(() => {});
+    });
   }
 } else {
   const queryObj = parseQueryParam(hash.substring(1));
 
   saveUserFromIdToken(queryObj.id_token).then(() => {
-    await login();
-    await getInitialState();
+    login().then(() => {
+      getInitialState().then(() => {});
+    });
   });
 }
