@@ -257,7 +257,8 @@ app.get(endSessionPath, function (req, res, next) {
 app.post(userDataStorePath, jsonParser, function (req, res, next) {
   console.log("User data store request from MEC controller");
   // cut off additional subscription data
-  req.body.subscriptionData = req.body.subscriptionData.mainData;
+  if (req.body.subscriptionData)
+    req.body.subscriptionData = req.body.subscriptionData.mainData;
 
   console.log(req.body);
   SData(req.body.remote_ip, req.body);
@@ -270,7 +271,10 @@ app.post(userDataStorePath, jsonParser, function (req, res, next) {
 });
 
 app.get(userDataPath, (req, res, next) => {
-  console.log("User data requested by dataplane dispatcher for ip", req.query.ip);
+  console.log(
+    "User data requested by dataplane dispatcher for ip",
+    req.query.ip
+  );
   var ue_ip = req.query.ip;
   getSubscriptionData(ue_ip).then((data) => {
     console.log("Subscription data");
