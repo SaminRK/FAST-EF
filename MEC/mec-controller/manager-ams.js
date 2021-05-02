@@ -23,6 +23,14 @@ if (process.env.NETWORK === "home") {
 SData("users", userData ? userData.users : []);
 SData("ues", []);
 
+// hard-coded ue-info , required for fetching state from cloud
+SData("ues", [
+  {
+    imsi: 508931234561001,
+    mecId: 6,
+  },
+]);
+
 const port = process.env.PORT || 8000;
 
 app.get("/manager/user/data", (req, res) => {
