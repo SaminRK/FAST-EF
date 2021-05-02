@@ -53,7 +53,7 @@ module.exports = {
     const ues = SData("ues");
     const ueIdx = ues.findIndex((ue) => ue.imsi === imsi);
 
-    //if ue info exists, fetch state; else return 404
+    //if ue info exists, fetch state; else return found = false
     if (ueIdx >= 0) {
       // Check if state is prefetched
       if ("state" in ues[ueIdx]) {
