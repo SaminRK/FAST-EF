@@ -24,12 +24,16 @@ SData("users", userData ? userData.users : []);
 SData("ues", []);
 
 // hard-coded ue-info , required for fetching state from cloud
-SData("ues", [
-  {
-    imsi: 508931234561001,
-    mecId: 6,
-  },
-]);
+// SData("ues", [
+//   {
+//     imsi: 1234567890,
+//     mecId: 6,
+//   },
+//   {
+//     imsi: 508931234561001,
+//     mecId: 6,
+//   },
+// ]);
 
 const port = process.env.PORT || 8000;
 
