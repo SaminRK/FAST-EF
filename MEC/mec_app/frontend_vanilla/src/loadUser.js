@@ -36,9 +36,10 @@ console.log("URL hash", hash);
 
 if (hash === "") {
   if (window.localStorage.accessToken == null) {
+    window.localStorage.redirectStart = new Date().getTime()
     console.log(
       "No access token. Redirecting to IdP. Time:",
-      new Date().getTime()
+      window.localStorage.redirectStart
     );
     redirectToAuthorize();
   } else {
@@ -51,7 +52,7 @@ if (hash === "") {
   }
 } else {
   const lt = new Date().getTime();
-  console.log("authorized by IdP. Time:", lt);
+  console.log("Authorized by IdP. Time:", lt, ". Auth total time:", lt - window.localStorage.redirectStart);
   const queryObj = parseQueryParam(hash.substring(1));
   saveUserFromIdToken(queryObj.id_token).then(() => {
     login().then(() => {
