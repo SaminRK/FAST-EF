@@ -31,10 +31,13 @@ GET /manager/user/data/?imsi=12345678901
 
 200 OK
 
-```js
+```json
 {
-  "subscribedApps": [ 12345 ]
-}
+  "mainData": {
+    "subscribedApps": [ 12345 ]
+  }, 
+  "additional": "111..11" // 1 MB
+} 
 ```
 
 ## AMS

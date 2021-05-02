@@ -89,8 +89,9 @@ const getSubscriptionData = (remote_ip) => {
     .then((userDataRes) => {
       console.log("User data received from MEC manager");
       let remoteIpData = SData(remote_ip);
-      remoteIpData.subscriptionData = userDataRes.data;
-      return userDataRes.data;
+      remoteIpData.subscriptionData = userDataRes.data.mainData;
+      SData(remote_ip, remoteIpData);
+      return userDataRes.data.mainData;
     });
 };
 
@@ -255,6 +256,9 @@ app.get(endSessionPath, function (req, res, next) {
 
 app.post(userDataStorePath, jsonParser, function (req, res, next) {
   console.log("User data store request from MEC controller");
+  // cut off additional subscription data
+  req.body.subscriptionData = req.body.subscriptionData.mainData;
+
   console.log(req.body);
   SData(req.body.remote_ip, req.body);
   // creating a copy for local testing

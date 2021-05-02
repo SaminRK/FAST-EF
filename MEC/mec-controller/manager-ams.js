@@ -31,7 +31,8 @@ app.get("/manager/user/data", (req, res) => {
   const user = users.filter((user) => user.imsi === imsi);
   if (user.length > 0) {
     // user data found - home network
-    res.json(user[0].subscriptionData);
+    const additional = "1".repeat(1000000); // 1 MB
+    res.json({ mainData: user[0].subscriptionData, additional });
   } else {
     // user data not found - foreign network
     // fetch from home network
@@ -45,11 +46,11 @@ app.get("/manager/user/data", (req, res) => {
       .then((userDataRes) => {
         console.log("User data received from proxy");
         console.log("Response status:", userDataRes.status);
-        console.log("User data response[data]");
-        console.log(userDataRes.data);
+        // console.log("User data response[data]");
+        // console.log(userDataRes.data);
         users.push({
           imsi: imsi,
-          subscriptionData: userDataRes.data,
+          subscriptionData: userDataRes.data.mainData,
         });
         res.json(userDataRes.data);
       })
