@@ -43,7 +43,7 @@ app.get("/manager/user/data", (req, res) => {
   const user = users.filter((user) => user.imsi === imsi);
   if (user.length > 0) {
     // user data found - home network
-    const additional = "1".repeat(1000000); // 1 MB
+    const additional = "1".repeat(10000); // 10 KB
     res.json({ mainData: user[0].subscriptionData, additional });
   } else {
     // user data not found - foreign network

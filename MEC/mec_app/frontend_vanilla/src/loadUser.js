@@ -36,17 +36,26 @@ console.log("URL hash", hash);
 
 if (hash === "") {
   if (window.localStorage.accessToken == null) {
+    console.log(
+      "No access token. Redirecting to IdP. Time:",
+      new Date().getTime()
+    );
     redirectToAuthorize();
   } else {
+    const lt = new Date().getTime();
+    console.log("Login by reusing access token. Time:", lt);
     login().then(() => {
+      console.log("Logged in. Login time:", new Date().getTime() - lt);
       getInitialState().then(() => {});
     });
   }
 } else {
+  const lt = new Date().getTime();
+  console.log("authorized by IdP. Time:", lt);
   const queryObj = parseQueryParam(hash.substring(1));
-
   saveUserFromIdToken(queryObj.id_token).then(() => {
     login().then(() => {
+      console.log("Logged in. Login time:", new Date().getTime() - lt);
       getInitialState().then(() => {});
     });
   });
