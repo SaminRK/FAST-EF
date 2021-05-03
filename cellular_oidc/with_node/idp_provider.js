@@ -7,7 +7,7 @@ const axios = require("axios");
 var app = express();
 var cors = require("cors");
 var SData = require("simple-data-storage");
-var jsonParser = require("body-parser").json({limit: '50mb'});
+var jsonParser = require("body-parser").json({ limit: "50mb" });
 
 require("custom-env").env(true);
 
@@ -80,6 +80,8 @@ const getSubscriptionData = (remote_ip) => {
   if ("subscriptionData" in SData(remote_ip))
     return Promise.resolve(SData(remote_ip).subscriptionData);
 
+  const st = new Date().getTime();
+  console.log("Fetching subs. data. Start at", st);
   return axios
     .get(`${mecManagerUrl}/manager/user/data/`, {
       params: {
@@ -87,7 +89,10 @@ const getSubscriptionData = (remote_ip) => {
       },
     })
     .then((userDataRes) => {
-      console.log("User data received from MEC manager");
+      console.log(
+        "User data received from MEC manager. Received at",
+        new Date().getTime()
+      );
       let remoteIpData = SData(remote_ip);
       remoteIpData.subscriptionData = userDataRes.data.mainData;
       SData(remote_ip, remoteIpData);
@@ -255,7 +260,10 @@ app.get(endSessionPath, function (req, res, next) {
 });
 
 app.post(userDataStorePath, jsonParser, function (req, res, next) {
-  console.log("User data store request from MEC controller");
+  console.log(
+    "User data store request from MEC controller. Received at",
+    new Date().getTime()
+  );
   // cut off additional subscription data
   if (req.body.subscriptionData)
     req.body.subscriptionData = req.body.subscriptionData.mainData;
