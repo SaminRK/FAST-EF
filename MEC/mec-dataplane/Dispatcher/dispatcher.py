@@ -31,8 +31,6 @@ def getHeadInfo(raw_packet) :
     # registered mec server
     server_list = []
     server_list.append("192.168.21.2")
-    server_list.append("11.12.13.14")
-    server_list.append("11.12.13.15")
     server_list.append("12.1.1.31")     # MEC Gateway
     #server_list.append("192.172.0.1")
     #server_list.append("45.45.0.1") #MNC
@@ -84,7 +82,11 @@ def getHeadInfo(raw_packet) :
     ip_dest = socket.inet_ntoa(ip_header[9])
     
     for i in server_list:    
-        if ip_dest == i and check_if_subscribed(ip_src):# or udp_dport == 53: #//MNC: 10 
+        if ip_dest == i:# or udp_dport == 53: #//MNC: 10 
+            # Access control
+            if ip_dest == server_list[0]:
+                check_if_subscribed(ip_src)
+            
             return True, gtp_header[3], ip_src # MNC: 9
     return False, gtp_header[3], ip_src        # MNC: 9
 
