@@ -7,7 +7,7 @@ const axios = require("axios");
 var app = express();
 var cors = require("cors");
 var SData = require("simple-data-storage");
-var jsonParser = require("body-parser").json();
+var jsonParser = require("body-parser").json({limit: '50mb'});
 
 require("custom-env").env(true);
 

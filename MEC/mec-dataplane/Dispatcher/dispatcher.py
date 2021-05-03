@@ -80,6 +80,7 @@ def getHeadInfo(raw_packet) :
     
     ip_src = socket.inet_ntoa(ip_header[8])
     ip_dest = socket.inet_ntoa(ip_header[9])
+    print('ip source', ip_src, 'ip dest', ip_dest)
     
     for i in server_list:    
         if ip_dest == i:# or udp_dport == 53: #//MNC: 10 
