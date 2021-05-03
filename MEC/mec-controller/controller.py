@@ -16,17 +16,19 @@ import argparse
 store = {}
 args = None
 mecManagerAmsUrl = None
+MEC_IDP_ADDR = "http://localhost:15005"
+CLOUD_IDP_ADDR = "http://104.196.145.129:15005"
 
-async def send_subscription_data_to_idp(session, store, enbUES1apId, prefetch):
+async def send_subscription_data_to_idp(session, store, enbUES1apId, prefetch, idp_addr):
     if prefetch:
         print('Prefetching user data')
         async with session.get(f'{mecManagerAmsUrl}/manager/user/data', params={'imsi': store[enbUES1apId]['imsi']}) as resp:
             print('Prefetch user data response', resp.status)
             store[enbUES1apId]['subscriptionData'] = await resp.json()
-            async with session.post('http://localhost:15005/oidc/store', json=store[enbUES1apId]) as resp_post:
+            async with session.post(f'{idp_addr}/oidc/store', json=store[enbUES1apId]) as resp_post:
                 print('user data post to idp response', resp_post.status)
     else: 
-        async with session.post('http://localhost:15005/oidc/store', json=store[enbUES1apId]) as resp_post:
+        async with session.post(f'{idp_addr}/oidc/store', json=store[enbUES1apId]) as resp_post:
             print('user data post to idp response', resp_post.status)
             
 
@@ -81,7 +83,9 @@ def parse_msg(msg):
                         tasks = []
                         
                         tasks.append(asyncio.ensure_future(send_subscription_data_to_idp(session, 
-                            store, enbUES1apId, args.prefetch_user_data)))
+                            store, enbUES1apId, args.prefetch_user_data, CLOUD_IDP_ADDR)))
+                        tasks.append(asyncio.ensure_future(send_subscription_data_to_idp(session, 
+                            store, enbUES1apId, args.prefetch_user_data, MEC_IDP_ADDR)))
                         
                         if args.prefetch_state:
                             print('Prefetching state. Telling AMS that UE has entered.')
