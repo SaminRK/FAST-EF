@@ -47,7 +47,10 @@ if (hash === "") {
     console.log("Login by reusing access token. Time:", lt);
     login().then(() => {
       console.log("Logged in. Login time:", new Date().getTime() - lt);
-      getInitialState().then(() => {});
+      const st = new Date().getTime();
+      getInitialState().then(() => {
+        console.log("Load initial state total time:", new Date().getTime() - st);
+      });
     });
   }
 } else {
@@ -57,7 +60,10 @@ if (hash === "") {
   saveUserFromIdToken(queryObj.id_token).then(() => {
     login().then(() => {
       console.log("Logged in. Login time:", new Date().getTime() - lt);
-      getInitialState().then(() => {});
+      const st = new Date().getTime();
+      getInitialState().then(() => {
+        console.log("Load initial state total time:", new Date().getTime() - st);
+      });
     });
   });
 }

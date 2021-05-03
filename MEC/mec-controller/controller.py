@@ -82,8 +82,8 @@ def parse_msg(msg):
                     async with aiohttp.ClientSession() as session:
                         tasks = []
                         
-                        tasks.append(asyncio.ensure_future(send_subscription_data_to_idp(session, 
-                            store, enbUES1apId, args.prefetch_user_data, CLOUD_IDP_ADDR)))
+                        # tasks.append(asyncio.ensure_future(send_subscription_data_to_idp(session, 
+                        #     store, enbUES1apId, args.prefetch_user_data, CLOUD_IDP_ADDR)))
                         tasks.append(asyncio.ensure_future(send_subscription_data_to_idp(session, 
                             store, enbUES1apId, args.prefetch_user_data, MEC_IDP_ADDR)))
                         
