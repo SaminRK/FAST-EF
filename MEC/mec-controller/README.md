@@ -31,10 +31,13 @@ GET /manager/user/data/?imsi=12345678901
 
 200 OK
 
-```js
+```json
 {
-  "subscribedApps": [ 12345 ]
-}
+  "mainData": {
+    "subscribedApps": [ 12345 ]
+  }, 
+  "additional": "111..11" // 1 MB
+} 
 ```
 
 ## AMS
@@ -49,14 +52,7 @@ Sent by MEC app in this MEC. Notification is to be sent to proxy.
 
 - Request
 
-POST /ams/app/notify
-
-```js
-{
-  imsi: 12345678901,
-  mecId: 5
-}
-```
+GET /ams/app/notify/?imsi=12345678901&mecId=5
 
 mecId is the id of MEC which is sending this notification.
 
@@ -68,15 +64,7 @@ mecId is the id of MEC which is sending this notification.
 
 - Request
 
-POST /ams/app/notification
-
-```js
-{
-  imsi: 12345678901,
-  mecId: 5,
-  appId: 12345
-}
-```
+GET /ams/app/notification/?imsi=12345678901&mecId=5&appId=12345
 
 mecId is of the MEC from which the UE is currently taking service.
 
@@ -86,12 +74,13 @@ mecId is of the MEC from which the UE is currently taking service.
 
 **App state fetch**
 
-- Sent by MEC app. 
-- AMS checks if it knows UE's previous MEC info. 
-  - If yes, 
+- Sent by MEC app.
+- AMS checks if it knows UE's previous MEC info.
+
+  - If yes,
     - fetches state from other MEC. (prefetching might store state locally)
     - responses state info. Set found to true.
-  - Otherwise, 
+  - Otherwise,
     - returns 404 status code. Set found to false.
 
 - Request
@@ -164,10 +153,10 @@ POST /ams/prefetch/state
     {
       "imsi": 12345678903,
       "mecId": 5,
-      "appId": 12345, 
+      "appId": 12345,
       "state": {
         "count": 8
-      } 
+      }
     },
     {
       "imsi": 12345678904,

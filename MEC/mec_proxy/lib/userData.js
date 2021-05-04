@@ -29,8 +29,8 @@ module.exports = {
       .then((userDataRes) => {
         console.log("User data received from mecId:", mecId);
         console.log("Response status:", userDataRes.status);
-        console.log("User data");
-        console.log(userDataRes.data);
+        // console.log("User data");
+        // console.log(userDataRes.data);
         res.json(userDataRes.data);
       })
       .catch((error) => {

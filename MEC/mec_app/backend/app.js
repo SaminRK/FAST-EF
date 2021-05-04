@@ -1,4 +1,4 @@
-const account = require("./lib/account");
+const loadUser = require("./lib/loadUser");
 const middleware = require("./lib/middleware");
 const state = require("./lib/state");
 const mec = require("./lib/mec");
@@ -21,15 +21,17 @@ app.use(cors());
 
 app.use(express.static(__dirname + "/public"));
 
-app.post("/user/save-from-id-token", jsonParser, account.saveFromIdToken);
+app.post("/user/save-from-id-token", jsonParser, loadUser.saveFromIdToken);
 
 app.get("/mec/app/state", mec.getMecState);
 
 app.use(middleware.authenticateToken);
 
-app.get("/user/login", account.login);
+app.get("/user/login", loadUser.login);
 
-app.get("/user/account", account.getUserAccount);
+app.get("/initstate", loadUser.getInitialState);
+
+app.get("/user/account", loadUser.getUserAccount);
 
 app.get("/state", state.getState);
 

@@ -5,6 +5,7 @@ const utility = require("./utility");
 
 module.exports = {
   saveFromIdToken(req, res) {
+    // User is authenticated with OIDC
     console.log("Save from id token request received");
 
     let base64Payload = req.body.idToken.split(".")[1];
@@ -44,13 +45,11 @@ module.exports = {
   },
 
   login(req, res, next) {
-    // user is authenticated with OIDC from frontend
+    // User has got access token
+    // return IMSI from JWT
 
-    // Now,
-    //   fetch user state from other mec
-    //   notify neighbours
+    // if user entry not present, create one
 
-    //if user entry not present, create one
     console.log("users", SData("users"));
 
     if (req.idx === -1) {
@@ -62,27 +61,43 @@ module.exports = {
       ]);
     }
 
-    const imsi = req.imsi;
-
-    let state = undefined;
     const users = SData("users");
     req.idx = users.findIndex((user) => user.imsi === req.imsi);
     console.log("Updated req.idx", req.idx);
 
+    res.json({
+      imsi: req.imsi,
+    });
+  },
+
+  getInitialState(req, res, next) {
+    // User has logged in. Now,
+    //   fetch user state from other mec
+    //   notify neighbours
+
+    const users = SData("users");
+
     const fetchState = () => {
-      console.log("Checking if AMS has any state info");
+      const st = new Date().getTime();
+      console.log("State fetch from AMS start. time", st);
       return axios
         .get(`${process.env.AMS_URL}/ams/fetch/state`, {
           params: {
-            imsi,
+            imsi: req.imsi,
             appId: process.env.APP_ID,
           },
         })
         .then((stateRes) => {
           console.log(stateRes.status);
           if (stateRes.data.found) {
-            console.log("received state", stateRes.data.state);
-            return stateRes.data.state;
+            
+            console.log("State fetch time", new Date().getTime() - st);
+
+            //Get integer from state string
+            const countStr = stateRes.data.state.countStr;
+            console.log("Received state. size", countStr.length);
+
+            return { count: parseInt(countStr[countStr.length - 1]) };
           } else {
             return Promise.resolve({ count: 0 });
           }
@@ -91,7 +106,6 @@ module.exports = {
 
     if ("state" in users[req.idx]) {
       res.json({
-        imsi: users[req.idx].imsi,
         state: users[req.idx].state,
       });
     } else {
@@ -101,12 +115,19 @@ module.exports = {
           SData("users", users);
 
           //notify neighbours
-
+          const nt = new Date().getTime();
+          console.log("Notify start", nt);
           axios
-            .post(`${process.env.AMS_URL}/ams/app/notify`, {
-              imsi: imsi,
-              mecId: process.env.MEC_ID,
-              appId: process.env.APP_ID,
+            .get(`${process.env.AMS_URL}/ams/app/notify`, {
+              params: {
+                imsi: req.imsi,
+                mecId: process.env.MEC_ID,
+                appId: process.env.APP_ID,
+              },
+            })
+            .then((notifyRes) => {
+              console.log("Notify response from manager", notifyRes.status);
+              console.log("Notify time", new Date().getTime() - nt);
             })
             .catch((error) => {
               console.log(error);
@@ -116,7 +137,6 @@ module.exports = {
           console.log(SData("users"));
 
           res.json({
-            imsi: users[req.idx].imsi,
             state,
           });
         })

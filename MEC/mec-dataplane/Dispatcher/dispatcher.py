@@ -9,7 +9,7 @@ import hashlib
 from datetime import datetime
 
 is_subscribed = {}
-AUTH_MODULE_ADDR = "http://localhost:15005"
+AUTH_MODULE_ADDR = None
 
 def check_if_subscribed(ip):
     if ip in is_subscribed:
@@ -31,8 +31,6 @@ def getHeadInfo(raw_packet) :
     # registered mec server
     server_list = []
     server_list.append("192.168.21.2")
-    server_list.append("11.12.13.14")
-    server_list.append("11.12.13.15")
     server_list.append("12.1.1.31")     # MEC Gateway
     #server_list.append("192.172.0.1")
     #server_list.append("45.45.0.1") #MNC
@@ -79,16 +77,27 @@ def getHeadInfo(raw_packet) :
         udp_sport = udp_header[0]
         udp_dport = udp_header[1]
         #print "ip dst: {0}, udp port: {1}".format(socket.inet_ntoa(ip_header[9]), udp_sport)
+    
+    ip_src = socket.inet_ntoa(ip_header[8])
+    ip_dest = socket.inet_ntoa(ip_header[9])
+    print('ip source', ip_src, 'ip dest', ip_dest)
+    
     for i in server_list:    
-        if socket.inet_ntoa(ip_header[9]) == i and check_if_subscribed(i):# or udp_dport == 53: #//MNC: 10 
-            return True, gtp_header[3], socket.inet_ntoa(ip_header[8]) # MNC: 9
-    return False, gtp_header[3], socket.inet_ntoa(ip_header[8])        # MNC: 9
+        if ip_dest == i:# or udp_dport == 53: #//MNC: 10 
+            # Access control
+            if ip_dest == server_list[0]:
+                check_if_subscribed(ip_src)
+            
+            return True, gtp_header[3], ip_src # MNC: 9
+    return False, gtp_header[3], ip_src        # MNC: 9
 
 # Run 
 # (foreign) python3 dispatcher.py -n foreign 
 # (home) python3 dispatcher.py -n home
 
 def main() :
+    global AUTH_MODULE_ADDR
+    
     my_parser = argparse.ArgumentParser()
     my_parser.add_argument('-n', '--network', type=str, help='network (home | foreign)')
     args = my_parser.parse_args()
@@ -101,10 +110,12 @@ def main() :
         CORE_IP = '192.168.61.5'    # spgwu ip address
         MEC_IP = '10.20.40.3'
         LOCAL_PORT = 7000
+        AUTH_MODULE_ADDR = "http://10.20.40.3:15005"
     else:
         CORE_IP = '192.168.61.9'
         MEC_IP = '10.20.50.3'
         LOCAL_PORT = 7001
+        AUTH_MODULE_ADDR = "http://10.20.50.3:15005"
 
     # receive the traffic
     ListenSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # IP, UDP

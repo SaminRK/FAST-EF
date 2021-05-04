@@ -16,17 +16,19 @@ import argparse
 store = {}
 args = None
 mecManagerAmsUrl = None
+MEC_IDP_ADDR = "http://localhost:15005"
+CLOUD_IDP_ADDR = "http://104.196.145.129:15005"
 
-async def send_subscription_data_to_idp(session, store, enbUES1apId, prefetch):
+async def send_subscription_data_to_idp(session, store, enbUES1apId, prefetch, idp_addr):
     if prefetch:
         print('Prefetching user data')
         async with session.get(f'{mecManagerAmsUrl}/manager/user/data', params={'imsi': store[enbUES1apId]['imsi']}) as resp:
             print('Prefetch user data response', resp.status)
             store[enbUES1apId]['subscriptionData'] = await resp.json()
-            async with session.post('http://localhost:15005/oidc/store', json=store[enbUES1apId]) as resp_post:
+            async with session.post(f'{idp_addr}/oidc/store', json=store[enbUES1apId]) as resp_post:
                 print('user data post to idp response', resp_post.status)
     else: 
-        async with session.post('http://localhost:15005/oidc/store', json=store[enbUES1apId]) as resp_post:
+        async with session.post(f'{idp_addr}/oidc/store', json=store[enbUES1apId]) as resp_post:
             print('user data post to idp response', resp_post.status)
             
 
@@ -80,8 +82,10 @@ def parse_msg(msg):
                     async with aiohttp.ClientSession() as session:
                         tasks = []
                         
+                        # tasks.append(asyncio.ensure_future(send_subscription_data_to_idp(session, 
+                        #     store, enbUES1apId, args.prefetch_user_data, CLOUD_IDP_ADDR)))
                         tasks.append(asyncio.ensure_future(send_subscription_data_to_idp(session, 
-                            store, enbUES1apId, args.prefetch_user_data)))
+                            store, enbUES1apId, args.prefetch_user_data, MEC_IDP_ADDR)))
                         
                         if args.prefetch_state:
                             print('Prefetching state. Telling AMS that UE has entered.')
@@ -99,7 +103,7 @@ def main() :
     parser = argparse.ArgumentParser()
     parser.add_argument('-u', '--prefetch_user_data', default=False, action='store_true')
     parser.add_argument('-s', '--prefetch_state', default=False, action='store_true')
-    parser.add_argument('-n', '--network', type=str, help='network (home | foreign)')
+    parser.add_argument('-n', '--network', default='home', type=str, help='network (home | foreign)')
     
     global args
     args = parser.parse_args() 
@@ -113,7 +117,7 @@ def main() :
     elif args.network == 'foreign': 
         mecManagerAmsUrl = 'http://localhost:8001'
 
-    LOCAL_PORT = 9003
+    LOCAL_PORT = 9001
 
     ListenSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     ListenSock.bind(('0.0.0.0', LOCAL_PORT))

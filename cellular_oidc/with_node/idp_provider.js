@@ -7,7 +7,7 @@ const axios = require("axios");
 var app = express();
 var cors = require("cors");
 var SData = require("simple-data-storage");
-var jsonParser = require("body-parser").json();
+var jsonParser = require("body-parser").json({limit: '50mb'});
 
 require("custom-env").env(true);
 
@@ -89,8 +89,9 @@ const getSubscriptionData = (remote_ip) => {
     .then((userDataRes) => {
       console.log("User data received from MEC manager");
       let remoteIpData = SData(remote_ip);
-      remoteIpData.subscriptionData = userDataRes.data;
-      return userDataRes.data;
+      remoteIpData.subscriptionData = userDataRes.data.mainData;
+      SData(remote_ip, remoteIpData);
+      return userDataRes.data.mainData;
     });
 };
 
@@ -255,6 +256,10 @@ app.get(endSessionPath, function (req, res, next) {
 
 app.post(userDataStorePath, jsonParser, function (req, res, next) {
   console.log("User data store request from MEC controller");
+  // cut off additional subscription data
+  if (req.body.subscriptionData)
+    req.body.subscriptionData = req.body.subscriptionData.mainData;
+
   console.log(req.body);
   SData(req.body.remote_ip, req.body);
   // creating a copy for local testing
@@ -266,7 +271,10 @@ app.post(userDataStorePath, jsonParser, function (req, res, next) {
 });
 
 app.get(userDataPath, (req, res, next) => {
-  console.log("User data requested by dataplane dispatcher");
+  console.log(
+    "User data requested by dataplane dispatcher for ip",
+    req.query.ip
+  );
   var ue_ip = req.query.ip;
   getSubscriptionData(ue_ip).then((data) => {
     console.log("Subscription data");

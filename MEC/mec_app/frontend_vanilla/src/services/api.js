@@ -31,6 +31,11 @@ export const login = async () => {
 
   document.getElementById("imsi").innerHTML = res.data.imsi;
   console.log("imsi", res.data.imsi);
+};
+
+export const getInitialState = async () => {
+  const res = await axios.get(`${apiUrl}/initstate`, makeAxiosConfig());
+
   document.getElementById("count").innerHTML = res.data.state.count;
   console.log("count", res.data.state.count);
 };

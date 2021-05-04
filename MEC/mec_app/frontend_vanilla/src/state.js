@@ -1,12 +1,12 @@
 import { updateBackendState } from "./services/api";
 
-const incrementCount = (event) => {
+const incrementCount = async (event) => {
   event.stopPropagation();
   event.preventDefault();
  
   const c = parseInt(document.getElementById("count").innerHTML);
   console.log("count", c);
-  updateBackendState({ count: c + 1 });
+  await updateBackendState({ count: c + 1 });
   document.getElementById("count").innerHTML = c + 1;
 };
 

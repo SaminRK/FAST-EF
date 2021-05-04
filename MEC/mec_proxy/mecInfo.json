@@ -2,11 +2,11 @@
   "mecs": [
     {
       "id": 5,
-      "managerAmsUrl": "http://localhost:8000"
+      "managerAmsUrl": "http://10.20.50.3:8000"
     },
     {
       "id": 6,
-      "managerAmsUrl": "http://localhost:8001"
+      "managerAmsUrl": "http://10.20.40.3:8000"
     }
   ]
 }

@@ -5,15 +5,7 @@
 **App Usage Notify**
 
 - Request
-  POST /app/notify
-
-```js
-{
-  appId: 12345,
-  imsi: 12345678901,
-  mecId: 5
-}
-```
+  GET /app/notify/?appId=12345&imsi=12345678901&mecId=5
 
 mecId is the id of MEC which is sending this notification.
 

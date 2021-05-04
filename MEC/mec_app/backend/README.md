@@ -38,6 +38,18 @@
 ```js
 {
   imsi: 12345678901,
+}
+```
+
+**GET /initstate**
+
+- Request
+  Header `{ 'authorization': 'Bearer TOKEN' }`
+
+- Response
+
+```js
+{
   state: {
     count: 6
   }
@@ -107,7 +119,7 @@ GET /mec/app/state/?imsi=12345678901
 
 ```js
 {
-  state: { ... }
+  countStr: "33333....33"
 }
 ```
 

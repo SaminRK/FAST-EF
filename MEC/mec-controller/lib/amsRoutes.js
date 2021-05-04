@@ -2,16 +2,18 @@ const axios = require("axios");
 
 module.exports = {
   appUsageNotify(req, res, next) {
-    const imsi = parseInt(req.body.imsi);
-    const appId = parseInt(req.body.appId);
-    const sendingMecId = parseInt(req.body.mecId);
+    const imsi = parseInt(req.query.imsi);
+    const appId = parseInt(req.query.appId);
+    const sendingMecId = parseInt(req.query.mecId);
     console.log("sendingMecId", sendingMecId);
 
     axios
-      .post(`${process.env.PROXY_URL}/app/notify`, {
-        imsi,
-        mecId: sendingMecId,
-        appId,
+      .get(`${process.env.PROXY_URL}/app/notify`, {
+        params: {
+          imsi,
+          mecId: sendingMecId,
+          appId,
+        },
       })
       .then((notifyRes) => {
         console.log("notifying proxy response status", notifyRes.status);
@@ -23,9 +25,9 @@ module.exports = {
   },
 
   notificationAboutUE(req, res) {
-    const imsi = req.body.imsi;
-    const sendingMecId = req.body.mecId;
-    const appId = req.body.appId;
+    const imsi = parseInt(req.query.imsi);
+    const sendingMecId = parseInt(req.query.mecId);
+    const appId = parseInt(req.query.appId);
 
     let ues = SData("ues");
     const ueIdx = ues.findIndex((ue) => ue.imsi === imsi);
@@ -38,7 +40,7 @@ module.exports = {
       SData("ues", [...SData("ues"), { imsi, mecId: sendingMecId, appId }]);
     }
 
-    console.log("Notification about UE received");
+    console.log("Notification about UE received. time", new Date().getTime());
     console.log("Updated SData[ues]");
     console.log(SData("ues"));
 
@@ -51,12 +53,12 @@ module.exports = {
     const ues = SData("ues");
     const ueIdx = ues.findIndex((ue) => ue.imsi === imsi);
 
-    //if ue info exists, fetch state; else return 404
+    //if ue info exists, fetch state; else return found = false
     if (ueIdx >= 0) {
       // Check if state is prefetched
       if ("state" in ues[ueIdx]) {
         console.log("State already prefetched");
-        res.json({ found: true, state: ues[ueIdx].state});
+        res.json({ found: true, state: ues[ueIdx].state });
       } else {
         const mecId = ues[ueIdx].mecId;
         console.log(
@@ -77,16 +79,16 @@ module.exports = {
           .then((stateRes) => {
             console.log("App state received from proxy");
             console.log("Response status:", stateRes.status);
-            console.log("state Response[data]");
-            console.log(stateRes.data);
-            res.json({found: true, state: stateRes.data});
+            // console.log("state Response[data]");
+            // console.log(stateRes.data);
+            res.json({ found: true, state: stateRes.data });
           })
           .catch((error) => {
             console.log(error);
           });
       }
     } else {
-      res.json({found: false});
+      res.json({ found: false });
     }
   },
 
@@ -105,8 +107,8 @@ module.exports = {
       .then((stateRes) => {
         console.log("App state received from app. Sending to proxy.");
         console.log("Response status:", stateRes.status);
-        console.log("state Response[data]");
-        console.log(stateRes.data);
+        // console.log("state Response[data]");
+        // console.log(stateRes.data);
         res.json(stateRes.data);
       })
       .catch((error) => {
@@ -115,13 +117,16 @@ module.exports = {
   },
 
   prefetchUeState(req, res, next) {
-    const imsi = req.body.imsi;
+    const imsi = parseInt(req.body.imsi);
+    console.log("Prefetch state request received for IMSI", imsi);
+
     let ues = SData("ues");
     const ueIdx = ues.findIndex((ue) => ue.imsi === imsi);
 
     // Check if AMS knows about UE's previous MEC
     if (ueIdx >= 0) {
-      console.log("Prefetching app state");
+      const st = new Date().getTime();
+      console.log("Prefetching app state start. time", st);
 
       const mecId = ues[ueIdx].mecId;
       const appId = ues[ueIdx].appId;
@@ -135,10 +140,13 @@ module.exports = {
           },
         })
         .then((stateRes) => {
-          console.log("App state received from proxy");
+          console.log(
+            "App state prefetched. Total time",
+            new Date().getTime() - st
+          );
           console.log("Response status:", stateRes.status);
-          console.log("state Response[data]");
-          console.log(stateRes.data);
+          // console.log("state Response[data]");
+          // console.log(stateRes.data);
           ues[ueIdx].state = stateRes.data;
         })
         .catch((error) => {
