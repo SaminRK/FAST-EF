@@ -43,13 +43,11 @@ def CreateGanttChartPoint(data):
     plt.show()
 
 data = [
-    [ 'UE attach procedure', 0, 2.3],
-    [ 'Proxy prefetches subs. data', 0.5, 1.1 ],
-    [ 'MEC Manager prefetches subs. data', 1.3, 1.7],
-    [ 'AMS prefetches state', 1.9, 2.6],
-    [ 'User authentication', 2.3, 2.7],
-    [ 'State transfer to app instance', 2.7, 2.8],
-    [ 'Notify neighbour MECs', 2.8, 3.1]
+    [ 'UE: attach', 0, 1.395],
+    [ 'UE: user authentication', 1.495, 2.324],
+    [ 'UE: load initial state', 2.325, 2.986],
+    [ 'MEC: Fetch subscription data', 0.495, 0.851],
+    [ 'MEC: Fetch state', 0.502, 0.805],
 ]
 
 CreateGanttChartPoint(data)
