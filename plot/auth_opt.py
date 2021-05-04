@@ -63,37 +63,43 @@ def plot_stacked_bar(data, series_labels, category_labels=None,
                          value_format.format(h), ha="center", 
                          va="center")
 
-# Auth : optimization
+def main():
+    # Auth : optimization
 
-series_labels = ['Fetch subscription data', 'Send subscription data to Auth module', 'Perform authentication']
+    series_labels = ['authentication', 'access control', 'registration']
 
-#       auth module in     subscription data prefetching       reuse of token
-# C1 -     cloud                     n                                   n
-# C2 -     cloud                     n                                   y
-# C3 -     cloud                     y                                   n
-# C4 -     cloud                     y                                   y
-# C5 -      MEC                      n                                   n
-# C6 -      MEC                      n                                   y
-# C7 -      MEC                      y                                   n
-# C8 -      MEC                      y                                   y
-category_labels = ['C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8']
+    #       auth module in     subscription data prefetching       reuse of token
+    # C1 -     cloud                     n                                   n
+    # C2 -     cloud                     n                                   y
+    # C3 -     cloud                     y                                   n
+    # C4 -     cloud                     y                                   y
+    # C5 -      MEC                      n                                   n
+    # C6 -      MEC                      n                                   y
+    # C7 -      MEC                      y                                   n
+    # C8 -      MEC                      y                                   y
+    category_labels = ['CUA', 'CUT', 'CSA', 'CST', 'MUA', 'MUT', 'MSA', 'MST']
 
-data = [
-    [0.9, 0.9, 0.0, 0.0, 0.9, 0.9, 0.0, 0.0],
-    [0.8, 0.8, 0.8, 0.8, 0.1, 0.1, 0.1, 0.1],
-    [0.7, 0.3, 0.7, 0.3, 0.7, 0.3, 0.7, 0.3]
-]
+    data = [
+        [2.531, 0.000, 2.554, 0.000, 0.705, 0.000, 0.696, 0.000],
+        [0.320, 0.340, 0.036, 0.037, 0.301, 0.340, 0.038, 0.037],
+        [0.864, 0.915, 0.828, 0.827, 0.910, 0.926, 0.835, 0.810]
+    ]
 
-plot_stacked_bar(
-    data, 
-    series_labels, 
-    category_labels=category_labels, 
-    show_values=False, 
-    value_format="{:.1f}",
-    colors=['tab:orange', 'tab:green', 'tab:blue'],
-    y_label="Latency (s)"
-)
+    plot_stacked_bar(
+        data, 
+        series_labels, 
+        category_labels=category_labels, 
+        show_values=False, 
+        value_format="{:.1f}",
+        colors=['tab:orange', 'tab:green', 'tab:blue'],
+        y_label="Latency (s)"
+    )
 
-plt.title('Optimization for authentication')
-plt.savefig('auth_opt.png')
-plt.show()
+    plt.xlabel('Different scenarios')
+    # plt.title('Optimization for authentication')
+    plt.savefig('auth_opt.png')
+    plt.savefig('auth_opt.svg')
+    plt.show()
+
+if __name__ == '__main__':
+    main()
