@@ -75,6 +75,7 @@ def main():
     ]
 
     mpl.rcParams.update({'font.size': 14})
+    plt.style.use('seaborn-talk')
 
     plot_stacked_bar(
         data, 
@@ -82,7 +83,7 @@ def main():
         category_labels=category_labels, 
         show_values=False, 
         value_format="{:.1f}",
-        colors=['tab:orange', 'tab:green', 'tab:blue'],
+        colors=None,
         y_label="Latency (s)",
         width=0.3
     )

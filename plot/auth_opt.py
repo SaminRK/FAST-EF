@@ -66,7 +66,7 @@ def plot_stacked_bar(data, series_labels, category_labels=None,
 def main():
     # Auth : optimization
 
-    series_labels = ['authentication', 'access control', 'registration']
+    series_labels = ['auth server', 'access control', 'registration']
 
     #       auth module in     subscription data prefetching       reuse of token
     # C1 -     cloud                     n                                   n
@@ -85,13 +85,16 @@ def main():
         [0.864, 0.915, 0.828, 0.827, 0.910, 0.926, 0.835, 0.810]
     ]
 
+    plt.style.use('seaborn-poster')
+    mpl.rcParams.update({'font.size': 12})
+
     plot_stacked_bar(
         data, 
         series_labels, 
         category_labels=category_labels, 
         show_values=False, 
         value_format="{:.1f}",
-        colors=['tab:orange', 'tab:green', 'tab:blue'],
+        colors=None,
         y_label="Latency (s)"
     )
 
