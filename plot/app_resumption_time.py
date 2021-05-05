@@ -4,7 +4,7 @@ import numpy as np
 
 def plot_stacked_bar(data, series_labels, category_labels=None, 
                      show_values=False, value_format="{}", y_label=None, 
-                     colors=None, grid=False, reverse=False):
+                     colors=None, grid=False, reverse=False, width=None):
     """Plots a stacked bar chart with the data and labels provided.
 
     Keyword arguments:
@@ -41,7 +41,7 @@ def plot_stacked_bar(data, series_labels, category_labels=None,
     for i, row_data in enumerate(data):
         color = colors[i] if colors is not None else None
         axes.append(plt.bar(ind, row_data, bottom=cum_size, 
-                            label=series_labels[i], color=color))
+                            label=series_labels[i], color=color, width=width))
         cum_size += row_data
 
     if category_labels:
@@ -74,6 +74,8 @@ def main():
         [5.423, 0.922, 0.661]
     ]
 
+    mpl.rcParams.update({'font.size': 14})
+
     plot_stacked_bar(
         data, 
         series_labels, 
@@ -81,8 +83,12 @@ def main():
         show_values=False, 
         value_format="{:.1f}",
         colors=['tab:orange', 'tab:green', 'tab:blue'],
-        y_label="Latency (s)"
+        y_label="Latency (s)",
+        width=0.3
     )
+
+    #Decoration 
+    
 
     plt.savefig('app_resumption_time.png')
     plt.savefig('app_resumption_time.svg')
