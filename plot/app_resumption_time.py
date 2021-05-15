@@ -4,7 +4,7 @@ import numpy as np
 
 def plot_stacked_bar(data, series_labels, category_labels=None, 
                      show_values=False, value_format="{}", y_label=None, 
-                     colors=None, grid=False, reverse=False):
+                     colors=None, grid=False, reverse=False, width=None):
     """Plots a stacked bar chart with the data and labels provided.
 
     Keyword arguments:
@@ -41,7 +41,7 @@ def plot_stacked_bar(data, series_labels, category_labels=None,
     for i, row_data in enumerate(data):
         color = colors[i] if colors is not None else None
         axes.append(plt.bar(ind, row_data, bottom=cum_size, 
-                            label=series_labels[i], color=color))
+                            label=series_labels[i], color=color, width=width))
         cum_size += row_data
 
     if category_labels:
@@ -64,29 +64,18 @@ def plot_stacked_bar(data, series_labels, category_labels=None,
                          va="center")
 
 def main():
-    # Auth : optimization
+    series_labels = ['UE attach', 'user authentication', 'load initial state']
 
-    series_labels = ['auth server', 'access control', 'registration']
-
-    #       auth module in     subscription data prefetching       reuse of token
-    # C1 -     cloud                     n                                   n
-    # C2 -     cloud                     n                                   y
-    # C3 -     cloud                     y                                   n
-    # C4 -     cloud                     y                                   y
-    # C5 -      MEC                      n                                   n
-    # C6 -      MEC                      n                                   y
-    # C7 -      MEC                      y                                   n
-    # C8 -      MEC                      y                                   y
-    category_labels = ['CUA', 'CUT', 'CSA', 'CST', 'MUA', 'MUT', 'MSA', 'MST']
+    category_labels = ['Cloud', 'Without optimization', 'With optimization']
 
     data = [
-        [2.531, 0.000, 2.554, 0.000, 0.705, 0.000, 0.696, 0.000],
-        [0.320, 0.340, 0.036, 0.037, 0.301, 0.340, 0.038, 0.037],
-        [0.864, 0.915, 0.828, 0.827, 0.910, 0.926, 0.835, 0.810]
+        [1.403, 1.403, 1.403],
+        [3.738, 2.025, 0.829],
+        [5.423, 0.922, 0.661]
     ]
 
-    plt.style.use('seaborn-poster')
-    mpl.rcParams.update({'font.size': 12})
+    mpl.rcParams.update({'font.size': 14})
+    plt.style.use('seaborn-talk')
 
     plot_stacked_bar(
         data, 
@@ -95,13 +84,15 @@ def main():
         show_values=False, 
         value_format="{:.1f}",
         colors=None,
-        y_label="Latency (s)"
+        y_label="Latency (s)",
+        width=0.3
     )
 
-    plt.xlabel('Different scenarios')
-    # plt.title('Optimization for authentication')
-    plt.savefig('auth_opt.png')
-    plt.savefig('auth_opt.svg')
+    #Decoration 
+    
+
+    plt.savefig('app_resumption_time.png')
+    plt.savefig('app_resumption_time.svg')
     plt.show()
 
 if __name__ == '__main__':

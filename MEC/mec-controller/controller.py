@@ -2,6 +2,7 @@ import socket
 import pprint
 import ipaddress
 import json
+import time
 import requests
 import aiohttp
 import asyncio
@@ -20,16 +21,21 @@ MEC_IDP_ADDR = "http://localhost:15005"
 CLOUD_IDP_ADDR = "http://104.196.145.129:15005"
 
 async def send_subscription_data_to_idp(session, store, enbUES1apId, prefetch, idp_addr):
+    st = time.time()
+    print('Subscription data send. Start at', round(st, 3))
     if prefetch:
         print('Prefetching user data')
         async with session.get(f'{mecManagerAmsUrl}/manager/user/data', params={'imsi': store[enbUES1apId]['imsi']}) as resp:
             print('Prefetch user data response', resp.status)
             store[enbUES1apId]['subscriptionData'] = await resp.json()
+            print("Subscription data fetched. Finished at", round(time.time() - st, 3))
             async with session.post(f'{idp_addr}/oidc/store', json=store[enbUES1apId]) as resp_post:
                 print('user data post to idp response', resp_post.status)
+                print("Subscription data sent. Finished at", round(time.time() - st, 3))
     else: 
         async with session.post(f'{idp_addr}/oidc/store', json=store[enbUES1apId]) as resp_post:
             print('user data post to idp response', resp_post.status)
+            print("Subscription data sent. Finished at", round(time.time() - st, 3))
             
 
 async def prefetch_state(session, store, enbUES1apId):
