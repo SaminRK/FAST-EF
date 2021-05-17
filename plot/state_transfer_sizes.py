@@ -27,10 +27,10 @@ def main():
     AX2_MIN_LIMIT = 0
     AX2_MAX_LIMIT = 0.5
     AX1_MIN_LIMIT = 0.5 
-    AX1_MAX_LIMIT = 35
+    AX1_MAX_LIMIT = 37
 
-    ax2.set_ylim(0, 0.5)
-    ax1.set_ylim(0.5, 37)  
+    ax2.set_ylim(AX2_MIN_LIMIT, AX2_MAX_LIMIT)
+    ax1.set_ylim(AX1_MIN_LIMIT, AX1_MAX_LIMIT)  
 
     # Add counts above the two bar graphs
     for rect in bar1 + bar2 + bar3:
