@@ -77,7 +77,7 @@ def main():
     # C6 -      MEC                      n                                   y
     # C7 -      MEC                      y                                   n
     # C8 -      MEC                      y                                   y
-    category_labels = ['CUA', 'CUT', 'CSA', 'CST', 'MUA', 'MUT', 'MSA', 'MST']
+    category_labels = ['CUA', 'CUT', 'CPA', 'CPT', 'MUA', 'MUT', 'MPA', 'MPT']
 
     data = [
         [2.531, 0.000, 2.554, 0.000, 0.705, 0.000, 0.696, 0.000],
@@ -98,7 +98,7 @@ def main():
         y_label="Latency (s)"
     )
 
-    plt.xlabel('Different scenarios')
+    plt.xlabel('Scenarios')
     # plt.title('Optimization for authentication')
     plt.savefig('auth_opt.png')
     plt.savefig('auth_opt.svg')
