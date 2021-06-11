@@ -72,3 +72,25 @@ GET /user/data/?ip=12.1.1.2
   "subscribedApps": [ 12345 ]
 }
 ```
+
+**Get Signing Keys**
+
+GET oidc/.well-known/jwks
+
+- Response 
+
+200 OK 
+
+```js
+{
+    "keys": [
+        {
+            "kty": "RSA",
+            "use": "sig",
+            "kid": "1",
+            "e": "AQAB",
+            "n": "3jhVmAvS-jziIgdr3CWuPLMMrfJbaCu9ytvXp-wZCjNPegxEWopFLODKhKhBtLIfC_H6muTnFTRb1ZA6wj1J61LZqTsZRlfVvw7qjdv_gMqKp3sVyf7o1c8_-25ZcYFjBsni0YRaOKlKKRQfhR_IR521JJqViPZs2akfFn6Dl9E"
+        }
+    ]
+}
+```

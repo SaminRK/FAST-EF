@@ -27,6 +27,7 @@ var userInfoPath = path + "/connect/userinfo";
 var endSessionPath = path + "/connect/endsession";
 var userDataStorePath = path + "/store";
 var userDataPath = "/user/data";
+var validateAccessTokenPath = path + "/validateAccessToken";
 
 var metadata = {
   issuer: path,
@@ -289,6 +290,11 @@ app.get(userDataPath, (req, res, next) => {
     console.log(data);
     res.json(data);
   });
+});
+
+app.get(validateAccessTokenPath, (req, res, next) => {
+  console.log("validate access token requested");
+  res.json({'status': 'OK'});
 });
 
 // Use http://localhost:15005/oidc as authority

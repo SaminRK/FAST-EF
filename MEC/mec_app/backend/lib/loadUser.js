@@ -50,23 +50,36 @@ module.exports = {
 
     // if user entry not present, create one
 
-    console.log("users", SData("users"));
+    //dummy request to resource server
+    const validateAccessToken = () => {
+      return axios
+        .get(`${process.env.IDP_URL}/oidc/validateAccessToken`, {
+          params: {},
+        })
+        .then((dummyRes) => {
+          return dummyRes.data;
+        });
+    };
 
-    if (req.idx === -1) {
-      SData("users", [
-        ...SData("users"),
-        {
-          imsi: req.imsi,
-        },
-      ]);
-    }
+    validateAccessToken().then(() => {
+      console.log("users", SData("users"));
 
-    const users = SData("users");
-    req.idx = users.findIndex((user) => user.imsi === req.imsi);
-    console.log("Updated req.idx", req.idx);
+      if (req.idx === -1) {
+        SData("users", [
+          ...SData("users"),
+          {
+            imsi: req.imsi,
+          },
+        ]);
+      }
 
-    res.json({
-      imsi: req.imsi,
+      const users = SData("users");
+      req.idx = users.findIndex((user) => user.imsi === req.imsi);
+      console.log("Updated req.idx", req.idx);
+
+      res.json({
+        imsi: req.imsi,
+      });
     });
   },
 
@@ -90,7 +103,6 @@ module.exports = {
         .then((stateRes) => {
           console.log(stateRes.status);
           if (stateRes.data.found) {
-            
             console.log("State fetch time", new Date().getTime() - st);
 
             //Get integer from state string
