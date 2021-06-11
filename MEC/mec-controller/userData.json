@@ -5,6 +5,12 @@
       "subscriptionData": {
         "subscribedApps": [12345]
       }
+    }, 
+    {
+      "imsi": 818727,
+      "subscriptionData": {
+        "subscribedApps": [12345]
+      }
     }
   ]
 }

@@ -8,7 +8,9 @@
     "start:local": "NODE_ENV=local nodemon idp_provider.js",
     "start:inmec": "NODE_ENV=inmec nodemon idp_provider.js",
     "debug:local": "DEBUG=* NODE_ENV=local nodemon idp_provider.js",
-    "debug:inmec": "DEBUG=* NODE_ENV=inmec nodemon idp_provider.js"
+    "debug:inmec": "DEBUG=* NODE_ENV=inmec nodemon idp_provider.js",
+    "debug:home": "DEBUG=* NODE_ENV=home nodemon idp_provider.js",
+    "debug:foreign": "DEBUG=* NODE_ENV=foreign nodemon idp_provider.js"
   },
   "author": "",
   "license": "ISC",
