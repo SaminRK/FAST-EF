@@ -6,7 +6,9 @@ def main():
     state_transfer_sizes = ['10 KB', '1 MB', '10 MB']
 
     data = [[0.885, 5.23, 33.28], [0.07, 0.341, 2.713], [0.034, 0.066, 0.234]]
-    labels = ['cloud', 'without prefetching', 'with prefetching']
+    colors = ['tab:blue', 'tab:orange', 'tab:green']
+    labels = ['Cloud', 'Without prefetching', 'With prefetching']
+    hatches = ['//', '\\\\', '---']
 
     X = np.arange(3)
 
@@ -16,13 +18,21 @@ def main():
     fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
     fig.subplots_adjust(hspace=0.08)
 
-    bar1 = ax1.bar(X + 0.00, data[0], color = 'tab:blue', width = 0.25, label=labels[0])
-    bar2 = ax1.bar(X + 0.25, data[1], color = 'tab:orange', width = 0.25, label=labels[1])
-    bar3 = ax1.bar(X + 0.50, data[2], color = 'tab:green', width = 0.25, label=labels[2])
+    ax1_bars = []
+    for i in range(3):
+        b = ax1.bar(X + i * 0.25, data[i], fill=False, facecolor = None, edgecolor = colors[i], 
+            width = 0.25, hatch = hatches[i], label=labels[i])
+        ax1_bars.append(b)
+    
+    bar1 = ax1_bars[0]
+    bar2 = ax1_bars[1]
+    bar3 = ax1_bars[2]
 
-    bar4 = ax2.bar(X + 0.00, data[0], color = 'tab:blue', width = 0.25, label=labels[0])
-    bar5 = ax2.bar(X + 0.25, data[1], color = 'tab:orange', width = 0.25, label=labels[1])
-    bar6 = ax2.bar(X + 0.50, data[2], color = 'tab:green', width = 0.25, label=labels[2])
+    ax2_bars = []
+    for i in range(3):
+        b = ax2.bar(X + i * 0.25, data[i], fill=False, facecolor = None, edgecolor = colors[i], 
+            width = 0.25, hatch = hatches[i], label=labels[i])
+        ax2_bars.append(b)
 
     AX2_MIN_LIMIT = 0
     AX2_MAX_LIMIT = 0.5

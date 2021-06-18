@@ -38,10 +38,14 @@ def plot_stacked_bar(data, series_labels, category_labels=None,
         data = np.flip(data, axis=1)
         category_labels = reversed(category_labels)
 
+    hatches = ['//', '\\\\', '--']
+    handles = []
     for i, row_data in enumerate(data):
         color = colors[i] if colors is not None else None
-        axes.append(plt.bar(ind, row_data, bottom=cum_size, 
-                            label=series_labels[i], color=color, width=width))
+        b = plt.bar(ind, row_data, bottom=cum_size, hatch=hatches[i],
+                            label=series_labels[i], fill=False, color=None, edgecolor=color, width=width)
+        axes.append(b)
+        handles.append(b)
         cum_size += row_data
 
     if category_labels:
@@ -50,7 +54,7 @@ def plot_stacked_bar(data, series_labels, category_labels=None,
     if y_label:
         plt.ylabel(y_label)
 
-    plt.legend()
+    plt.legend(handles=handles[::-1])
 
     if grid:
         plt.grid()
@@ -64,18 +68,18 @@ def plot_stacked_bar(data, series_labels, category_labels=None,
                          va="center")
 
 def main():
-    series_labels = ['UE attach', 'user authentication', 'load initial state']
+    series_labels = ['UE attach', 'User authentication', 'Load initial state']
 
     category_labels = ['Cloud', 'Without optimization', 'With optimization']
 
     data = [
         [1.403, 1.403, 1.403],
-        [3.738, 2.025, 0.829],
+        [4.388, 2.124, 0.929],
         [5.423, 0.922, 0.661]
     ]
 
     mpl.rcParams.update({'font.size': 14})
-    plt.style.use('seaborn-talk')
+    # plt.style.use('seaborn-talk')
 
     plot_stacked_bar(
         data, 
@@ -83,13 +87,10 @@ def main():
         category_labels=category_labels, 
         show_values=False, 
         value_format="{:.1f}",
-        colors=None,
+        colors=['tab:blue', 'tab:orange', 'tab:green'],
         y_label="Latency (s)",
         width=0.3
     )
-
-    #Decoration 
-    
 
     plt.savefig('app_resumption_time.png')
     plt.savefig('app_resumption_time.svg')

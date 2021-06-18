@@ -19,19 +19,19 @@ def set_font(ax, font_size):
         item.set_fontsize(font_size)
 
 def main():
-    labels = ['without optimizations', 'with optimizations']
-    colors = ['tab:blue', 'tab:orange']
+    labels = ['Without optimizations', 'With optimizations']
+    colors = ['skyblue', 'tab:orange']
 
     without_opt = {
       'index': [5, 4, 3, 2, 1, 0],
-      'start': [0, 1.357, 1.426, 3.382, 3.620, 3.918],
-      'end': [1.356, 3.381, 1.747, 4.304, 3.917, 3.969]
+      'start': [0, 1.357, 1.426, 3.482, 3.720, 4.018],
+      'end': [1.356, 3.481, 1.747, 4.404, 4.017, 4.069]
     }
     
     with_opt = {
       'index': [5, 4, 3, 2, 1, 0],
-      'start': [0, .495, .502, 1.396,  2.225, 2.551],
-      'end': [1.395, .816, .799, 2.224, 2.886, 2.602]
+      'start': [0, .495, .502, 1.396,  2.325, 2.651],
+      'end': [1.395, .816, .799, 2.324, 2.986, 2.702]
     }
 
     # ax1 top, ax2 bottom

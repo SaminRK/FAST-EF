@@ -38,10 +38,14 @@ def plot_stacked_bar(data, series_labels, category_labels=None,
         data = np.flip(data, axis=1)
         category_labels = reversed(category_labels)
 
+    hatches = ['//', '\\\\\\', '--']
+    handles = []
     for i, row_data in enumerate(data):
         color = colors[i] if colors is not None else None
-        axes.append(plt.bar(ind, row_data, bottom=cum_size, 
-                            label=series_labels[i], color=color))
+        b = plt.bar(ind, row_data, bottom=cum_size, hatch=hatches[i],
+                            label=series_labels[i], fill=False, color=None, edgecolor=color)
+        axes.append(b)
+        handles.append(b)
         cum_size += row_data
 
     if category_labels:
@@ -50,7 +54,7 @@ def plot_stacked_bar(data, series_labels, category_labels=None,
     if y_label:
         plt.ylabel(y_label)
 
-    plt.legend()
+    plt.legend(handles=handles[::-1])
 
     if grid:
         plt.grid()
@@ -66,7 +70,7 @@ def plot_stacked_bar(data, series_labels, category_labels=None,
 def main():
     # Auth : optimization
 
-    series_labels = ['auth server', 'access control', 'registration']
+    series_labels = ['Auth server', 'Access control', 'Registration']
 
     #       auth module in     subscription data prefetching       reuse of token
     # C1 -     cloud                     n                                   n
@@ -80,7 +84,7 @@ def main():
     category_labels = ['CUA', 'CUT', 'CPA', 'CPT', 'MUA', 'MUT', 'MPA', 'MPT']
 
     data = [
-        [2.531, 0.000, 2.554, 0.000, 0.705, 0.000, 0.696, 0.000],
+        [3.181, 0.650, 3.204, 0.650, 0.805, 0.100, 0.796, 0.100],
         [0.320, 0.340, 0.036, 0.037, 0.301, 0.340, 0.038, 0.037],
         [0.864, 0.915, 0.828, 0.827, 0.910, 0.926, 0.835, 0.810]
     ]
@@ -94,7 +98,7 @@ def main():
         category_labels=category_labels, 
         show_values=False, 
         value_format="{:.1f}",
-        colors=None,
+        colors=['tab:blue', 'tab:orange', 'tab:green'],
         y_label="Latency (s)"
     )
 
