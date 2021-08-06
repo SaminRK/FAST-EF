@@ -19,12 +19,16 @@ This repository contains the code and setup files for FAST-EF.
 
 ### LTE Network
 #### Core network
-Clone the core network repository from [https://github.com/saadsakib/openair-epc-fed.git](https://github.com/saadsakib/openair-epc-fed.git). This repository is forked from [https://github.com/OPENAIRINTERFACE/openair-epc-fed.git](https://github.com/OPENAIRINTERFACE/openair-epc-fed.git) by openairinterface. The author @Sadman has added roaming protocol in the core network which was not present in the original repository.
-	```git clone https://github.com/saadsakib/openair-epc-fed.git```
+Clone the core network repository from [saadsakib/openair-epc-fed](https://github.com/saadsakib/openair-epc-fed.git). This repository is forked from [OPENAIRINTERFACE/openair-epc-fed.git](https://github.com/OPENAIRINTERFACE/openair-epc-fed.git) by openairinterface. 
+
+```
+git clone https://github.com/saadsakib/openair-epc-fed.git
+```
+
+Inside the `OPENAIRINTERFACE/openair-epc-fed` repository, [openair-mme](https://github.com/OPENAIRINTERFACE/openair-mme) and [openair-hss](https://github.com/OPENAIRINTERFACE/openair-hss) repositories are used as submodules. Some changes were also made in these two repositories which can be found in [saadsakib/openair-mme](https://github.com/saadsakib/openair-mme) and [saadsakib/openair-hss](https://github.com/saadsakib/openair-hss.git). The author @Sadman has added roaming protocol in the core network which was not present in the original repositories. The changes can be found in `roaming` branch in all 3 repositories.
+	
 Try following this documentation provided by openairinterface in order to deploy the core network [https://github.com/saadsakib/openair-epc-fed/blob/roaming/docs/DEPLOY_HOME.md](https://github.com/saadsakib/openair-epc-fed/blob/roaming/docs/DEPLOY_HOME.md)
 
-We have used a script to setup the home and foreign core network. You can try and use that as well.
-	```./open-air-fed/two_epc_run.sh```
 
 #### RAN
 Clone the RAN repository from [https://gitlab.eurecom.fr/oai/openairinterface5g.git](https://gitlab.eurecom.fr/oai/openairinterface5g.git)
