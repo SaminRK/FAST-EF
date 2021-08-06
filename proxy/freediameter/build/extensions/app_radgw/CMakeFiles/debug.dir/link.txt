@@ -1,1 +1,0 @@
-/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../debug.rgwx CMakeFiles/debug.dir/rgwx_debug.c.o 

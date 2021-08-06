@@ -1,1 +1,0 @@
-/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../test_acct.fdx CMakeFiles/test_acct.dir/test_acct.c.o 

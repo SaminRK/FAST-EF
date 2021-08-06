@@ -1,1 +1,0 @@
-/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../app_acct.fdx CMakeFiles/app_acct.dir/app_acct.c.o CMakeFiles/app_acct.dir/acct_db.c.o CMakeFiles/app_acct.dir/acct_records.c.o CMakeFiles/app_acct.dir/lex.acct_conf.c.o CMakeFiles/app_acct.dir/acct_conf.tab.c.o -lpq 

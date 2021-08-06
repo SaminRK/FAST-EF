@@ -1,1 +1,0 @@
-/usr/bin/cc -Wall -g -O0  -rdynamic CMakeFiles/testmesg_stress.dir/testmesg_stress.c.o  -o testmesg_stress -Wl,-rpath,/home/samin/workspace/research_implementation/proxy/freediameter/build/libfdcore:/home/samin/workspace/research_implementation/proxy/freediameter/build/libfdproto ../libfdcore/libfdcore.so.1.2.1 -lgnutls -lgcrypt -ldl ../libfdproto/libfdproto.so.1.2.1 -lpthread 

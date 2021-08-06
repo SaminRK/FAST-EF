@@ -1,9 +1,9 @@
-## FAST-EF
+# FAST-EF
 
 This repository contains the code and setup files for FAST-EF.
 
 
-# Repository structure
+## Repository structure
 	-- openair-epc-fed
 	-- openairinterface5g
 	-- MEC
@@ -22,7 +22,7 @@ This repository contains the code and setup files for FAST-EF.
 	-- assets
 		-- image-of-implementation-setup.png
 
-# Setup steps
+## Setup steps
 	** Setup steps for LTE Network, need to provide scripts maybe
 	** Setup steps for MEC, need to provide setup scripts (important)
 	

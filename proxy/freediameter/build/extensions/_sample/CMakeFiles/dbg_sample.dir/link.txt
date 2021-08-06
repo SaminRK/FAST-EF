@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC -g  -shared  -o ../dbg_sample.fdx CMakeFiles/dbg_sample.dir/sample.c.o CMakeFiles/dbg_sample.dir/hello.cpp.o CMakeFiles/dbg_sample.dir/fini.c.o 

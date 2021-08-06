@@ -1,1 +1,0 @@
-/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../dbg_interactive.fdx CMakeFiles/dbg_interactive.dir/dbg_interactive.c.o CMakeFiles/dbg_interactive.dir/dbg_interactivePYTHON_wrap.c.o CMakeFiles/dbg_interactive.dir/fDpy-inc.c.o -lpython2.7 

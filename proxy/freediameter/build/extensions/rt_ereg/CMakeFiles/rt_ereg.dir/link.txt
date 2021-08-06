@@ -1,1 +1,0 @@
-/usr/bin/cc -fPIC -Wall -g -O0  -shared  -o ../rt_ereg.fdx CMakeFiles/rt_ereg.dir/rtereg.c.o CMakeFiles/rt_ereg.dir/lex.rtereg_conf.c.o CMakeFiles/rt_ereg.dir/rtereg_conf.tab.c.o 
