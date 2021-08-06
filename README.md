@@ -31,10 +31,15 @@ Clone the RAN repository from (https://gitlab.eurecom.fr/oai/openairinterface5g.
 	```git clone https://gitlab.eurecom.fr/oai/openairinterface5g.git```
 Try following this documentation provided by openairinterface in order to deploy the RAN: Building the RAN (https://gitlab.eurecom.fr/oai/openairinterface5g/-/blob/master/doc/BUILD.md)[https://gitlab.eurecom.fr/oai/openairinterface5g/-/blob/master/doc/BUILD.md] and running the RAN (https://gitlab.eurecom.fr/oai/openairinterface5g/-/blob/master/doc/RUNMODEM.md)[https://gitlab.eurecom.fr/oai/openairinterface5g/-/blob/master/doc/RUNMODEM.md]
 
-
+We have used a script to setup the enb and ue. You can try and use that as well.
+	```./open-air-fed/ran_files/```
+The conf files we have use for setup can also be found in this folder.
 	
 ### MEC Setup
 
-	** Setup steps for LTE Network, need to provide scripts maybe
-	** Setup steps for MEC, need to provide setup scripts (important)
-	
+1. Installing dependencies for MEC dataplane. This can be found at (MEC/mec-dataplane/MEC-setup.md)[MEC/mec-dataplane/MEC-setup.md]
+
+2. Installing depepndencies for MEC controlplane. Installing pycrate. You can follow instructions provided in the repository of pycrate (https://github.com/P1sec/pycrate)[https://github.com/P1sec/pycrate]
+
+3. Setup network for the experiment. The network needs to be setup according to the number of machines used. We have setup the networks using the following scripts.
+
